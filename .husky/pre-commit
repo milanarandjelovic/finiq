@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "Running lint and type checks before commit"
+echo "------------------------------------------------"
+
+bunx lint-staged

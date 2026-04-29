@@ -20,7 +20,7 @@ export function crudMutationOptions(
     errorMessage: string
     onSuccess?: () => void
   },
-): { mutation: { onSuccess: () => void; onError: () => void }} {
+): { mutation: { onSuccess: () => void; onError: () => void } } {
   return {
     mutation: {
       onSuccess() {

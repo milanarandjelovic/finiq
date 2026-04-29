@@ -1,8 +1,9 @@
+import { MutationOptions } from '@tanstack/react-query'
+
 import type {
   BackendValidationError,
   MinimalFormError,
 } from '@/types/form-validation'
-import {MutationOptions} from "@tanstack/react-query";
 
 /**
  * Applies validation errors to a form.
@@ -35,7 +36,13 @@ export const applyValidationErrors = (
 export function formMutationOptions<TSuccess>(
   form: MinimalFormError,
   onSuccess?: (response: TSuccess) => void,
-) : {mutation: MutationOptions<TSuccess, { statusCode?: number; errors?: BackendValidationError[] }, unknown>} {
+): {
+  mutation: MutationOptions<
+    TSuccess,
+    { statusCode?: number; errors?: BackendValidationError[] },
+    unknown
+  >
+} {
   return {
     mutation: {
       onSuccess,

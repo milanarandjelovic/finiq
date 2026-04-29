@@ -1,0 +1,16 @@
+#!/bin/sh
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$BRANCH" = "master" ]; then
+  echo "------------------------------------------------"
+  echo "ERROR: Direct push to 'master' branch is not allowed."
+  echo "Please create a separate branch and open a merge request."
+  echo "------------------------------------------------"
+  exit 1
+fi
+
+echo "Running unit tests before push"
+echo "------------------------------------------------"
+
+bun --filter @finiq/web test

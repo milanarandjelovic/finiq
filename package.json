@@ -1,16 +1,8 @@
 {
   "name": "finiq",
-  "devDependencies": {
-    "prettier": "^3.7.4",
-    "turbo": "^2.9.6",
-    "typescript": "5.9.2"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.3.8",
   "private": true,
   "scripts": {
+    "prepare": "node -e \"if (!process.env.CI) { require('child_process').execSync('husky', {stdio: 'inherit'}) }\"",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -20,6 +12,10 @@
     "ui:add": "bun --filter=@finiq/ui run ui:add",
     "ui:format": "bun --filter=@finiq/ui run format",
     "web:generate:api": "bun --filter=@finiq/web generate:api",
+    "test:web": "bun --filter=@finiq/web run test",
+    "test:web:coverage": "bun --filter=@finiq/web run test:coverage",
+    "test:web:watch": "bun --filter=@finiq/web run test:watch",
+    "test:web:e2e": "bun --filter=@finiq/web run test:e2e",
     "db:migration:generate": "bun --filter=@finiq/api migration:generate",
     "db:migration:create": "bun --filter=@finiq/api migration:create",
     "db:migration:run": "bun --filter=@finiq/api migration:run",
@@ -30,6 +26,19 @@
     "db:seed:create": "bun --filter=@finiq/api seed:create",
     "db:seed:dynamic": "bun --filter=@finiq/api seed:dynamic"
   },
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.6",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.3.8",
   "workspaces": [
     "apps/*",
     "packages/*",
