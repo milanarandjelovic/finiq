@@ -37,7 +37,7 @@ export class NetworkClient {
 
         const token = await getAccessToken()
 
-       if (token) {
+        if (token) {
           config.headers.set('Authorization', `Bearer ${token}`)
         }
 

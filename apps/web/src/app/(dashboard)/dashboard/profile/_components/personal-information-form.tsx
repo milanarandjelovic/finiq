@@ -52,7 +52,7 @@ export function PersonalInformationForm() {
     useUserProfileControllerUpdate(
       formMutationOptions(form, (response) => {
         if (response.status !== 200) {
-            return
+          return
         }
 
         refetch()
