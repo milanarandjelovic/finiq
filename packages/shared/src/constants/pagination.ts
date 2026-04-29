@@ -1,0 +1,2 @@
+export const PAGINATION_PAGE_START = 1
+export const PAGINATION_PAGE_LIMIT = 10

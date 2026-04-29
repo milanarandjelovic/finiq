@@ -1,0 +1,18 @@
+{
+  "extends": "@finiq/typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@finiq/ui/components": ["./src/components"],
+      "@finiq/ui/components/*": ["./src/components/*"],
+      "@finiq/ui/hooks/*": ["./src/hooks/*"],
+      "@finiq/ui/lib/*": ["./src/lib/*"],
+      "@finiq/ui/*": ["./src/*"]
+    },
+    "rootDir": "src",
+    "outDir": "dist",
+    "strictNullChecks": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

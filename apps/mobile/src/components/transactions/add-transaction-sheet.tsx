@@ -1,0 +1,189 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm, type Resolver } from 'react-hook-form'
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+
+import {
+  transactionFormSchema,
+  type TransactionFormValues,
+} from '@finiq/schemas'
+import { BottomSheet } from '@/components/shared/bottom-sheet'
+import { AppTextInput } from '@/components/ui/app-text-input'
+import { Button } from '@/components/ui/button'
+import { FormField } from '@/components/ui/form-field'
+import { useTransactionCreate } from '@/hooks/data/use-transaction-create'
+import { useTheme } from '@/hooks/use-theme'
+import type { Category } from '@/types/category'
+
+interface AddTransactionSheetProps {
+  visible: boolean
+  onClose: () => void
+  categories: Category[]
+}
+
+export function AddTransactionSheet({
+  visible,
+  onClose,
+  categories,
+}: AddTransactionSheetProps) {
+  const { colors } = useTheme()
+  const { mutate, isPending } = useTransactionCreate()
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<TransactionFormValues>({
+    resolver: zodResolver(
+      transactionFormSchema,
+    ) as Resolver<TransactionFormValues>,
+  })
+
+  const type = watch('type')
+
+  const onSubmit = (values: TransactionFormValues) => {
+    mutate(values, {
+      onSuccess: () => {
+        reset()
+        onClose()
+      },
+      onError: () => Alert.alert('Error', 'Could not save transaction.'),
+    })
+  }
+
+  return (
+    <BottomSheet visible={visible} onClose={onClose} title="Add Transaction">
+      <View style={styles.content}>
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <View style={styles.typeRow}>
+              {(['income', 'expense'] as const).map((t) => (
+                <Button
+                  key={t}
+                  label={t.charAt(0).toUpperCase() + t.slice(1)}
+                  variant={field.value === t ? 'primary' : 'outline'}
+                  onPress={() => field.onChange(t)}
+                  size="sm"
+                />
+              ))}
+            </View>
+          )}
+        />
+
+        <Controller
+          name="amount"
+          control={control}
+          render={({ field }) => (
+            <FormField label="Amount" error={errors.amount?.message}>
+              <AppTextInput
+                value={field.value?.toString()}
+                onChangeText={(v) => field.onChange(parseFloat(v) || 0)}
+                keyboardType="decimal-pad"
+                placeholder="0.00"
+                error={errors.amount?.message}
+              />
+            </FormField>
+          )}
+        />
+
+        <Controller
+          name="date"
+          control={control}
+          render={({ field }) => (
+            <FormField label="Date (YYYY-MM-DD)" error={errors.date?.message}>
+              <AppTextInput
+                value={field.value}
+                onChangeText={field.onChange}
+                placeholder="2024-01-31"
+                error={errors.date?.message}
+              />
+            </FormField>
+          )}
+        />
+
+        {type === 'expense' && (
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field }) => (
+              <FormField label="Category">
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={styles.chipRow}>
+                    {categories.map((cat) => (
+                      <TouchableOpacity
+                        key={cat.id}
+                        onPress={() => field.onChange(cat.id)}
+                        style={[
+                          styles.catChip,
+                          { borderColor: colors.border },
+                          field.value === cat.id && {
+                            backgroundColor: colors.primary + '20',
+                            borderColor: colors.primary,
+                          },
+                        ]}
+                      >
+                        <Text>
+                          {cat.emoji} {cat.name}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              </FormField>
+            )}
+          />
+        )}
+
+        <Controller
+          name="note"
+          control={control}
+          render={({ field }) => (
+            <FormField label="Note (optional)">
+              <AppTextInput
+                value={field.value ?? ''}
+                onChangeText={field.onChange}
+                placeholder="Optional note"
+              />
+            </FormField>
+          )}
+        />
+
+        <Button
+          label="Add Transaction"
+          onPress={handleSubmit(onSubmit)}
+          loading={isPending}
+        />
+      </View>
+    </BottomSheet>
+  )
+}
+
+const styles = StyleSheet.create({
+  content: {
+    padding: 16,
+    gap: 12,
+  },
+  typeRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  catChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+})

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <title>{{applicationName}}</title>
+    <style type='text/css'>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        table {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            border: 0;
+            display: block;
+            max-width: 100%;
+        }
+        .email-wrapper {
+            width: 100%;
+            background-color: #f3f4f6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .email-header {
+            background-color: #111827;
+            padding: 28px 40px;
+            text-align: center;
+        }
+        .email-header-logo {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .email-content {
+            padding: 40px;
+        }
+        .email-content h1 {
+            color: #111827;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            line-height: 1.3;
+        }
+        .email-content p {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.65;
+            margin: 0 0 16px 0;
+        }
+        .email-btn {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 13px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            margin: 8px 0 24px;
+        }
+        .email-note {
+            background-color: #fef9c3;
+            border-left: 3px solid #fbbf24;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 8px 0 16px;
+        }
+        .email-note p {
+            color: #78350f;
+            font-size: 14px;
+            margin: 0;
+        }
+        .email-divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 24px 0;
+        }
+        .email-footer {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 24px 40px;
+            text-align: center;
+        }
+        .email-footer p {
+            color: #9ca3af;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .email-footer a {
+            color: #6b7280;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body style='margin: 0; padding: 0; background-color: #f3f4f6;'>
+<table class='email-wrapper' width='100%' cellpadding='0' cellspacing='0' border='0' role='presentation' style='background-color: #f3f4f6; width: 100%;'>
+    <tr>
+        <td align='center' style='padding: 40px 20px;'>
+            <table class='email-container' width='600' cellpadding='0' cellspacing='0' border='0' role='presentation' style='max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);'>
+
+                <!-- Header -->
+                <tr>
+                    <td class='email-header' style='background-color: #111827; padding: 28px 40px; text-align: center;'>
+                        <a class='email-header-logo' href='#' style='color: #ffffff; font-size: 18px; font-weight: 700; text-decoration: none; letter-spacing: 0.5px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>
+                            {{applicationName}}
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td class='email-content' style='padding: 40px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>
+                        {{{body}}}
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td class='email-footer' style='background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 24px 40px; text-align: center;'>
+                        <p style='color: #9ca3af; font-size: 13px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>
+                            &copy; 2025 {{applicationName}}. All rights reserved.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+
+</html>

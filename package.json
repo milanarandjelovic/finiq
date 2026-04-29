@@ -1,0 +1,38 @@
+{
+  "name": "finiq",
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.6",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.3.8",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "clean": "turbo run clean && rm -rf .turbo node_modules",
+    "ui:add": "bun --filter=@finiq/ui run ui:add",
+    "ui:format": "bun --filter=@finiq/ui run format",
+    "web:generate:api": "bun --filter=@finiq/web generate:api",
+    "db:migration:generate": "bun --filter=@finiq/api migration:generate",
+    "db:migration:create": "bun --filter=@finiq/api migration:create",
+    "db:migration:run": "bun --filter=@finiq/api migration:run",
+    "db:migration:revert": "bun --filter=@finiq/api migration:revert",
+    "db:create": "bun --filter=@finiq/api db:create",
+    "db:drop": "bun --filter=@finiq/api db:drop",
+    "db:seed:run": "bun --filter=@finiq/api seed:run",
+    "db:seed:create": "bun --filter=@finiq/api seed:create",
+    "db:seed:dynamic": "bun --filter=@finiq/api seed:dynamic"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tooling/*"
+  ]
+}

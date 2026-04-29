@@ -1,0 +1,10 @@
+@import '@finiq/tailwind-config/style.css';
+
+@source '../../../../../packages/ui/src';
+
+@layer base {
+    html,
+    body {
+        @apply min-h-screen w-full;
+    }
+}

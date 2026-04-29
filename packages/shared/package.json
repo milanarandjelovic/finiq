@@ -1,0 +1,35 @@
+{
+  "name": "@finiq/shared",
+  "version": "1.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "lint": "eslint src/",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@finiq/eslint-config": "workspace:*",
+    "@finiq/prettier-config": "workspace:*",
+    "@finiq/typescript-config": "workspace:*",
+    "eslint": "^9.36.0",
+    "tsup": "^8.5.0",
+    "typescript": "5.9.2"
+  }
+}

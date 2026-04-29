@@ -1,0 +1,24 @@
+{
+  "name": "@finiq/tailwind-config",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore"
+  },
+  "exports": {
+    "./style.css": "./style.css"
+  },
+  "prettier": "@finiq/prettier-config",
+  "dependencies": {
+    "tailwindcss": "^4.1.13",
+    "tw-animate-css": "^1.3.8"
+  },
+  "dependenciesMeta": {},
+  "devDependencies": {
+    "@finiq/eslint-config": "workspace:*",
+    "@finiq/prettier-config": "workspace:*",
+    "prettier": "^3.6.2"
+  }
+}

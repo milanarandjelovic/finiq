@@ -1,0 +1,53 @@
+{
+  "name": "@finiq/web",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "next typegen && tsc --noEmit",
+    "clean": "git clean -xdf .cache .turbo .next dist node_modules",
+    "format": "prettier --write src/",
+    "generate:api": "orval --config orval.config.ts"
+  },
+  "dependencies": {
+    "@finiq/hooks": "workspace:*",
+    "@finiq/schemas": "workspace:*",
+    "@finiq/shared": "workspace:*",
+    "@finiq/ui": "workspace:*",
+    "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-query": "^5.99.0",
+    "@tanstack/react-table": "^8.21.3",
+    "axios": "^1.15.0",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^1.8.0",
+    "next": "16.2.0",
+    "next-themes": "^0.4.6",
+    "nuqs": "^2.8.9",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.73.1",
+    "recharts": "^3.8.1",
+    "sonner": "^2.0.7",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@finiq/eslint-config": "workspace:*",
+    "@finiq/prettier-config": "workspace:*",
+    "@finiq/tailwind-config": "workspace:*",
+    "@finiq/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@tailwindcss/postcss": "^4.1.13",
+    "dotenv": "^17.4.2",
+    "eslint": "^9.39.1",
+    "orval": "^8.8.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "5.9.2"
+  }
+}

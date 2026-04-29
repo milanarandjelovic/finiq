@@ -1,0 +1,164 @@
+'use client'
+
+import { useMemo } from 'react'
+import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+
+import {
+  isOverBudget,
+  PAGINATION_PAGE_LIMIT,
+  PAGINATION_PAGE_START,
+} from '@finiq/shared'
+import {
+  getBudgetControllerFindAllQueryKey,
+  useBudgetControllerFindAll,
+} from '@/api/__generated__/budgets/budgets'
+import type {
+  Budget,
+  BudgetControllerFindAll200,
+} from '@/api/__generated__/models'
+import {
+  getColumns,
+  type BudgetRow,
+} from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-columns'
+import { BudgetTableToolbarActions } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-toolbar-actions'
+import { DataTable } from '@/components/shared/data-table/data-table'
+import { DataTableSkeleton } from '@/components/shared/data-table/data-table-skeleton'
+import { DataTableToolbar } from '@/components/shared/data-table/data-table-toolbar'
+import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
+import { useDataTable } from '@/hooks/use-data-table'
+import { type DataTableFilterField } from '@/types/data-table'
+
+interface CategoryBreakdownItem {
+  categoryId: string
+  spent: number
+  available: number
+}
+
+interface BudgetTableProps {
+  year: number
+  month: number
+  breakdownMap: Map<string, CategoryBreakdownItem>
+  onUpsert: (categoryId: string, amount: number) => void
+}
+
+const filterFields: DataTableFilterField<BudgetRow>[] = [
+  {
+    id: 'categoryName',
+    label: 'Category',
+    placeholder: 'Filter by name…',
+  },
+]
+
+export function BudgetTable({
+  year,
+  month,
+  breakdownMap,
+  onUpsert,
+}: BudgetTableProps) {
+  const formatCurrency = useCurrencyFormatter()
+  const columns = useMemo(() => getColumns(formatCurrency), [formatCurrency])
+
+  const [page] = useQueryState(
+    'page',
+    parseAsInteger.withDefault(PAGINATION_PAGE_START),
+  )
+  const [perPage] = useQueryState(
+    'perPage',
+    parseAsInteger.withDefault(PAGINATION_PAGE_LIMIT),
+  )
+  const [categoryName] = useQueryState(
+    'categoryName',
+    parseAsString.withDefault(''),
+  )
+
+  const { data: budgetsResult, isLoading } = useBudgetControllerFindAll(
+    {
+      year,
+      month,
+      currentPage: page,
+      perPage,
+      categoryName: categoryName || undefined,
+    },
+    {
+      query: {
+        queryKey: getBudgetControllerFindAllQueryKey({
+          year,
+          month,
+          currentPage: page,
+          perPage,
+          categoryName,
+        }),
+        placeholderData: (prev) => prev,
+      },
+    },
+  )
+
+  const budgetsData = (
+    budgetsResult?.data as BudgetControllerFindAll200 | undefined
+  )?.data?.budgets
+  const pageCount = budgetsData?.meta?.pagination?.lastPage ?? -1
+
+  const data: BudgetRow[] = useMemo(
+    () =>
+      (budgetsData?.data ?? []).map((b: Budget) => {
+        const budgeted = Number(b.amount)
+        const breakdown = breakdownMap.get(b.category.id)
+        const spent = breakdown?.spent ?? 0
+        const available = breakdown?.available ?? budgeted - spent
+        const pct = budgeted > 0 ? Math.round((spent / budgeted) * 100) : null
+
+        return {
+          categoryId: b.category.id,
+          categoryName: b.category.name,
+          categoryEmoji: b.category.emoji,
+          categoryColor: b.category.color,
+          budgeted,
+          spent,
+          available,
+          pct,
+          isOver: isOverBudget(spent, budgeted),
+          assignmentStatus: 'assigned' as const,
+          onUpsert,
+        }
+      }),
+    [budgetsData, breakdownMap, onUpsert],
+  )
+
+  const { table } = useDataTable({
+    data,
+    columns,
+    pageCount,
+    filterFields,
+  })
+
+  const toolbar = (
+    <DataTableToolbar table={table} filterFields={filterFields}>
+      <BudgetTableToolbarActions table={table} onUpsert={onUpsert} />
+    </DataTableToolbar>
+  )
+
+  if (isLoading) {
+    return (
+      <div className="w-full space-y-2.5">
+        {toolbar}
+        <DataTableSkeleton
+          columnCount={7}
+          rowCount={5}
+          cellWidths={[
+            '20px',
+            '260px',
+            '120px',
+            '120px',
+            '120px',
+            '120px',
+            '100px',
+          ]}
+          withPagination
+          shrinkZero
+        />
+      </div>
+    )
+  }
+
+  return <DataTable table={table}>{toolbar}</DataTable>
+}
