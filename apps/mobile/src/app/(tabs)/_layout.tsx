@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 
 import { useTheme } from '@/hooks/use-theme'
 
 export default function TabsLayout() {
   const { colors } = useTheme()
+  const { t } = useTranslation()
 
   return (
     <Tabs
@@ -22,7 +24,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('sidebar.dashboard'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
@@ -31,7 +33,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="transactions"
         options={{
-          title: 'Transactions',
+          title: t('sidebar.transactions'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="swap-horizontal-outline"
@@ -44,7 +46,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="budget"
         options={{
-          title: 'Budget',
+          title: t('sidebar.budget'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wallet-outline" size={size} color={color} />
           ),
@@ -53,7 +55,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="categories"
         options={{
-          title: 'Categories',
+          title: t('sidebar.categories'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
@@ -62,7 +64,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="goals"
         options={{
-          title: 'Goals',
+          title: t('sidebar.goals'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="flag-outline" size={size} color={color} />
           ),
@@ -71,7 +73,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="stats"
         options={{
-          title: 'Stats',
+          title: t('sidebar.stats'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bar-chart-outline" size={size} color={color} />
           ),
@@ -80,7 +82,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: t('sidebar.settings'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />
           ),

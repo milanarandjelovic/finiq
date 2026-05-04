@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type Resolver } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { categoryFormSchema, type CategoryFormValues } from '@finiq/schemas'
@@ -36,6 +37,7 @@ export function CategorySheet({
   categoryId,
   defaultValues,
 }: CategorySheetProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const { mutate: create, isPending: creating } = useCategoryCreate()
   const { mutate: update, isPending: updating } = useCategoryUpdate()
@@ -85,18 +87,20 @@ export function CategorySheet({
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      title={categoryId ? 'Edit Category' : 'New Category'}
+      title={
+        categoryId ? t('categories.editCategory') : t('categories.newCategory')
+      }
     >
       <View style={styles.content}>
         <Controller
           name="name"
           control={control}
           render={({ field }) => (
-            <FormField label="Name" error={errors.name?.message}>
+            <FormField label={t('general.name')} error={errors.name?.message}>
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder="e.g. Groceries"
+                placeholder={t('categories.namePlaceholder')}
                 error={errors.name?.message}
               />
             </FormField>
@@ -107,18 +111,21 @@ export function CategorySheet({
           name="emoji"
           control={control}
           render={({ field }) => (
-            <FormField label="Emoji" error={errors.emoji?.message}>
+            <FormField
+              label={t('categories.emoji')}
+              error={errors.emoji?.message}
+            >
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder="🛒"
+                placeholder={t('categories.emojiPlaceholder')}
                 error={errors.emoji?.message}
               />
             </FormField>
           )}
         />
 
-        <FormField label="Color">
+        <FormField label={t('categories.color')}>
           <View style={styles.swatchRow}>
             {PRESET_COLORS.map((c) => (
               <TouchableOpacity
@@ -142,19 +149,23 @@ export function CategorySheet({
           name="budgetAmount"
           control={control}
           render={({ field }) => (
-            <FormField label="Monthly budget (optional)">
+            <FormField
+              label={`${t('categories.monthlyBudget')} (${t('general.optional')})`}
+            >
               <AppTextInput
                 value={field.value?.toString() ?? ''}
                 onChangeText={(v) => field.onChange(parseFloat(v) || undefined)}
                 keyboardType="decimal-pad"
-                placeholder="0.00"
+                placeholder={t('categories.monthlyBudgetPlaceholder')}
               />
             </FormField>
           )}
         />
 
         <Button
-          label={categoryId ? 'Save changes' : 'Create category'}
+          label={
+            categoryId ? t('general.saveChanges') : t('categories.addCategory')
+          }
           onPress={handleSubmit(onSubmit)}
           loading={creating || updating}
         />

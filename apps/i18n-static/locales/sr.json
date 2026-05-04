@@ -213,6 +213,8 @@
     "preferences": "Preference",
     "preferencesDescription": "Podesite vašu valutu.",
     "currency": "Valuta",
+    "theme": "Tema",
+    "language": "Jezik",
     "settingsSaved": "Podešavanja sačuvana",
     "failedToSave": "Čuvanje podešavanja nije uspelo"
   },

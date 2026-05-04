@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet } from 'react-native'
 
 import { calculateProgress, isOverBudget } from '@finiq/shared'
@@ -25,6 +26,7 @@ export function BudgetCategoryCard({
   available: number
   onBlur: (amount: number) => void
 }) {
+  const { t } = useTranslation()
   const [inputValue, setInputValue] = useState(budgeted.toString())
   const format = useCurrencyFormatter()
   const over = isOverBudget(spent, budgeted)
@@ -35,7 +37,7 @@ export function BudgetCategoryCard({
         <Text>
           {category.emoji} {category.name}
         </Text>
-        {over && <Badge label="Over budget" variant="destructive" />}
+        {over && <Badge label={t('budget.overBudget')} variant="destructive" />}
       </View>
 
       <AppTextInput
@@ -52,8 +54,12 @@ export function BudgetCategoryCard({
       />
 
       <View style={[styles.amounts, { backgroundColor: 'transparent' }]}>
-        <MutedText>{format(spent)} spent</MutedText>
-        <MutedText>{format(available)} available</MutedText>
+        <MutedText>
+          {t('budget.spent')} {format(spent)}
+        </MutedText>
+        <MutedText>
+          {t('budget.available')} {format(available)}
+        </MutedText>
       </View>
     </SurfaceView>
   )

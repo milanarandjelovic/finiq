@@ -2,10 +2,12 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text } from 'react-native'
 
 import { settingsFormSchema, type SettingsFormValues } from '@finiq/schemas'
 import { CurrencyPicker } from '@/components/currency-picker'
+import { LanguagePicker } from '@/components/language-picker'
 import { ScreenHeader } from '@/components/screen-header'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
@@ -19,6 +21,7 @@ import { useAuthSession } from '@/hooks/use-auth-session'
 import { routes } from '@/util/routes'
 
 export default function SettingsView() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { data: settings } = useSettings()
   const { mutate: updateSettings, isPending } = useSettingsUpdate()
@@ -44,21 +47,25 @@ export default function SettingsView() {
 
   return (
     <Screen>
-      <ScreenHeader title="Settings" />
+      <ScreenHeader title={t('settings.title')} />
       <ScrollView contentContainerStyle={styles.container}>
         <SurfaceView style={styles.card}>
-          <Text style={styles.cardTitle}>Preferences</Text>
+          <Text style={styles.cardTitle}>{t('settings.preferences')}</Text>
 
-          <FormField label="Theme">
+          <FormField label={t('settings.theme')}>
             <ThemeToggle variant="segmented" />
           </FormField>
 
-          <MutedText>Set your preferred currency for display.</MutedText>
+          <FormField label={t('settings.language')}>
+            <LanguagePicker />
+          </FormField>
+
+          <MutedText>{t('settings.preferencesDescription')}</MutedText>
           <Controller
             control={control}
             name="currency"
             render={({ field }) => (
-              <FormField label="Currency">
+              <FormField label={t('settings.currency')}>
                 <CurrencyPicker
                   value={field.value ?? 'USD'}
                   onChange={field.onChange}
@@ -67,13 +74,17 @@ export default function SettingsView() {
             )}
           />
           <Button
-            label="Save settings"
+            label={t('general.saveChanges')}
             onPress={handleSubmit(onSubmit)}
             loading={isPending}
           />
         </SurfaceView>
 
-        <Button label="Sign out" variant="outline" onPress={handleLogout} />
+        <Button
+          label={t('general.signOut')}
+          variant="outline"
+          onPress={handleLogout}
+        />
       </ScrollView>
     </Screen>
   )

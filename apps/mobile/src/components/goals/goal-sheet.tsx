@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type Resolver } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { goalFormSchema, type GoalFormValues } from '@finiq/schemas'
@@ -37,6 +38,7 @@ export function GoalSheet({
   goalId,
   defaultValues,
 }: GoalSheetProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const { mutate: create, isPending: creating } = useCategoryCreate()
   const { mutate: update, isPending: updating } = useCategoryUpdate()
@@ -87,18 +89,18 @@ export function GoalSheet({
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      title={goalId ? 'Edit Goal' : 'New Goal'}
+      title={goalId ? t('goals.editGoal') : t('goals.newGoal')}
     >
       <View style={styles.content}>
         <Controller
           name="name"
           control={control}
           render={({ field }) => (
-            <FormField label="Name" error={errors.name?.message}>
+            <FormField label={t('general.name')} error={errors.name?.message}>
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder="e.g. Emergency Fund"
+                placeholder={t('goals.goalNamePlaceholder')}
                 error={errors.name?.message}
               />
             </FormField>
@@ -109,18 +111,18 @@ export function GoalSheet({
           name="emoji"
           control={control}
           render={({ field }) => (
-            <FormField label="Emoji" error={errors.emoji?.message}>
+            <FormField label={t('goals.emoji')} error={errors.emoji?.message}>
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder="🎯"
+                placeholder={t('goals.emojiPlaceholder')}
                 error={errors.emoji?.message}
               />
             </FormField>
           )}
         />
 
-        <FormField label="Color">
+        <FormField label={t('goals.color')}>
           <View style={styles.swatchRow}>
             {PRESET_COLORS.map((c) => (
               <TouchableOpacity
@@ -145,14 +147,14 @@ export function GoalSheet({
           control={control}
           render={({ field }) => (
             <FormField
-              label="Target amount"
+              label={t('goals.targetAmount')}
               error={errors.targetAmount?.message}
             >
               <AppTextInput
                 value={field.value?.toString() ?? ''}
                 onChangeText={(v) => field.onChange(parseFloat(v) || 0)}
                 keyboardType="decimal-pad"
-                placeholder="0.00"
+                placeholder={t('goals.targetAmountPlaceholder')}
                 error={errors.targetAmount?.message}
               />
             </FormField>
@@ -163,18 +165,18 @@ export function GoalSheet({
           name="targetDate"
           control={control}
           render={({ field }) => (
-            <FormField label="Target date (optional)">
+            <FormField label={t('goals.targetDate')}>
               <DateInput
                 value={field.value}
                 onChange={field.onChange}
-                placeholder="Select target date"
+                placeholder={t('goals.pickADate')}
               />
             </FormField>
           )}
         />
 
         <Button
-          label={goalId ? 'Save changes' : 'Create goal'}
+          label={goalId ? t('general.saveChanges') : t('goals.newGoal')}
           onPress={handleSubmit(onSubmit)}
           loading={creating || updating}
         />

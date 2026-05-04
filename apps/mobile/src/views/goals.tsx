@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +23,7 @@ import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import type { Category } from '@/types/category'
 
 export default function GoalsView() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [createVisible, setCreateVisible] = useState(false)
   const [editTarget, setEditTarget] = useState<Category | null>(null)
@@ -49,10 +51,10 @@ export default function GoalsView() {
   return (
     <Screen>
       <ScreenHeader
-        title="Goals"
+        title={t('goals.title')}
         rightElement={
           <Button
-            label="Add"
+            label={t('goals.newGoal')}
             size="sm"
             onPress={() => setCreateVisible(true)}
           />
@@ -75,7 +77,7 @@ export default function GoalsView() {
           data={goals}
           keyExtractor={(g) => g.id}
           contentContainerStyle={styles.list}
-          ListEmptyComponent={<EmptyState message="No goals found." />}
+          ListEmptyComponent={<EmptyState message={t('goals.noGoals')} />}
           ListFooterComponent={
             isFetchingNextPage ? (
               <ActivityIndicator style={styles.footer} />
@@ -93,12 +95,12 @@ export default function GoalsView() {
               onEdit={() => setEditTarget(item)}
               onDelete={() =>
                 Alert.alert(
-                  'Delete Goal',
-                  'Are you sure you want to delete this goal?',
+                  `${t('general.delete')} ${t('goals.title')}`,
+                  t('general.somethingWentWrong'),
                   [
-                    { text: 'Cancel', style: 'cancel' },
+                    { text: t('general.cancel'), style: 'cancel' },
                     {
-                      text: 'Delete',
+                      text: t('general.delete'),
                       style: 'destructive',
                       onPress: () => deleteGoal(item.id),
                     },

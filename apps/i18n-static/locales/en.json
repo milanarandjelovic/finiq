@@ -213,6 +213,8 @@
     "preferences": "Preferences",
     "preferencesDescription": "Set your currency preference.",
     "currency": "Currency",
+    "theme": "Theme",
+    "language": "Language",
     "settingsSaved": "Settings saved",
     "failedToSave": "Failed to save settings"
   },
