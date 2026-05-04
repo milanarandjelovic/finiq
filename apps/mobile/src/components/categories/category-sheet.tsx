@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type Resolver } from 'react-hook-form'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -52,6 +53,12 @@ export function CategorySheet({
   })
 
   const selectedColor = watch('color')
+
+  useEffect(() => {
+    if (visible) {
+      reset(defaultValues ?? { color: PRESET_COLORS[0] })
+    }
+  }, [visible, defaultValues])
 
   const onSubmit = (values: CategoryFormValues) => {
     if (categoryId) {

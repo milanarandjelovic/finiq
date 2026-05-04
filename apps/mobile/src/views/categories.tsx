@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native'
 
 import { CategoryRow } from '@/components/categories/category-row'
 import { CategorySheet } from '@/components/categories/category-sheet'
@@ -67,7 +73,20 @@ export default function CategoriesView() {
             <CategoryRow
               category={item}
               onEdit={() => setEditTarget(item)}
-              onDelete={() => deleteCategory(item.id)}
+              onDelete={() =>
+                Alert.alert(
+                  'Delete Category',
+                  'Are you sure you want to delete this category?',
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                      text: 'Delete',
+                      style: 'destructive',
+                      onPress: () => deleteCategory(item.id),
+                    },
+                  ],
+                )
+              }
             />
           )}
         />

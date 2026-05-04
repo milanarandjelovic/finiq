@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react'
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native'
 
 import { GoalCard } from '@/components/goals/goal-card'
 import { GoalSheet } from '@/components/goals/goal-sheet'
@@ -85,7 +91,20 @@ export default function GoalsView() {
               saved={savedByGoal.get(item.id) ?? 0}
               format={format}
               onEdit={() => setEditTarget(item)}
-              onDelete={() => deleteGoal(item.id)}
+              onDelete={() =>
+                Alert.alert(
+                  'Delete Goal',
+                  'Are you sure you want to delete this goal?',
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                      text: 'Delete',
+                      style: 'destructive',
+                      onPress: () => deleteGoal(item.id),
+                    },
+                  ],
+                )
+              }
             />
           )}
         />

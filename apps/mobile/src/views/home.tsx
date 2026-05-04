@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
 import { calculateProgress } from '@finiq/shared'
@@ -11,6 +11,7 @@ import { MutedText } from '@/components/ui/muted-text'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { Screen } from '@/components/ui/screen'
 import { SurfaceView } from '@/components/ui/surface-view'
+import { Text } from '@/components/ui/text'
 import { useDashboard } from '@/hooks/data/use-dashboard'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 
@@ -58,11 +59,13 @@ export default function HomeView() {
           <SummaryCard
             label="Balance"
             value={format(dashboard?.balance ?? 0)}
+            color={(dashboard?.balance ?? 0) >= 0 ? '#16a34a' : '#dc2626'}
           />
 
           <SummaryCard
             label="Ready to assign"
             value={format(dashboard?.readyToAssign ?? 0)}
+            color="#eab308"
           />
         </View>
 

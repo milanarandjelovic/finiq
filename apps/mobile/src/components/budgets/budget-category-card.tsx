@@ -31,7 +31,7 @@ export function BudgetCategoryCard({
 
   return (
     <SurfaceView style={styles.card}>
-      <View style={styles.cardHeader}>
+      <View style={[styles.cardHeader, { backgroundColor: 'transparent' }]}>
         <Text>
           {category.emoji} {category.name}
         </Text>
@@ -51,7 +51,7 @@ export function BudgetCategoryCard({
         color={category.color}
       />
 
-      <View style={styles.amounts}>
+      <View style={[styles.amounts, { backgroundColor: 'transparent' }]}>
         <MutedText>{format(spent)} spent</MutedText>
         <MutedText>{format(available)} available</MutedText>
       </View>

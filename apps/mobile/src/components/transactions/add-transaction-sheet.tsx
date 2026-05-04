@@ -16,6 +16,7 @@ import {
 import { BottomSheet } from '@/components/shared/bottom-sheet'
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
+import { DateInput } from '@/components/ui/date-input'
 import { FormField } from '@/components/ui/form-field'
 import { useTransactionCreate } from '@/hooks/data/use-transaction-create'
 import { useTheme } from '@/hooks/use-theme'
@@ -99,13 +100,8 @@ export function AddTransactionSheet({
           name="date"
           control={control}
           render={({ field }) => (
-            <FormField label="Date (YYYY-MM-DD)" error={errors.date?.message}>
-              <AppTextInput
-                value={field.value}
-                onChangeText={field.onChange}
-                placeholder="2024-01-31"
-                error={errors.date?.message}
-              />
+            <FormField label="Date" error={errors.date?.message}>
+              <DateInput value={field.value} onChange={field.onChange} />
             </FormField>
           )}
         />

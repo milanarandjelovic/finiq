@@ -33,39 +33,42 @@ export function BottomSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <TouchableOpacity
-        style={styles.overlay}
-        activeOpacity={1}
-        onPress={onClose}
-      />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-      >
-        <View style={[styles.sheet, { backgroundColor: colors.card }]}>
-          <View style={[styles.header, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.title, { color: colors.foreground }]}>
-              {title}
-            </Text>
-            <TouchableOpacity onPress={onClose}>
-              <Text style={{ color: colors.mutedForeground, fontSize: 15 }}>
-                Cancel
+      <View style={styles.wrapper}>
+        <TouchableOpacity
+          style={StyleSheet.absoluteFill}
+          activeOpacity={1}
+          onPress={onClose}
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+        >
+          <View style={[styles.sheet, { backgroundColor: colors.card }]}>
+            <View style={[styles.header, { borderBottomColor: colors.border }]}>
+              <Text style={[styles.title, { color: colors.foreground }]}>
+                {title}
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={onClose}>
+                <Text style={{ color: colors.mutedForeground, fontSize: 15 }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView keyboardShouldPersistTaps="handled">
+              {children}
+            </ScrollView>
           </View>
-          <ScrollView keyboardShouldPersistTaps="handled">
-            {children}
-          </ScrollView>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   )
 }
 
 const styles = StyleSheet.create({
-  overlay: {
+  wrapper: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
   },
   container: {
     justifyContent: 'flex-end',

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type Resolver } from 'react-hook-form'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -6,6 +7,7 @@ import { goalFormSchema, type GoalFormValues } from '@finiq/schemas'
 import { BottomSheet } from '@/components/shared/bottom-sheet'
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
+import { DateInput } from '@/components/ui/date-input'
 import { FormField } from '@/components/ui/form-field'
 import { useCategoryCreate } from '@/hooks/data/use-category-create'
 import { useCategoryUpdate } from '@/hooks/data/use-category-update'
@@ -52,6 +54,12 @@ export function GoalSheet({
   })
 
   const selectedColor = watch('color')
+
+  useEffect(() => {
+    if (visible) {
+      reset(defaultValues ?? { color: PRESET_COLORS[0] })
+    }
+  }, [visible, defaultValues])
 
   const onSubmit = (values: GoalFormValues) => {
     const payload = { ...values, isGoal: true }
@@ -155,11 +163,11 @@ export function GoalSheet({
           name="targetDate"
           control={control}
           render={({ field }) => (
-            <FormField label="Target date (optional, YYYY-MM-DD)">
-              <AppTextInput
-                value={field.value ?? ''}
-                onChangeText={field.onChange}
-                placeholder="2025-12-31"
+            <FormField label="Target date (optional)">
+              <DateInput
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Select target date"
               />
             </FormField>
           )}

@@ -26,11 +26,12 @@
     "migration:create": "npm run typeorm migration:create",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
-    "db:create": "npm run build && ts-node ../../node_modules/typeorm-extension/bin/cli.cjs db:create -d ./dist/providers/db/typeorm.config.js",
-    "db:drop": "npm run build && ts-node ../../node_modules/typeorm-extension/bin/cli.cjs db:drop -d ./dist/providers/db/typeorm.config.js",
-    "seed:run": "npm run build && ts-node ../../node_modules/typeorm-extension/bin/cli.cjs seed:run -d ./dist/providers/db/typeorm.config.js",
-    "seed:create": "npm run build && ts-node ../../node_modules/typeorm-extension/bin/cli.cjs seed:create -d ./dist/providers/db/typeorm.config.js",
-    "seed:dynamic": "npm run build && ts-node -r tsconfig-paths/register src/providers/db/run-seeders.ts"
+    "db:create": "npm run build && node ./node_modules/typeorm-extension/bin/cli.cjs db:create -d ./dist/providers/db/typeorm.config.js",
+    "db:drop": "npm run build && node ./node_modules/typeorm-extension/bin/cli.cjs db:drop -d ./dist/providers/db/typeorm.config.js",
+    "seed:run": "npm run build && node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d ./dist/providers/db/typeorm.config.js",
+    "seed:create": "npm run build && node ./node_modules/typeorm-extension/bin/cli.cjs seed:create -d ./dist/providers/db/typeorm.config.js",
+    "seed:dynamic": "npm run build && ts-node -r tsconfig-paths/register src/providers/db/run-seeders.ts",
+    "seed:dynamic:fresh": "npm run build && ts-node -r tsconfig-paths/register src/providers/db/run-seeders.ts -- --fresh"
   },
   "dependencies": {
     "@finiq/shared": "workspace:*",
