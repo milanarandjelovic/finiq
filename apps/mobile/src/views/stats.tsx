@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
 import { MonthNavigator } from '@/components/month-navigator'
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { MutedText } from '@/components/ui/muted-text'
 import { Screen } from '@/components/ui/screen'
 import { SurfaceView } from '@/components/ui/surface-view'
+import { Text } from '@/components/ui/text'
 import { useStatistics } from '@/hooks/data/use-statistics'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { useTheme } from '@/hooks/use-theme'
@@ -80,7 +81,7 @@ export default function StatsView() {
           )}
 
           {tab === 'trend' && (
-            <>
+            <SurfaceView style={styles.trendCard}>
               <TrendBarChart data={statistics?.monthlyTrend ?? []} />
               <View style={styles.legend}>
                 <View style={styles.legendItem}>
@@ -102,7 +103,7 @@ export default function StatsView() {
                   <MutedText>Expenses</MutedText>
                 </View>
               </View>
-            </>
+            </SurfaceView>
           )}
         </ScrollView>
       )}
@@ -124,7 +125,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    padding: 12,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 12,
+    paddingRight: 12,
     borderRadius: 10,
   },
   colorDot: {
@@ -136,11 +140,15 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
   },
+  trendCard: {
+    borderRadius: 12,
+    padding: 16,
+    gap: 16,
+  },
   legend: {
     flexDirection: 'row',
     gap: 16,
     justifyContent: 'center',
-    marginTop: 8,
   },
   legendItem: {
     flexDirection: 'row',

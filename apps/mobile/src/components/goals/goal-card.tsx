@@ -28,7 +28,7 @@ export function GoalCard({
 
   return (
     <SurfaceView style={styles.card}>
-      <View style={styles.cardHeader}>
+      <View style={[styles.cardHeader, { backgroundColor: 'transparent' }]}>
         <Text style={styles.cardEmoji}>{goal.emoji}</Text>
         <Text style={styles.cardName}>{goal.name}</Text>
         <TouchableOpacity onPress={onEdit} hitSlop={8}>
@@ -41,12 +41,12 @@ export function GoalCard({
 
       <ProgressBar value={progress} color={goal.color} height={8} />
 
-      <View style={styles.amounts}>
+      <View style={[styles.amounts, { backgroundColor: 'transparent' }]}>
         <MutedText>{format(saved)} saved</MutedText>
         <MutedText>of {format(target)}</MutedText>
       </View>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: 'transparent' }]}>
         <Badge label={`${Math.round(progress)}% complete`} />
         {goal.targetDate && (
           <MutedText style={styles.targetDate}>Due {goal.targetDate}</MutedText>

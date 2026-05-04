@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
 import { MonthNavigator } from '@/components/month-navigator'
@@ -10,6 +16,7 @@ import { AddTransactionSheet } from '@/components/transactions/add-transaction-s
 import { TransactionRow } from '@/components/transactions/transaction-row'
 import { Button } from '@/components/ui/button'
 import { Screen } from '@/components/ui/screen'
+import { SurfaceView } from '@/components/ui/surface-view'
 import { useCategories } from '@/hooks/data/use-categories'
 import { useTransactionDelete } from '@/hooks/data/use-transaction-delete'
 import { useTransactions } from '@/hooks/data/use-transactions'
@@ -64,29 +71,46 @@ export default function TransactionsView() {
       {isLoading ? (
         <LoadingState />
       ) : (
-        <FlatList
-          data={transactions}
-          keyExtractor={(t) => t.id}
-          ListEmptyComponent={
-            <EmptyState message="No transactions this month." />
-          }
-          ListFooterComponent={
-            isFetchingNextPage ? (
-              <ActivityIndicator style={styles.footer} />
-            ) : null
-          }
-          onEndReachedThreshold={0.3}
-          onEndReached={() => {
-            if (hasNextPage && !isFetchingNextPage) fetchNextPage()
-          }}
-          renderItem={({ item }) => (
-            <TransactionRow
-              transaction={item}
-              format={format}
-              onDelete={() => deleteTransaction(item.id)}
-            />
-          )}
-        />
+        <SurfaceView style={styles.list}>
+          <FlatList
+            data={transactions}
+            keyExtractor={(t) => t.id}
+            ListEmptyComponent={
+              <EmptyState message="No transactions this month." />
+            }
+            ListFooterComponent={
+              isFetchingNextPage ? (
+                <ActivityIndicator style={styles.footer} />
+              ) : null
+            }
+            onEndReachedThreshold={0.3}
+            onEndReached={() => {
+              if (hasNextPage && !isFetchingNextPage) {
+                fetchNextPage()
+              }
+            }}
+            renderItem={({ item }) => (
+              <TransactionRow
+                transaction={item}
+                format={format}
+                onDelete={() =>
+                  Alert.alert(
+                    'Delete Transaction',
+                    'Are you sure you want to delete this transaction?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Delete',
+                        style: 'destructive',
+                        onPress: () => deleteTransaction(item.id),
+                      },
+                    ],
+                  )
+                }
+              />
+            )}
+          />
+        </SurfaceView>
       )}
 
       <AddTransactionSheet
@@ -106,6 +130,12 @@ const styles = StyleSheet.create({
   segment: {
     flexDirection: 'row',
     gap: 4,
+  },
+  list: {
+    flex: 1,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    overflow: 'hidden',
   },
   footer: {
     paddingVertical: 16,

@@ -19,8 +19,13 @@ export function TransactionRow({
   const isIncome = transaction.type === 'income'
 
   return (
-    <View style={[styles.row, { borderBottomColor: colors.border }]}>
-      <View style={styles.rowLeft}>
+    <View
+      style={[
+        styles.row,
+        { borderBottomColor: colors.border, backgroundColor: 'transparent' },
+      ]}
+    >
+      <View style={[styles.rowLeft]}>
         <Text style={[styles.rowDate, { color: colors.mutedForeground }]}>
           {transaction.date}
         </Text>
@@ -72,6 +77,7 @@ const styles = StyleSheet.create({
   rowLeft: {
     gap: 2,
     flex: 1,
+    backgroundColor: 'transparent',
   },
   rowDate: {
     fontSize: 12,
@@ -87,6 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    backgroundColor: 'transparent',
   },
   rowAmount: {
     fontSize: 15,

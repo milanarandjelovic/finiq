@@ -24,7 +24,8 @@
     "db:drop": "bun --filter=@finiq/api db:drop",
     "db:seed:run": "bun --filter=@finiq/api seed:run",
     "db:seed:create": "bun --filter=@finiq/api seed:create",
-    "db:seed:dynamic": "bun --filter=@finiq/api seed:dynamic"
+    "db:seed:dynamic": "bun --filter=@finiq/api seed:dynamic",
+    "db:seed:dynamic:fresh": "bun --filter=@finiq/api seed:dynamic:fresh"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
@@ -43,5 +44,8 @@
     "apps/*",
     "packages/*",
     "tooling/*"
-  ]
+  ],
+  "dependencies": {
+    "@react-native-community/datetimepicker": "^9.1.0"
+  }
 }

@@ -10,6 +10,17 @@ if [ "$BRANCH" = "master" ]; then
   exit 1
 fi
 
+echo "Running type check before push"
+echo "------------------------------------------------"
+
+bun run check-types
+if [ $? -ne 0 ]; then
+  echo "------------------------------------------------"
+  echo "Type check failed. Push aborted."
+  echo "------------------------------------------------"
+  exit 1
+fi
+
 echo "Running unit tests before push"
 echo "------------------------------------------------"
 

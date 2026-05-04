@@ -1,11 +1,6 @@
-/**
- * Design tokens derived from tooling/tailwind-config/style.css (Vercel theme).
- * oklch values are converted to hex for React Native compatibility.
- */
-
 export const lightColors = {
   // Backgrounds
-  background: '#fafafa',
+  background: '#e6e6e6',
   card: '#ffffff',
   popover: '#fafafa',
 
@@ -37,7 +32,7 @@ export const lightColors = {
   successForeground: '#ffffff',
 
   // Border / Input / Ring
-  border: '#e4e4e4',
+  border: '#c0c0c0',
   input: '#ebebeb',
   ring: '#000000',
 
@@ -50,35 +45,44 @@ export const lightColors = {
 } as const
 
 export const darkColors = {
+  // Backgrounds
   background: '#000000',
   card: '#0a0a0a',
   popover: '#111111',
 
+  // Foregrounds
   foreground: '#ffffff',
   cardForeground: '#ffffff',
   popoverForeground: '#ffffff',
 
+  // Primary
   primary: '#ffffff',
   primaryForeground: '#000000',
 
+  // Secondary
   secondary: '#222222',
   secondaryForeground: '#ffffff',
 
+  // Muted
   muted: '#1c1c1c',
   mutedForeground: '#a4a4a4',
 
+  // Accent
   accent: '#333333',
   accentForeground: '#ffffff',
 
+  // Semantic states
   destructive: '#f2555a',
   destructiveForeground: '#000000',
   success: '#3dd68c',
   successForeground: '#000000',
 
+  // Border / Input / Ring
   border: '#262626',
   input: '#333333',
   ring: '#a4a4a4',
 
+  // Chart palette
   chart1: '#d4a017',
   chart2: '#6969e8',
   chart3: '#737373',
