@@ -1,5 +1,6 @@
 {
   "general": {
+    "welcome": "Welcome",
     "loading": "Loading...",
     "error": "Error",
     "somethingWentWrong": "Something went wrong",
@@ -50,7 +51,7 @@
     "loginNoAccount": "No account?",
     "loginForgotPassword": "Forgot password?",
     "loginSubmit": "Sign in",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "hi@example.com",
     "passwordPlaceholder": "••••••••",
     "registerTitle": "Create account",
     "registerDescription": "Start managing your finances with Finiq",
@@ -191,7 +192,8 @@
     "monthlyContributionPlaceholder": "500",
     "targetDate": "Target date (optional)",
     "pickADate": "Pick a date",
-    "saveGoal": "Save goal"
+    "saveGoal": "Save goal",
+    "due": "Due"
   },
   "profile": {
     "title": "Profile",
@@ -233,5 +235,8 @@
     "noData": "No data available.",
     "income": "Income",
     "expenses": "Expenses"
+  },
+  "search": {
+    "byName": "Search by name..."
   }
 }

@@ -18,8 +18,8 @@ import {
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
+import { useResetPassword } from '@/hooks/auth/use-reset-password'
 import { useTheme } from '@/hooks/use-theme'
-import { FiniqAPI } from '@/network/api'
 import { routes } from '@/util/routes'
 
 export default function ResetPasswordScreen() {
@@ -27,19 +27,20 @@ export default function ResetPasswordScreen() {
   const router = useRouter()
   const { colors } = useTheme()
   const { token } = useLocalSearchParams<{ token: string }>()
+  const { mutateAsync: resetPassword, isPending } = useResetPassword()
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordFormSchema),
   })
 
   const onSubmit = async (values: ResetPasswordFormValues) => {
     try {
-      await FiniqAPI.auth.resetPassword({ ...values, token })
+      await resetPassword({ ...values, token })
       router.replace(routes.login)
     } catch {
       setError('root', {
@@ -127,7 +128,7 @@ export default function ResetPasswordScreen() {
           <Button
             label={t('auth.resetPasswordSubmit')}
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
+            loading={isPending}
           />
         </ScrollView>
       </KeyboardAvoidingView>

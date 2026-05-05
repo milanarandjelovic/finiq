@@ -21,8 +21,8 @@ import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { MutedText } from '@/components/ui/muted-text'
+import { useForgotPassword } from '@/hooks/auth/use-forgot-password'
 import { useTheme } from '@/hooks/use-theme'
-import { FiniqAPI } from '@/network/api'
 import { routes } from '@/util/routes'
 
 export default function ForgotPasswordScreen() {
@@ -30,19 +30,20 @@ export default function ForgotPasswordScreen() {
   const router = useRouter()
   const { colors } = useTheme()
   const [sentEmail, setSentEmail] = useState<string | null>(null)
+  const { mutateAsync: forgotPassword, isPending } = useForgotPassword()
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
   })
 
   const onSubmit = async ({ email }: ForgotPasswordFormValues) => {
     try {
-      await FiniqAPI.auth.forgotPassword({ email })
+      await forgotPassword({ email })
       setSentEmail(email)
     } catch {
       setError('root', { message: t('general.somethingWentWrong') })
@@ -111,7 +112,7 @@ export default function ForgotPasswordScreen() {
           <Button
             label={t('auth.forgotPasswordSubmit')}
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
+            loading={isPending}
           />
 
           <Button

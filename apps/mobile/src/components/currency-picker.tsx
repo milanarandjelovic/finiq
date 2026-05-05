@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CURRENCIES } from '@finiq/shared'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -23,6 +24,7 @@ export function CurrencyPicker({ value, onChange }: CurrencyPickerProps) {
   const border = useThemeColor('border')
   const text = useThemeColor('text')
   const primary = useThemeColor('primary')
+  const insets = useSafeAreaInsets()
 
   return (
     <>
@@ -38,29 +40,36 @@ export function CurrencyPicker({ value, onChange }: CurrencyPickerProps) {
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="slide">
-        <TouchableOpacity
-          style={styles.overlay}
-          onPress={() => setOpen(false)}
-        />
-        <View style={[styles.sheet, { backgroundColor: surface }]}>
-          <FlatList
-            data={CURRENCIES}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[styles.row, { borderBottomColor: border }]}
-                onPress={() => {
-                  onChange(item.value)
-                  setOpen(false)
-                }}
-              >
-                <Text style={{ color: text }}>{item.label}</Text>
-                {item.value === value && (
-                  <Ionicons name="checkmark" size={18} color={primary} />
-                )}
-              </TouchableOpacity>
-            )}
+        <View style={styles.overlay}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            onPress={() => setOpen(false)}
           />
+          <View
+            style={[
+              styles.sheet,
+              { backgroundColor: surface, paddingBottom: insets.bottom },
+            ]}
+          >
+            <FlatList
+              data={CURRENCIES}
+              keyExtractor={(item) => item.value}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.row, { borderBottomColor: border }]}
+                  onPress={() => {
+                    onChange(item.value)
+                    setOpen(false)
+                  }}
+                >
+                  <Text style={{ color: text }}>{item.label}</Text>
+                  {item.value === value && (
+                    <Ionicons name="checkmark" size={18} color={primary} />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
         </View>
       </Modal>
     </>
@@ -79,6 +88,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
   },
   sheet: {
     maxHeight: '60%',

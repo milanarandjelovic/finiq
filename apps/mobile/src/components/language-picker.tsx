@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useAvailableLanguages } from '@/hooks/data/use-available-languages'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -34,6 +35,7 @@ export function LanguagePicker() {
   const text = useThemeColor('text')
   const primary = useThemeColor('primary')
   const muted = useThemeColor('muted')
+  const insets = useSafeAreaInsets()
 
   const currentLang = i18n.language
 
@@ -72,26 +74,33 @@ export function LanguagePicker() {
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="slide">
-        <TouchableOpacity
-          style={styles.overlay}
-          onPress={() => setOpen(false)}
-        />
-        <View style={[styles.sheet, { backgroundColor: surface }]}>
-          <FlatList
-            data={languages}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[styles.row, { borderBottomColor: border }]}
-                onPress={() => handleSelect(item)}
-              >
-                <Text style={{ color: text }}>{getLanguageName(item)}</Text>
-                {item === currentLang && (
-                  <Ionicons name="checkmark" size={18} color={primary} />
-                )}
-              </TouchableOpacity>
-            )}
+        <View style={styles.overlay}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            onPress={() => setOpen(false)}
           />
+          <View
+            style={[
+              styles.sheet,
+              { backgroundColor: surface, paddingBottom: insets.bottom },
+            ]}
+          >
+            <FlatList
+              data={languages}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.row, { borderBottomColor: border }]}
+                  onPress={() => handleSelect(item)}
+                >
+                  <Text style={{ color: text }}>{getLanguageName(item)}</Text>
+                  {item === currentLang && (
+                    <Ionicons name="checkmark" size={18} color={primary} />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
         </View>
       </Modal>
     </>
@@ -110,6 +119,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
   },
   sheet: {
     maxHeight: '60%',

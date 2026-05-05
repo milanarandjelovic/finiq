@@ -35,7 +35,7 @@ export class LocalesController {
     const data = this.localesService.getLocale(lang)
 
     res
-      .set('Cache-Control', 'public, max-age=86400')
+      // .set('Cache-Control', 'public, max-age=86400')
       .set('Content-Type', 'application/json')
       .json(data)
   }

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
 import { calculateProgress } from '@finiq/shared'
@@ -23,6 +24,7 @@ export function GoalCard({
   onDelete: () => void
   format: (amount: number) => string
 }) {
+  const { t } = useTranslation()
   const target = goal.targetAmount ?? 0
   const progress = calculateProgress(saved, target)
 
@@ -42,14 +44,20 @@ export function GoalCard({
       <ProgressBar value={progress} color={goal.color} height={8} />
 
       <View style={[styles.amounts, { backgroundColor: 'transparent' }]}>
-        <MutedText>{format(saved)} saved</MutedText>
-        <MutedText>of {format(target)}</MutedText>
+        <MutedText>
+          {format(saved)} {t('goals.saved')}
+        </MutedText>
+        <MutedText>
+          {t('goals.of')} {format(target)}
+        </MutedText>
       </View>
 
       <View style={[styles.footer, { backgroundColor: 'transparent' }]}>
-        <Badge label={`${Math.round(progress)}% complete`} />
+        <Badge label={`${Math.round(progress)}${t('goals.percentComplete')}`} />
         {goal.targetDate && (
-          <MutedText style={styles.targetDate}>Due {goal.targetDate}</MutedText>
+          <MutedText style={styles.targetDate}>
+            {t('goals.due')} {goal.targetDate}
+          </MutedText>
         )}
       </View>
     </SurfaceView>

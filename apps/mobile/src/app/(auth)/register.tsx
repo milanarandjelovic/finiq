@@ -15,26 +15,27 @@ import { registerFormSchema, type RegisterFormValues } from '@finiq/schemas'
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
+import { useRegister } from '@/hooks/auth/use-register'
 import { useTheme } from '@/hooks/use-theme'
-import { FiniqAPI } from '@/network/api'
 import { routes } from '@/util/routes'
 
 export default function RegisterScreen() {
   const { t } = useTranslation()
   const router = useRouter()
   const { colors } = useTheme()
+  const { mutateAsync: register, isPending } = useRegister()
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormValues>({ resolver: zodResolver(registerFormSchema) })
 
   const onSubmit = async (values: RegisterFormValues) => {
     const { passwordConfirmation: _, ...payload } = values
     try {
-      await FiniqAPI.auth.register(payload)
+      await register(payload)
       router.replace(routes.login)
     } catch {
       setError('root', { message: t('general.somethingWentWrong') })
@@ -135,7 +136,7 @@ export default function RegisterScreen() {
           <Button
             label={t('auth.registerSubmit')}
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
+            loading={isPending}
           />
 
           <Button

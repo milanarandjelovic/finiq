@@ -4,11 +4,21 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 
 @Injectable()
 export class LocalesService {
-  private readonly localesDir = path.join(process.cwd(), 'locales')
+  private readonly translationsDir: string
+
+  constructor() {
+    const translationsMain = require.resolve('@finiq/translations')
+    this.translationsDir = path.join(
+      path.dirname(translationsMain),
+      '..',
+      'src',
+      'locales',
+    )
+  }
 
   getLocale(lang: string): Record<string, unknown> {
     const safeLang = lang.replace(/[^a-zA-Z0-9_-]/g, '')
-    const filePath = path.join(this.localesDir, `${safeLang}.json`)
+    const filePath = path.join(this.translationsDir, `${safeLang}.json`)
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException(`Locale "${safeLang}" not found`)
@@ -19,12 +29,12 @@ export class LocalesService {
   }
 
   getAvailableLocales(): string[] {
-    if (!fs.existsSync(this.localesDir)) {
+    if (!fs.existsSync(this.translationsDir)) {
       return []
     }
 
     return fs
-      .readdirSync(this.localesDir)
+      .readdirSync(this.translationsDir)
       .filter((file) => file.endsWith('.json'))
       .map((file) => file.replace('.json', ''))
   }

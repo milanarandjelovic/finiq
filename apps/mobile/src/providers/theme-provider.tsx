@@ -9,7 +9,7 @@ import React, {
 import * as SecureStore from 'expo-secure-store'
 import { useColorScheme } from 'react-native'
 
-const STORAGE_KEY = 'theme_preference'
+import { THEME_COOKIE_NAME } from '@finiq/shared'
 
 export type ThemePreference = 'light' | 'dark' | 'system'
 export type ColorScheme = 'light' | 'dark'
@@ -30,7 +30,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const [preference, setPreferenceState] = useState<ThemePreference>('system')
 
   useEffect(() => {
-    SecureStore.getItemAsync(STORAGE_KEY).then((stored) => {
+    SecureStore.getItemAsync(THEME_COOKIE_NAME).then((stored) => {
       if (stored === 'light' || stored === 'dark' || stored === 'system') {
         setPreferenceState(stored)
       }
@@ -42,7 +42,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 
   const setPreference = useCallback((pref: ThemePreference) => {
     setPreferenceState(pref)
-    SecureStore.setItemAsync(STORAGE_KEY, pref)
+    SecureStore.setItemAsync(THEME_COOKIE_NAME, pref)
   }, [])
 
   const cycleTheme = useCallback(() => {

@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Localization from 'expo-localization'
 import * as SecureStore from 'expo-secure-store'
 import i18next, { LanguageDetectorAsyncModule } from 'i18next'
@@ -31,8 +30,17 @@ const fetchTranslations = async (
   lang: string,
 ): Promise<Record<string, unknown> | null> => {
   try {
-    const response = await fetch(`${Env.i18nUrl}/locales/${lang}`)
-    if (!response.ok) return null
+    const response = await fetch(`${Env.i18nUrl}/locales/${lang}`, {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
     return response.json()
   } catch {
     return null

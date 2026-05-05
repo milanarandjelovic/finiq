@@ -65,7 +65,7 @@ export default function GoalsView() {
         <AppTextInput
           value={search}
           onChangeText={setSearch}
-          placeholder="Search by name..."
+          placeholder={t('search.byName')}
           style={styles.search}
         />
       </View>

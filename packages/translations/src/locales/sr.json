@@ -1,5 +1,6 @@
 {
   "general": {
+    "welcome": "Dobrodošli",
     "loading": "Učitavanje...",
     "error": "Greška",
     "somethingWentWrong": "Nešto je pošlo naopako",
@@ -50,7 +51,7 @@
     "loginNoAccount": "Nemate nalog?",
     "loginForgotPassword": "Zaboravili ste lozinku?",
     "loginSubmit": "Prijavi se",
-    "emailPlaceholder": "vi@primer.com",
+    "emailPlaceholder": "hi@example.com",
     "passwordPlaceholder": "••••••••",
     "registerTitle": "Kreirajte nalog",
     "registerDescription": "Počnite da upravljate finansijama sa Finiqom",
@@ -175,7 +176,7 @@
     "failedToUpdate": "Ažuriranje cilja nije uspelo",
     "goalDeleted": "Cilj obrisan",
     "failedToDelete": "Brisanje cilja nije uspelo",
-    "saved": "uštedeno",
+    "saved": "ušteđeno",
     "of": "od",
     "percentComplete": "% završeno",
     "target": "Cilj:",
@@ -191,7 +192,8 @@
     "monthlyContributionPlaceholder": "500",
     "targetDate": "Ciljni datum (opciono)",
     "pickADate": "Izaberite datum",
-    "saveGoal": "Sačuvaj cilj"
+    "saveGoal": "Sačuvaj cilj",
+    "due": "Rok"
   },
   "profile": {
     "title": "Profil",
@@ -210,7 +212,7 @@
   },
   "settings": {
     "title": "Podešavanja",
-    "preferences": "Preference",
+    "preferences": "Podešavanja",
     "preferencesDescription": "Podesite vašu valutu.",
     "currency": "Valuta",
     "theme": "Tema",
@@ -233,5 +235,8 @@
     "noData": "Nema dostupnih podataka.",
     "income": "Prihodi",
     "expenses": "Rashodi"
+  },
+  "search": {
+    "byName": "Pretraži po imenu..."
   }
 }
