@@ -11,7 +11,7 @@ import {
   useTransactionControllerFindAll,
 } from '@/api/__generated__/transactions/transactions'
 import {
-  getColumns,
+  useGetColumns,
   type TransactionRow,
 } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table-columns'
 import { TransactionsTableToolbarActions } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table-toolbar-actions'
@@ -50,7 +50,7 @@ export function TransactionsTable({
   onDelete,
 }: TransactionsTableProps) {
   const formatCurrency = useCurrencyFormatter()
-  const columns = useMemo(() => getColumns(formatCurrency), [formatCurrency])
+  const columns = useGetColumns(formatCurrency)
 
   const [page] = useQueryState(
     'page',

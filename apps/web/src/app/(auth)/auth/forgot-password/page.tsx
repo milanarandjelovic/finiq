@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 import {
   Card,
@@ -15,15 +16,17 @@ import { ForgotPasswordForm } from '@/app/(auth)/auth/forgot-password/_component
 import { routes } from '@/lib/routes'
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation()
   const [sentTo, setSentTo] = useState<string | null>(null)
 
   if (sentTo) {
     return (
       <Card className="w-full max-w-sm text-center">
         <CardHeader>
-          <CardTitle>Check your email</CardTitle>
+          <CardTitle>{t('auth.forgotPasswordCheckEmailTitle')}</CardTitle>
           <CardDescription>
-            We sent a reset link to <strong>{sentTo}</strong>
+            {t('auth.forgotPasswordCheckEmailDescription')}{' '}
+            <strong>{sentTo}</strong>
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
@@ -31,7 +34,7 @@ export default function ForgotPasswordPage() {
             href={routes.login}
             className="text-primary text-sm hover:underline"
           >
-            Back to sign in
+            {t('auth.forgotPasswordBackToSignIn')}
           </Link>
         </CardFooter>
       </Card>
@@ -41,10 +44,8 @@ export default function ForgotPasswordPage() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="flex flex-col items-center text-center">
-        <CardTitle>Forgot password?</CardTitle>
-        <CardDescription>
-          Enter your email and we&apos;ll send you a reset link.
-        </CardDescription>
+        <CardTitle>{t('auth.forgotPasswordTitle')}</CardTitle>
+        <CardDescription>{t('auth.forgotPasswordDescription')}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -56,7 +57,7 @@ export default function ForgotPasswordPage() {
           href={routes.login}
           className="text-primary text-sm hover:underline"
         >
-          Back to sign in
+          {t('auth.forgotPasswordBackToSignIn')}
         </Link>
       </CardFooter>
     </Card>

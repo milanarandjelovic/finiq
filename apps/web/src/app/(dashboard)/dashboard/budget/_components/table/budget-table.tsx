@@ -17,7 +17,7 @@ import type {
   BudgetControllerFindAll200,
 } from '@/api/__generated__/models'
 import {
-  getColumns,
+  useGetColumns,
   type BudgetRow,
 } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-columns'
 import { BudgetTableToolbarActions } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-toolbar-actions'
@@ -56,7 +56,7 @@ export function BudgetTable({
   onUpsert,
 }: BudgetTableProps) {
   const formatCurrency = useCurrencyFormatter()
-  const columns = useMemo(() => getColumns(formatCurrency), [formatCurrency])
+  const columns = useGetColumns(formatCurrency)
 
   const [page] = useQueryState(
     'page',

@@ -21,7 +21,11 @@
     "signOut": "Odjavi se",
     "signUp": "Registruj se",
     "optional": "opciono",
-    "noData": "Nema dostupnih podataka."
+    "noData": "Nema dostupnih podataka.",
+    "openMenu": "Otvori meni",
+    "reset": "Resetuj",
+    "deleting": "Brisanje...",
+    "menu": "Meni"
   },
   "validation": {
     "emailNotEmpty": "Email ne sme biti prazan.",
@@ -94,7 +98,10 @@
     "account": "Nalog",
     "lightMode": "Svetli mod",
     "darkMode": "Tamni mod",
-    "logout": "Odjavi se"
+    "logout": "Odjavi se",
+    "home": "Početna",
+    "other": "Ostalo",
+    "menu": "Meni"
   },
   "userMenu": {
     "profile": "Profil",
@@ -112,6 +119,7 @@
   },
   "transactions": {
     "title": "Transakcije",
+    "description": "Pratite i upravljajte svojim prihodima i rashodima.",
     "allTypes": "Svi tipovi",
     "income": "Prihod",
     "expense": "Rashod",
@@ -130,14 +138,28 @@
     "noteOptionalLabel": "Napomena (opciono)",
     "notePlaceholder": "Za šta je ovo bilo?",
     "transactionAdded": "Transakcija dodata",
-    "failedToAdd": "Dodavanje transakcije nije uspelo"
+    "failedToAdd": "Dodavanje transakcije nije uspelo",
+    "deleteTransaction": "Obriši transakciju",
+    "deleteTransactionConfirm": "Da li ste sigurni da želite da obrišete ovu transakciju? Ova akcija se ne može poništiti."
   },
   "budget": {
     "title": "Budžet",
+    "description": "Upravljajte mesečnim alokacijama budžeta.",
     "copyFromPreviousMonth": "Kopiraj iz prethodnog meseca",
+    "manageCategories": "Upravljaj kategorijama",
+    "readyToAssign": "Spremo za dodelu",
     "overBudget": "Prekoračen budžet",
     "spent": "Potrošeno:",
-    "available": "Dostupno:"
+    "available": "Dostupno:",
+    "assigned": "Dodeljeno",
+    "notAssigned": "Nije dodeljeno",
+    "failedToCopy": "Kopiranje budžeta nije uspelo",
+    "failedToSave": "Čuvanje budžeta nije uspelo",
+    "editBudget": "Uredi budžet",
+    "assignBudget": "Dodeli budžet",
+    "amount": "Iznos",
+    "assign": "Dodeli",
+    "resetBudgetConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} {{kategorija}}?"
   },
   "categories": {
     "title": "Kategorije",
@@ -154,7 +176,6 @@
     "categoryDeleted": "Kategorija obrisana",
     "failedToDelete": "Brisanje kategorije nije uspelo",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🛒",
     "color": "Boja",
     "colorPlaceholder": "#6366f1",
     "namePlaceholder": "Namirnice",
@@ -162,10 +183,13 @@
     "monthlyBudgetPlaceholder": "0.00",
     "saveCategory": "Sačuvaj kategoriju",
     "budgetPrefix": "Budžet: ",
-    "perMonth": "/mes"
+    "perMonth": "/mes",
+    "goalCategory": "Kategorija cilja",
+    "filterByName": "Pretraži po imenu..."
   },
   "goals": {
     "title": "Ciljevi",
+    "description": "Pratite svoje ciljeve štednje.",
     "newGoal": "Novi cilj",
     "newSavingsGoal": "Novi cilj štednje",
     "editGoal": "Uredi cilj",
@@ -181,7 +205,6 @@
     "percentComplete": "% završeno",
     "target": "Cilj:",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🎯",
     "color": "Boja",
     "colorPlaceholder": "#10b981",
     "goalName": "Naziv cilja",
@@ -215,8 +238,11 @@
     "preferences": "Podešavanja",
     "preferencesDescription": "Podesite vašu valutu.",
     "currency": "Valuta",
-    "theme": "Tema",
+    "currencyDescription": "Podesite vašu valutu.",
     "language": "Jezik",
+    "languageUpdated": "Jezik ažuriran",
+    "saveSettings": "Sačuvaj podešavanja",
+    "theme": "Tema",
     "settingsSaved": "Podešavanja sačuvana",
     "failedToSave": "Čuvanje podešavanja nije uspelo"
   },
@@ -238,5 +264,18 @@
   },
   "search": {
     "byName": "Pretraži po imenu..."
+  },
+  "table": {
+    "rowsPerPage": "Redova po strani",
+    "of": "od",
+    "rowsSelected": "redova izabrano",
+    "page": "Strana",
+    "goToFirstPage": "Idi na prvu stranu",
+    "goToPreviousPage": "Idi na prethodnu stranu",
+    "goToNextPage": "Idi na sledeću stranu",
+    "goToLastPage": "Idi na poslednju stranu",
+    "selectAll": "Izaberi sve",
+    "selectRow": "Izaberi red",
+    "noResults": "Nema rezultata."
   }
 }

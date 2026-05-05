@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@finiq/ui/components/button'
 import {
   Dialog,
@@ -18,19 +20,20 @@ export function DeleteTransactionDialog({
   onOpenChange: (v: boolean) => void
   onConfirm: () => Promise<void>
 }) {
+  const { t } = useTranslation()
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete transaction</DialogTitle>
+          <DialogTitle>{t('transactions.deleteTransaction')}</DialogTitle>
         </DialogHeader>
         <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete this transaction? This action cannot
-          be undone.
+          {t('transactions.deleteTransactionConfirm')}
         </p>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('general.cancel')}
           </Button>
           <Button
             variant="destructive"
@@ -39,7 +42,7 @@ export function DeleteTransactionDialog({
               onOpenChange(false)
             }}
           >
-            Delete
+            {t('general.delete')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 import {
   Card,
@@ -12,13 +15,13 @@ import { ResetPasswordForm } from '@/app/(auth)/auth/reset-password/_components/
 import { routes } from '@/lib/routes'
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation()
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="flex flex-col items-center text-center">
-        <CardTitle>Set new password</CardTitle>
-        <CardDescription>
-          Choose a strong password for your account.
-        </CardDescription>
+        <CardTitle>{t('auth.resetPasswordTitle')}</CardTitle>
+        <CardDescription>{t('auth.resetPasswordDescription')}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -30,7 +33,7 @@ export default function ResetPasswordPage() {
           href={routes.login}
           className="text-primary text-sm hover:underline"
         >
-          Back to sign in
+          {t('auth.resetPasswordBackToSignIn')}
         </Link>
       </CardFooter>
     </Card>

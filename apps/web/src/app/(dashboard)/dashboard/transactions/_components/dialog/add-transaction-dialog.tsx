@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Plus } from 'lucide-react'
 import { useForm, type Resolver } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import {
@@ -55,6 +56,7 @@ export function AddTransactionDialog({
   categories: Category[]
   onSuccess: () => void
 }) {
+  const { t } = useTranslation()
   const form = useForm<TransactionFormValues>({
     resolver: zodResolver(
       transactionFormSchema,
@@ -73,7 +75,7 @@ export function AddTransactionDialog({
     useTransactionControllerCreate({
       mutation: {
         onSuccess() {
-          toast.success('Transaction added')
+          toast.success(t('transactions.transactionAdded'))
           form.reset({
             type: 'expense',
             amount: 0,
@@ -83,7 +85,7 @@ export function AddTransactionDialog({
           onSuccess()
         },
         onError() {
-          toast.error('Failed to add transaction')
+          toast.error(t('transactions.failedToAdd'))
         },
       },
     })
@@ -102,12 +104,12 @@ export function AddTransactionDialog({
       <DialogTrigger asChild>
         <Button>
           <Plus />
-          Add transaction
+          {t('transactions.addTransaction')}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add transaction</DialogTitle>
+          <DialogTitle>{t('transactions.addTransaction')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -119,7 +121,7 @@ export function AddTransactionDialog({
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel>{t('transactions.type')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -130,8 +132,12 @@ export function AddTransactionDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="expense">Expense</SelectItem>
-                      <SelectItem value="income">Income</SelectItem>
+                      <SelectItem value="expense">
+                        {t('transactions.expense')}
+                      </SelectItem>
+                      <SelectItem value="income">
+                        {t('transactions.income')}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -143,13 +149,13 @@ export function AddTransactionDialog({
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount</FormLabel>
+                  <FormLabel>{t('transactions.amount')}</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       step="0.01"
                       min="0.01"
-                      placeholder="0.00"
+                      placeholder={t('transactions.amountPlaceholder')}
                       {...field}
                     />
                   </FormControl>
@@ -162,7 +168,7 @@ export function AddTransactionDialog({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>{t('transactions.date')}</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -172,7 +178,7 @@ export function AddTransactionDialog({
                         >
                           {field.value
                             ? format(new Date(field.value), 'PPP')
-                            : 'Pick a date'}
+                            : t('transactions.pickADate')}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -199,11 +205,13 @@ export function AddTransactionDialog({
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>{t('transactions.category')}</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select category" />
+                          <SelectValue
+                            placeholder={t('transactions.selectCategory')}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -224,9 +232,12 @@ export function AddTransactionDialog({
               name="note"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Note (optional)</FormLabel>
+                  <FormLabel>{t('transactions.noteOptionalLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="What was this for?" {...field} />
+                    <Input
+                      placeholder={t('transactions.notePlaceholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -237,7 +248,7 @@ export function AddTransactionDialog({
               className="w-full"
               isLoading={isPending}
             >
-              Add transaction
+              {t('transactions.addTransaction')}
             </LoadingButton>
           </form>
         </Form>

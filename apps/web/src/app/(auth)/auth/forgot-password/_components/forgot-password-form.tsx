@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import {
   forgotPasswordFormSchema,
@@ -25,6 +26,7 @@ export function ForgotPasswordForm({
 }: {
   onSuccess: (email: string) => void
 }) {
+  const { t } = useTranslation()
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
@@ -58,11 +60,11 @@ export function ForgotPasswordForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('general.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
                   {...field}
                 />
@@ -73,7 +75,7 @@ export function ForgotPasswordForm({
         />
 
         <LoadingButton type="submit" isLoading={isPending} className="w-full">
-          Send reset link
+          {t('auth.forgotPasswordSubmit')}
         </LoadingButton>
       </form>
     </Form>

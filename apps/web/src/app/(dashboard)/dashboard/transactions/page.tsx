@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { useMonthNavigation } from '@finiq/hooks'
 import { MonthPicker } from '@finiq/ui/components/month-picker'
@@ -24,6 +25,7 @@ import { TransactionsTable } from '@/app/(dashboard)/dashboard/transactions/_com
 import { crudMutationOptions } from '@/lib/mutation'
 
 export default function TransactionsPage() {
+  const { t } = useTranslation()
   const { year, month, date, setDate } = useMonthNavigation()
   const [open, setOpen] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -53,9 +55,11 @@ export default function TransactionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Transactions</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t('transactions.title')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Track and manage your income and expenses.
+            {t('transactions.description')}
           </p>
         </div>
 

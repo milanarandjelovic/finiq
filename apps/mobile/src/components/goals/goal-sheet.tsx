@@ -61,7 +61,7 @@ export function GoalSheet({
     if (visible) {
       reset(defaultValues ?? { color: PRESET_COLORS[0] })
     }
-  }, [visible, defaultValues])
+  }, [visible, defaultValues, reset])
 
   const onSubmit = (values: GoalFormValues) => {
     const payload = { ...values, isGoal: true }
@@ -115,7 +115,7 @@ export function GoalSheet({
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder={t('goals.emojiPlaceholder')}
+                placeholder="🎯"
                 error={errors.emoji?.message}
               />
             </FormField>

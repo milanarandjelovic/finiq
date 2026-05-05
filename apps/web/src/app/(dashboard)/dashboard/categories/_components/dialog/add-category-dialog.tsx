@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -20,6 +21,7 @@ import { CategoryForm } from '@/app/(dashboard)/dashboard/categories/_components
 import { crudMutationOptions } from '@/lib/mutation'
 
 export function AddCategoryDialog() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const qc = useQueryClient()
 
@@ -27,8 +29,8 @@ export function AddCategoryDialog() {
     useCategoryControllerCreate(
       crudMutationOptions(qc, {
         queryKeys: [getCategoryControllerFindAllQueryKey()],
-        successMessage: 'Category created',
-        errorMessage: 'Failed to create category',
+        successMessage: t('categories.categoryCreated'),
+        errorMessage: t('categories.failedToCreate'),
         onSuccess: () => setOpen(false),
       }),
     )
@@ -38,12 +40,12 @@ export function AddCategoryDialog() {
       <DialogTrigger asChild>
         <Button>
           <Plus />
-          Add category
+          {t('categories.addCategory')}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New category</DialogTitle>
+          <DialogTitle>{t('categories.newCategory')}</DialogTitle>
         </DialogHeader>
         <CategoryForm
           onSubmit={async (v) => {

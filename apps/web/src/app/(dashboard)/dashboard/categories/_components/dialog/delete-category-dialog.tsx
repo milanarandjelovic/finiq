@@ -1,6 +1,7 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -26,13 +27,14 @@ export function DeleteCategoryDialog({
   category,
   onClose,
 }: DeleteCategoryDialogProps) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
 
   const { mutateAsync: deleteCategory } = useCategoryControllerDelete(
     crudMutationOptions(qc, {
       queryKeys: [getCategoryControllerFindAllQueryKey()],
-      successMessage: 'Category deleted',
-      errorMessage: 'Failed to delete category',
+      successMessage: t('categories.categoryDeleted'),
+      errorMessage: t('categories.failedToDelete'),
       onSuccess: onClose,
     }),
   )
@@ -41,22 +43,22 @@ export function DeleteCategoryDialog({
     <Dialog open={!!category} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete category</DialogTitle>
+          <DialogTitle>
+            {t('general.delete')} {t('general.name')}
+          </DialogTitle>
         </DialogHeader>
         <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete{' '}
-          <span className="text-foreground font-medium">{category?.name}</span>?
-          This action cannot be undone.
+          {t('categories.deleteConfirm', { name: category?.name })}
         </p>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t('general.cancel')}
           </Button>
           <Button
             variant="destructive"
             onClick={() => category && deleteCategory({ id: category.id })}
           >
-            Delete
+            {t('general.delete')}
           </Button>
         </DialogFooter>
       </DialogContent>

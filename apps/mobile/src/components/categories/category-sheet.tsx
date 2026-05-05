@@ -60,7 +60,7 @@ export function CategorySheet({
     if (visible) {
       reset(defaultValues ?? { color: PRESET_COLORS[0] })
     }
-  }, [visible, defaultValues])
+  }, [visible, defaultValues, reset])
 
   const onSubmit = (values: CategoryFormValues) => {
     if (categoryId) {
@@ -118,7 +118,7 @@ export function CategorySheet({
               <AppTextInput
                 value={field.value}
                 onChangeText={field.onChange}
-                placeholder={t('categories.emojiPlaceholder')}
+                placeholder="🛒"
                 error={errors.emoji?.message}
               />
             </FormField>

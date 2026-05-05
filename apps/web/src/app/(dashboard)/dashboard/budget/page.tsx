@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useQueryClient } from '@tanstack/react-query'
 import { CopyIcon, TagIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { useMonthNavigation } from '@finiq/hooks'
@@ -34,6 +35,7 @@ interface CategoryBreakdownItem {
 }
 
 export default function BudgetPage() {
+  const { t } = useTranslation()
   const { year, month, date, setDate } = useMonthNavigation()
   const formatCurrency = useCurrencyFormatter()
   const qc = useQueryClient()
@@ -71,9 +73,9 @@ export default function BudgetPage() {
           qc.invalidateQueries({
             queryKey: getBudgetControllerFindAllQueryKey({ year, month }),
           })
-          toast.success('Budgets copied from previous month')
+          toast.success(t('budget.copyFromPreviousMonth'))
         },
-        onError: () => toast.error('Failed to copy budgets'),
+        onError: () => toast.error(t('budget.failedToCopy')),
       },
     })
 
@@ -100,12 +102,12 @@ export default function BudgetPage() {
             disabled={isCopying}
           >
             <CopyIcon className="size-3.5" />
-            Copy previous month
+            {t('budget.copyFromPreviousMonth')}
           </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href={routes.categories}>
               <TagIcon className="size-3.5" />
-              Manage categories
+              {t('budget.manageCategories')}
             </Link>
           </Button>
         </div>
@@ -114,7 +116,7 @@ export default function BudgetPage() {
       <Card className="py-3">
         <CardContent className="flex items-center justify-between px-6">
           <span className="text-muted-foreground text-sm font-medium">
-            Ready to Assign
+            {t('budget.readyToAssign')}
           </span>
           <span
             className={`text-2xl font-bold tabular-nums ${readyToAssign >= 0 ? 'text-green-500' : 'text-destructive'}`}

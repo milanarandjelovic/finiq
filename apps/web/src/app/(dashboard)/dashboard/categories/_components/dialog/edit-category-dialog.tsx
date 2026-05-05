@@ -1,6 +1,7 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import {
   Dialog,
@@ -25,14 +26,15 @@ export function EditCategoryDialog({
   category,
   onClose,
 }: EditCategoryDialogProps) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
 
   const { mutateAsync: updateCategory, isPending: isUpdating } =
     useCategoryControllerUpdate(
       crudMutationOptions(qc, {
         queryKeys: [getCategoryControllerFindAllQueryKey()],
-        successMessage: 'Category updated',
-        errorMessage: 'Failed to update category',
+        successMessage: t('categories.categoryUpdated'),
+        errorMessage: t('categories.failedToUpdate'),
         onSuccess: onClose,
       }),
     )
@@ -41,7 +43,7 @@ export function EditCategoryDialog({
     <Dialog open={!!category} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit category</DialogTitle>
+          <DialogTitle>{t('categories.editCategory')}</DialogTitle>
         </DialogHeader>
         {category && (
           <CategoryForm

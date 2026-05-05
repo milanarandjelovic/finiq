@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { registerFormSchema, type RegisterFormValues } from '@finiq/schemas'
@@ -22,6 +23,7 @@ import { formMutationOptions } from '@/lib/form-validation'
 import { routes } from '@/lib/routes'
 
 export function RegisterForm() {
+  const { t } = useTranslation()
   const router = useRouter()
 
   const form = useForm<RegisterFormValues>({
@@ -36,7 +38,7 @@ export function RegisterForm() {
 
   const { mutateAsync: register, isPending } = useAuthControllerRegister(
     formMutationOptions(form, () => {
-      toast.success('Account created! Check your email to verify.')
+      toast.success(t('auth.registerSuccess'))
       router.push(routes.login)
     }),
   )
@@ -56,9 +58,13 @@ export function RegisterForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full name</FormLabel>
+              <FormLabel>{t('auth.registerFullName')}</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" autoComplete="name" {...field} />
+                <Input
+                  placeholder={t('auth.registerFullNamePlaceholder')}
+                  autoComplete="name"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,11 +76,11 @@ export function RegisterForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('general.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
                   {...field}
                 />
@@ -89,10 +95,10 @@ export function RegisterForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t('general.password')}</FormLabel>
               <FormControl>
                 <PasswordInput
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
                   {...field}
                 />
@@ -107,10 +113,10 @@ export function RegisterForm() {
           name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm password</FormLabel>
+              <FormLabel>{t('auth.registerConfirmPassword')}</FormLabel>
               <FormControl>
                 <PasswordInput
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
                   {...field}
                 />
@@ -121,7 +127,7 @@ export function RegisterForm() {
         />
 
         <LoadingButton type="submit" isLoading={isPending} className="w-full">
-          Create account
+          {t('auth.registerSubmit')}
         </LoadingButton>
       </form>
     </Form>

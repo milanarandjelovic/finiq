@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { Avatar, AvatarFallback } from '@finiq/ui/components/avatar'
 import {
   Tabs,
@@ -13,6 +15,7 @@ import { PersonalInformationForm } from '@/app/(dashboard)/dashboard/profile/_co
 import { getInitials } from '@/lib/get-initials'
 
 export default function ProfilePage() {
+  const { t } = useTranslation()
   const { data } = useUserProfileControllerFindOne()
   const user = data?.status === 200 ? data.data.data?.user : undefined
 
@@ -20,7 +23,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-semibold">Profile</h1>
+      <h1 className="text-2xl font-semibold">{t('profile.title')}</h1>
 
       <div className="flex items-center gap-4">
         <Avatar className="size-16">
@@ -34,8 +37,12 @@ export default function ProfilePage() {
 
       <Tabs defaultValue="personal">
         <TabsList>
-          <TabsTrigger value="personal">Personal information</TabsTrigger>
-          <TabsTrigger value="password">Change password</TabsTrigger>
+          <TabsTrigger value="personal">
+            {t('profile.personalInformation')}
+          </TabsTrigger>
+          <TabsTrigger value="password">
+            {t('profile.changePassword')}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="personal">

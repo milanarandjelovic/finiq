@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChevronUp, LogOut, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useTranslation } from 'react-i18next'
 
 import { Avatar, AvatarFallback } from '@finiq/ui/components/avatar'
 import {
@@ -36,6 +37,7 @@ export function AppSidebar() {
   const router = useRouter()
   const { logout } = useAuth()
   const { theme, setTheme } = useTheme()
+  const { t } = useTranslation()
   const { data } = useUserProfileControllerFindOne()
   const user = data?.status === 200 ? data.data.data?.user : undefined
 
@@ -67,7 +69,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -85,7 +87,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -122,7 +124,9 @@ export function AppSidebar() {
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
                   {theme === 'dark' ? <Sun /> : <Moon />}
-                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+                  {theme === 'dark'
+                    ? t('sidebar.lightMode')
+                    : t('sidebar.darkMode')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -130,7 +134,7 @@ export function AppSidebar() {
                   className="text-destructive focus:text-destructive"
                 >
                   <LogOut />
-                  Logout
+                  {t('sidebar.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

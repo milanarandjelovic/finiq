@@ -11,7 +11,7 @@ export default {
     '^(@finiq/schemas)',
     '^(@finiq/shared)',
     '^(@finiq/ui$)|^(@finiq/ui/(.*)$)',
-    '^(^@/(.*)$|^@/api/(.*)$|^@/app/(.*)$|^@/assets/(.*)$|^@/components/(.*)$|^@/constants/(.*)$|^@/context/(.*)$|^@/hooks/(.*)$|^@/lib/(.*)$|^@/types/(.*)$)',
+    '^(^@/(.*)$|^@/api/(.*)$|^@/app/(.*)$|^@/assets/(.*)$|^@/components/(.*)$|^@/constants/(.*)$|^@/context/(.*)$|^@/hooks/(.*)$|^@/lib/(.*)$|^@/types/(.*)$|^@/util/(.*)$)',
     '',
     '^[../]',
     '^[./]',

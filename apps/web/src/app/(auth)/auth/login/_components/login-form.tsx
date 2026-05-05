@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { loginFormSchema, type LoginFormValues } from '@finiq/schemas'
 import {
@@ -23,6 +24,7 @@ import { formMutationOptions } from '@/lib/form-validation'
 import { routes } from '@/lib/routes'
 
 export function LoginForm() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { login } = useAuth()
 
@@ -58,11 +60,11 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('general.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
                   {...field}
                 />
@@ -78,17 +80,17 @@ export function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('general.password')}</FormLabel>
                 <Link
                   href={routes.forgotPassword}
                   className="text-primary text-sm hover:underline"
                 >
-                  Forgot password?
+                  {t('auth.loginForgotPassword')}
                 </Link>
               </div>
               <FormControl>
                 <PasswordInput
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="current-password"
                   {...field}
                 />
@@ -99,7 +101,7 @@ export function LoginForm() {
         />
 
         <LoadingButton type="submit" isLoading={isPending} className="w-full">
-          Sign in
+          {t('auth.loginSubmit')}
         </LoadingButton>
       </form>
     </Form>

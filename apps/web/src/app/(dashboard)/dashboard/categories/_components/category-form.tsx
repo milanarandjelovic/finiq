@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type Resolver } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { categoryFormSchema, type CategoryFormValues } from '@finiq/schemas'
 import {
@@ -25,6 +26,7 @@ export function CategoryForm({
   onSubmit: (values: CategoryFormValues) => Promise<void>
   isPending: boolean
 }) {
+  const { t } = useTranslation()
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categoryFormSchema) as Resolver<CategoryFormValues>,
     defaultValues: {
@@ -45,7 +47,7 @@ export function CategoryForm({
             name="emoji"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Emoji</FormLabel>
+                <FormLabel>{t('categories.emoji')}</FormLabel>
                 <FormControl>
                   <Input placeholder="🛒" {...field} />
                 </FormControl>
@@ -58,7 +60,7 @@ export function CategoryForm({
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Color</FormLabel>
+                <FormLabel>{t('categories.color')}</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
                     <input
@@ -67,7 +69,10 @@ export function CategoryForm({
                       onChange={(e) => field.onChange(e.target.value)}
                       className="size-9 cursor-pointer rounded-md border"
                     />
-                    <Input placeholder="#6366f1" {...field} />
+                    <Input
+                      placeholder={t('categories.colorPlaceholder')}
+                      {...field}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -80,9 +85,12 @@ export function CategoryForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t('general.name')}</FormLabel>
               <FormControl>
-                <Input placeholder="Groceries" {...field} />
+                <Input
+                  placeholder={t('categories.namePlaceholder')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -93,13 +101,13 @@ export function CategoryForm({
           name="budgetAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Monthly budget</FormLabel>
+              <FormLabel>{t('categories.monthlyBudget')}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   min="0"
                   step="0.01"
-                  placeholder="0.00"
+                  placeholder={t('categories.monthlyBudgetPlaceholder')}
                   {...field}
                 />
               </FormControl>
@@ -113,7 +121,7 @@ export function CategoryForm({
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3">
               <div className="space-y-0.5">
-                <FormLabel>Goal category</FormLabel>
+                <FormLabel>{t('categories.goalCategory')}</FormLabel>
               </div>
               <FormControl>
                 <Switch
@@ -125,7 +133,7 @@ export function CategoryForm({
           )}
         />
         <LoadingButton type="submit" className="w-full" isLoading={isPending}>
-          Save category
+          {t('categories.saveCategory')}
         </LoadingButton>
       </form>
     </Form>

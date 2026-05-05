@@ -1,14 +1,20 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import Cookies from 'js-cookie'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { settingsFormSchema, type SettingsFormValues } from '@finiq/schemas'
 import type { CurrencyValue } from '@finiq/shared'
-import { CURRENCIES } from '@finiq/shared'
+import {
+  CURRENCIES,
+  LANGUAGE_AVAILABLE_NAMES,
+  LANGUAGE_STORAGE_KEY,
+} from '@finiq/shared'
 import {
   Card,
   CardContent,
@@ -42,11 +48,16 @@ import {
   useSettingControllerFindAll,
   useSettingControllerUpdate,
 } from '@/api/__generated__/settings/settings'
+import { changeLanguage } from '@/i18n'
 import { applyValidationErrors } from '@/lib/form-validation'
 import type { BackendValidationError } from '@/types/form-validation'
 
 export function SettingsForm() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
+  const [currentLang, setCurrentLang] = useState(
+    Cookies.get(LANGUAGE_STORAGE_KEY) || 'en',
+  )
 
   const { data: settingsResult, isLoading } = useSettingControllerFindAll()
   const settings = (
@@ -65,6 +76,13 @@ export function SettingsForm() {
       form.setValue('currency', settings?.currency as CurrencyValue)
     }
   }, [settings, form])
+
+  const handleLanguageChange = async (lang: string) => {
+    setCurrentLang(lang)
+    Cookies.set(LANGUAGE_STORAGE_KEY, lang, { expires: 365 })
+    await changeLanguage(lang)
+    toast.success(t('settings.languageUpdated'))
+  }
 
   const { mutateAsync: updateSettings, isPending } = useSettingControllerUpdate(
     {
@@ -98,8 +116,10 @@ export function SettingsForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Preferences</CardTitle>
-        <CardDescription>Set your currency preference.</CardDescription>
+        <CardTitle>{t('settings.preferences')}</CardTitle>
+        <CardDescription>
+          {t('settings.preferencesDescription')}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -117,7 +137,7 @@ export function SettingsForm() {
                 name="currency"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Currency</FormLabel>
+                    <FormLabel>{t('settings.currency')}</FormLabel>
                     <Select
                       key={field.value}
                       onValueChange={field.onChange}
@@ -140,8 +160,32 @@ export function SettingsForm() {
                   </FormItem>
                 )}
               />
+              <FormItem>
+                <FormLabel>{t('settings.language')}</FormLabel>
+                <Select
+                  value={currentLang}
+                  onValueChange={handleLanguageChange}
+                >
+                  <FormControl className="w-full">
+                    <SelectTrigger>
+                      <SelectValue>
+                        {LANGUAGE_AVAILABLE_NAMES[currentLang] || currentLang}
+                      </SelectValue>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.entries(LANGUAGE_AVAILABLE_NAMES).map(
+                      ([code, name]) => (
+                        <SelectItem key={code} value={code}>
+                          {name}
+                        </SelectItem>
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+              </FormItem>
               <LoadingButton type="submit" isLoading={isPending}>
-                Save settings
+                {t('settings.saveSettings')}
               </LoadingButton>
             </form>
           </Form>
