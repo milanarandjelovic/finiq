@@ -7,6 +7,10 @@ vi.mock('next-themes', () => ({
   useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }),
 }))
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}))
+
 vi.mock('@finiq/ui/components/button', () => ({
   Button: ({ children, ...props }: any) => (
     <button {...props}>{children}</button>
@@ -28,7 +32,7 @@ describe('ThemeToggle', () => {
     render(<ThemeToggle />)
     expect(screen.getByRole('button')).toHaveAttribute(
       'aria-label',
-      'Toggle theme',
+      'sidebar.toggleTheme',
     )
   })
 })
