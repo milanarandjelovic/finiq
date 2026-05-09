@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { PAGINATION_PAGE_LIMIT, PAGINATION_PAGE_START } from '@finiq/shared'
 import { Checkbox } from '@finiq/ui/components/checkbox'
@@ -28,19 +29,12 @@ interface CategoriesTableProps {
   onDelete: (category: Category) => void
 }
 
-const filterFields: DataTableFilterField<Category>[] = [
-  {
-    id: 'name' as keyof Category,
-    label: 'Name',
-    placeholder: 'Filter by name…',
-  },
-]
-
 export function CategoriesTable({
   isGoal,
   onEdit,
   onDelete,
 }: CategoriesTableProps) {
+  const { t } = useTranslation()
   const [page] = useQueryState(
     'page',
     parseAsInteger.withDefault(PAGINATION_PAGE_START),
@@ -81,6 +75,17 @@ export function CategoriesTable({
     [categoriesData],
   )
 
+  const filterFields: DataTableFilterField<Category>[] = useMemo(
+    () => [
+      {
+        id: 'name' as keyof Category,
+        label: t('general.name'),
+        placeholder: t('table.filterByName'),
+      },
+    ],
+    [t],
+  )
+
   const columns: ColumnDef<Category>[] = useMemo(
     () => [
       {
@@ -97,7 +102,7 @@ export function CategoriesTable({
             onCheckedChange={(value) =>
               table.toggleAllPageRowsSelected(!!value)
             }
-            aria-label="Select all"
+            aria-label={t('table.selectAll')}
             className="translate-y-0.5"
           />
         ),
@@ -105,14 +110,14 @@ export function CategoriesTable({
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label={t('table.selectRow')}
             className="translate-y-0.5"
           />
         ),
       },
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('general.name'),
         cell: ({ row }) => {
           const category = row.original
           return (
@@ -133,7 +138,7 @@ export function CategoriesTable({
       },
       {
         id: 'color',
-        header: 'Color',
+        header: t('categories.color'),
         size: 80,
         cell: ({ row }) => (
           <div
@@ -156,7 +161,7 @@ export function CategoriesTable({
         ),
       },
     ],
-    [onEdit, onDelete],
+    [onEdit, onDelete, t],
   )
 
   const { table } = useDataTable({

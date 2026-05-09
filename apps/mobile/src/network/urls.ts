@@ -1,43 +1,60 @@
-export const urls = {
-  api: {
-    auth: {
-      login: '/auth/login',
-      register: '/auth/register',
-      forgotPassword: '/auth/forgot-password',
-      resetPassword: '/auth/reset-password',
-      logout: '/auth/logout',
+export const URLS = {
+  API: {
+    // Auth
+    AUTH: {
+      LOGIN: '/auth/login',
+      REGISTER: '/auth/register',
+      FORGOT_PASSWORD: '/auth/forgot-password',
+      RESET_PASSWORD: '/auth/reset-password',
+      LOGOUT: '/auth/logout',
     },
-    dashboard: {
-      get: '/dashboard',
+
+    // Dashboard
+    DASHBOARD: {
+      GET: '/dashboard',
     },
-    transactions: {
-      findAll: '/transactions',
-      create: '/transactions',
-      delete: (id: string) => `/transactions/${id}`,
+
+    // Transactions
+    TRANSACTIONS: {
+      FIND_ALL: '/transactions',
+      CREATE: '/transactions',
+      DELETE: (id: string) => `/transactions/${id}`,
     },
-    categories: {
-      findAll: '/categories',
-      create: '/categories',
-      update: (id: string) => `/categories/${id}`,
-      delete: (id: string) => `/categories/${id}`,
+
+    // Categories
+    CATEGORIES: {
+      FIND_ALL: '/categories',
+      CREATE: '/categories',
+      UPDATE: (id: string) => `/categories/${id}`,
+      DELETE: (id: string) => `/categories/${id}`,
     },
-    budgets: {
-      findAll: '/budgets',
-      upsert: '/budgets',
-      copy: '/budgets/copy',
+
+    // Budgets
+    BUDGETS: {
+      FIND_ALL: '/budgets',
+      UPSERT: '/budgets',
+      COPY: '/budgets/copy',
     },
-    statistics: {
-      get: '/statistics',
+
+    // Statistics
+    STATISTICS: {
+      GET: '/statistics',
     },
-    settings: {
-      findAll: '/settings',
-      update: '/settings',
+
+    // Settings
+    SETTINGS: {
+      FIND_ALL: '/settings',
+      UPDATE: '/settings',
     },
-    profile: {
-      update: '/user/profile',
+
+    // Profile
+    PROFILE: {
+      UPDATE: '/user/profile',
     },
-    password: {
-      change: '/user/password',
+
+    // Password
+    PASSWORD: {
+      CHANGE: '/user/password',
     },
   },
 }

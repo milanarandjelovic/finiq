@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@finiq/ui/components/button'
 import {
   Dialog,
@@ -22,23 +24,23 @@ export function DeleteGoalDialog({
   onConfirm,
   onCancel,
 }: DeleteGoalDialogProps) {
+  const { t } = useTranslation()
+
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onCancel()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete goal</DialogTitle>
+          <DialogTitle>{t('goals.deleteGoal')}</DialogTitle>
         </DialogHeader>
         <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete{' '}
-          <span className="text-foreground font-medium">{goalName}</span>? This
-          action cannot be undone.
+          {t('goals.deleteConfirm', { name: goalName })}
         </p>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {t('general.cancel')}
           </Button>
           <Button variant="destructive" onClick={onConfirm}>
-            Delete
+            {t('general.delete')}
           </Button>
         </DialogFooter>
       </DialogContent>

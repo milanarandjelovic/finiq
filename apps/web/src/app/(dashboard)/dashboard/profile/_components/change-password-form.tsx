@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import {
@@ -29,6 +30,7 @@ import { useUserPasswordControllerUpdate } from '@/api/__generated__/user-passwo
 import { formMutationOptions } from '@/lib/form-validation'
 
 export function ChangePasswordForm() {
+  const { t } = useTranslation()
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordFormSchema),
     defaultValues: {
@@ -41,7 +43,7 @@ export function ChangePasswordForm() {
   const { mutateAsync: updatePassword, isPending } =
     useUserPasswordControllerUpdate(
       formMutationOptions(form, () => {
-        toast.success('Password changed')
+        toast.success(t('profile.passwordChanged'))
         form.reset()
       }),
     )
@@ -61,9 +63,9 @@ export function ChangePasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Change password</CardTitle>
+        <CardTitle>{t('profile.changePassword')}</CardTitle>
         <CardDescription>
-          Use a strong password with uppercase letters and numbers.
+          {t('profile.changePasswordDescription')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -77,7 +79,7 @@ export function ChangePasswordForm() {
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current password</FormLabel>
+                  <FormLabel>{t('profile.currentPassword')}</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="••••••••" {...field} />
                   </FormControl>
@@ -90,7 +92,7 @@ export function ChangePasswordForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New password</FormLabel>
+                  <FormLabel>{t('profile.newPassword')}</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="••••••••" {...field} />
                   </FormControl>
@@ -103,7 +105,7 @@ export function ChangePasswordForm() {
               name="passwordConfirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm new password</FormLabel>
+                  <FormLabel>{t('profile.confirmNewPassword')}</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="••••••••" {...field} />
                   </FormControl>
@@ -112,7 +114,7 @@ export function ChangePasswordForm() {
               )}
             />
             <LoadingButton type="submit" isLoading={isPending}>
-              Change password
+              {t('profile.changePasswordSubmit')}
             </LoadingButton>
           </form>
         </Form>

@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { useMonthNavigation } from '@finiq/hooks'
 import { calculateProgress, isOverBudget } from '@finiq/shared'
 import { Badge } from '@finiq/ui/components/badge'
@@ -37,6 +39,7 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
   const { year, month, date, setDate } = useMonthNavigation()
 
@@ -54,9 +57,11 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Overview</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t('dashboard.overview')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Your financial summary for this month.
+            {t('dashboard.overviewDescription')}
           </p>
         </div>
         <MonthPicker value={date} onChange={setDate} />
@@ -77,28 +82,28 @@ export default function DashboardPage() {
         ) : (
           <>
             <SummaryCard
-              label="Income"
+              label={t('dashboard.income')}
               value={data?.totalIncome ?? 0}
               variant="income"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Expenses"
+              label={t('dashboard.expenses')}
               value={data?.totalExpenses ?? 0}
               variant="expense"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Balance"
+              label={t('dashboard.balance')}
               value={data?.balance ?? 0}
               variant="balance"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Ready to assign"
+              label={t('dashboard.readyToAssign')}
               value={data?.readyToAssign ?? 0}
               variant="assign"
               formatCurrency={formatCurrency}
@@ -110,7 +115,7 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-medium">
-            Category breakdown
+            {t('dashboard.categoryBreakdown')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -123,7 +128,7 @@ export default function DashboardPage() {
             ))
           ) : data?.categoryBreakdown.length === 0 ? (
             <p className="text-muted-foreground py-4 text-center text-sm">
-              No categories yet.
+              {t('dashboard.noCategoriesYet')}
             </p>
           ) : (
             data?.categoryBreakdown.map((item) => {
@@ -150,7 +155,7 @@ export default function DashboardPage() {
                           variant="destructive"
                           className="h-5 px-1.5 text-xs"
                         >
-                          Over
+                          {t('dashboard.over')}
                         </Badge>
                       )}
                     </div>

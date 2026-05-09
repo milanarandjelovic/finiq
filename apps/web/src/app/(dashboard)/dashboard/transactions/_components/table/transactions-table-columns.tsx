@@ -44,7 +44,7 @@ export function useGetColumns(
             onCheckedChange={(value) =>
               table.toggleAllPageRowsSelected(!!value)
             }
-            aria-label="Select all"
+            aria-label={t('table.selectAll')}
             className="translate-y-0.5"
           />
         ),
@@ -52,7 +52,7 @@ export function useGetColumns(
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label={t('table.selectRow')}
             className="translate-y-0.5"
           />
         ),

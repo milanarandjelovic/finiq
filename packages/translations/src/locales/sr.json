@@ -85,6 +85,7 @@
   },
   "sidebar": {
     "toggleSidebar": "Preklopi bočnu traku",
+    "toggleTheme": "Promeni temu",
     "dashboard": "Kontrolna tabla",
     "transactions": "Transakcije",
     "budget": "Budžet",
@@ -100,8 +101,7 @@
     "darkMode": "Tamni mod",
     "logout": "Odjavi se",
     "home": "Početna",
-    "other": "Ostalo",
-    "menu": "Meni"
+    "other": "Ostalo"
   },
   "userMenu": {
     "profile": "Profil",
@@ -109,6 +109,8 @@
   },
   "dashboard": {
     "title": "Kontrolna tabla",
+    "overview": "Pregled",
+    "overviewDescription": "Vaš finansijski pregled za ovaj mesec.",
     "income": "Prihodi",
     "expenses": "Rashodi",
     "balance": "Stanje",
@@ -139,8 +141,15 @@
     "notePlaceholder": "Za šta je ovo bilo?",
     "transactionAdded": "Transakcija dodata",
     "failedToAdd": "Dodavanje transakcije nije uspelo",
+    "transactionDeleted": "Transakcija obrisana",
+    "transactionsDeleted": "{{count}} transakcije obrisane",
+    "failedToDelete": "Brisanje transakcije nije uspelo",
+    "failedToDeleteMultiple": "Brisanje transakcija nije uspelo",
     "deleteTransaction": "Obriši transakciju",
-    "deleteTransactionConfirm": "Da li ste sigurni da želite da obrišete ovu transakciju? Ova akcija se ne može poništiti."
+    "deleteTransactions": "Obriši transakcije",
+    "deleteCount": "Obriši ({{count}})",
+    "deleteTransactionConfirm": "Da li ste sigurni da želite da obrišete ovu transakciju? Ova akcija se ne može poništiti.",
+    "deleteTransactionsConfirm": "Da li ste sigurni da želite da obrišete {{count}} transakcije? Ova akcija se ne može poništiti."
   },
   "budget": {
     "title": "Budžet",
@@ -159,7 +168,12 @@
     "assignBudget": "Dodeli budžet",
     "amount": "Iznos",
     "assign": "Dodeli",
-    "resetBudgetConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} {{kategorija}}?"
+    "resetBudgetConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} {{kategorija}}?",
+    "resetCount": "Resetuj ({{count}})",
+    "resetBudget": "Resetuj budžet",
+    "resetBudgets": "Resetuj budžete",
+    "resetBudgetSingleConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{name}}?",
+    "resetBudgetMultipleConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} kategorija?"
   },
   "categories": {
     "title": "Kategorije",
@@ -185,7 +199,13 @@
     "budgetPrefix": "Budžet: ",
     "perMonth": "/mes",
     "goalCategory": "Kategorija cilja",
-    "filterByName": "Pretraži po imenu..."
+    "deleteCount": "Obriši ({{count}})",
+    "deleteCategory": "Obriši kategoriju",
+    "deleteCategories": "Obriši kategorije",
+    "categoriesDeleted": "{{count}} kategorija obrisano",
+    "failedToDeleteMultiple": "Brisanje kategorija nije uspelo",
+    "deleteCategoryConfirm": "Da li ste sigurni da želite da obrišete {{name}}? Ova radnja se ne može poništiti.",
+    "deleteCategoriesConfirm": "Da li ste sigurni da želite da obrišete {{count}} kategorija? Ova radnja se ne može poništiti."
   },
   "goals": {
     "title": "Ciljevi",
@@ -198,8 +218,10 @@
     "failedToCreate": "Kreiranje cilja nije uspelo",
     "goalUpdated": "Cilj ažuriran",
     "failedToUpdate": "Ažuriranje cilja nije uspelo",
+    "deleteGoal": "Obriši cilj",
     "goalDeleted": "Cilj obrisan",
     "failedToDelete": "Brisanje cilja nije uspelo",
+    "deleteConfirm": "Da li ste sigurni da želite da obrišete {{name}}? Ova akcija se ne može poništiti.",
     "saved": "ušteđeno",
     "of": "od",
     "percentComplete": "% završeno",
@@ -240,7 +262,6 @@
     "currency": "Valuta",
     "currencyDescription": "Podesite vašu valutu.",
     "language": "Jezik",
-    "languageUpdated": "Jezik ažuriran",
     "saveSettings": "Sačuvaj podešavanja",
     "theme": "Tema",
     "settingsSaved": "Podešavanja sačuvana",
@@ -266,6 +287,10 @@
     "byName": "Pretraži po imenu..."
   },
   "table": {
+    "filterByName": "Pretraži po imenu…",
+    "searchByCategory": "Pretraži po kategoriji…",
+    "filterBy": "Filtriraj po {{label}}…",
+    "allOf": "{{label}}: Sve",
     "rowsPerPage": "Redova po strani",
     "of": "od",
     "rowsSelected": "redova izabrano",

@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { ForgotPasswordForm } from '@/app/(auth)/auth/forgot-password/_components/forgot-password-form'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation()
@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
         </CardHeader>
         <CardFooter className="justify-center">
           <Link
-            href={routes.login}
+            href={ROUTES.LOGIN}
             className="text-primary text-sm hover:underline"
           >
             {t('auth.forgotPasswordBackToSignIn')}
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
 
       <CardFooter className="justify-center">
         <Link
-          href={routes.login}
+          href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
         >
           {t('auth.forgotPasswordBackToSignIn')}

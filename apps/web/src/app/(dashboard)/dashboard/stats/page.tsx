@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { MONTH_NAMES } from '@finiq/shared'
 import { MonthPicker } from '@finiq/ui/components/month-picker'
@@ -25,6 +26,7 @@ interface MonthlyTrendItem {
 }
 
 export default function StatsPage() {
+  const { t } = useTranslation()
   const [date, setDate] = useState(() => {
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), 1)
@@ -56,14 +58,18 @@ export default function StatsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Statistics</h1>
+        <h1 className="text-2xl font-semibold">{t('statistics.title')}</h1>
         <MonthPicker value={date} onChange={setDate} />
       </div>
 
       <Tabs defaultValue="categories">
         <TabsList>
-          <TabsTrigger value="categories">By category</TabsTrigger>
-          <TabsTrigger value="trend">6-month trend</TabsTrigger>
+          <TabsTrigger value="categories">
+            {t('statistics.byCategory')}
+          </TabsTrigger>
+          <TabsTrigger value="trend">
+            {t('statistics.sixMonthTrend')}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories" className="mt-4">

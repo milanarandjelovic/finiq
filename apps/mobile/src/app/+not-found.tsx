@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function NotFoundScreen() {
   const { t } = useTranslation()
@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ title: t('notFound.title') }} />
       <View style={styles.container}>
         <Text style={styles.title}>{t('notFound.description')}</Text>
-        <Link href={routes.index} style={styles.link}>
+        <Link href={ROUTES.INDEX} style={styles.link}>
           <Text style={[styles.linkText, { color: colors.primary }]}>
             {t('notFound.goHome')}
           </Text>

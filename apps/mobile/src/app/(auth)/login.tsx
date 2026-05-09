@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { useAuthSession } from '@/hooks/use-auth-session'
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function LoginScreen() {
   const { t } = useTranslation()
@@ -35,7 +35,7 @@ export default function LoginScreen() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       await login(values)
-      router.replace(routes.dashboard)
+      router.replace(ROUTES.DASHBOARD)
     } catch {
       setError('root', { message: t('errors.unauthorized') })
     }
@@ -107,13 +107,13 @@ export default function LoginScreen() {
           <Button
             label={t('auth.loginForgotPassword')}
             variant="ghost"
-            onPress={() => router.push(routes.forgotPassword)}
+            onPress={() => router.push(ROUTES.FORGOT_PASSWORD)}
           />
 
           <Button
             label={`${t('auth.loginNoAccount')} ${t('general.signUp')}`}
             variant="ghost"
-            onPress={() => router.push(routes.register)}
+            onPress={() => router.push(ROUTES.REGISTER)}
           />
         </ScrollView>
       </KeyboardAvoidingView>

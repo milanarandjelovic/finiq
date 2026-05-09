@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router'
 import { ActivityIndicator, View } from 'react-native'
 
 import { useAuth } from '@/providers/auth-provider'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function Index() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -15,5 +15,5 @@ export default function Index() {
     )
   }
 
-  return <Redirect href={isAuthenticated ? routes.dashboard : routes.login} />
+  return <Redirect href={isAuthenticated ? ROUTES.DASHBOARD : ROUTES.LOGIN} />
 }

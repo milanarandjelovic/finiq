@@ -46,8 +46,8 @@ export default function TransactionsPage() {
   const { mutateAsync: deleteTransaction } = useTransactionControllerDelete(
     crudMutationOptions(qc, {
       queryKeys: transactionQueryKeys,
-      successMessage: 'Transaction deleted',
-      errorMessage: 'Failed to delete transaction',
+      successMessage: t('transactions.transactionDeleted'),
+      errorMessage: t('transactions.failedToDelete'),
     }),
   )
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { PageSpinner } from '@finiq/ui/components/spinner'
 import { useAuth } from '@/context/auth-context'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function AuthLayout({
   children,
@@ -17,7 +17,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace(routes.dashboard)
+      router.replace(ROUTES.DASHBOARD)
     }
   }, [isAuthenticated, isLoading, router])
 

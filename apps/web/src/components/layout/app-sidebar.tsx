@@ -30,7 +30,7 @@ import { useUserProfileControllerFindOne } from '@/api/__generated__/user-profil
 import { bottomNavItems, navItems } from '@/components/layout/nav-items'
 import { useAuth } from '@/context/auth-context'
 import { getInitials } from '@/lib/get-initials'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function AppSidebar() {
   const pathname = usePathname()
@@ -43,7 +43,7 @@ export function AppSidebar() {
 
   function handleLogout() {
     logout()
-    router.push(routes.login)
+    router.push(ROUTES.LOGIN)
   }
 
   const initials = getInitials(user?.name)
@@ -51,7 +51,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-sidebar-border border-b p-4">
-        <Link href={routes.dashboard} className="flex items-center gap-2">
+        <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
           <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg text-sm font-bold">
             F
           </div>

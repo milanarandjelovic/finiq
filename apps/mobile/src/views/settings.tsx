@@ -18,7 +18,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useSettings } from '@/hooks/data/use-settings'
 import { useSettingsUpdate } from '@/hooks/data/use-settings-update'
 import { useAuthSession } from '@/hooks/use-auth-session'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function SettingsView() {
   const { t } = useTranslation()
@@ -29,7 +29,7 @@ export default function SettingsView() {
 
   const handleLogout = async () => {
     await logout()
-    router.replace(routes.login)
+    router.replace(ROUTES.LOGIN)
   }
   const { control, handleSubmit, setValue } = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsFormSchema),

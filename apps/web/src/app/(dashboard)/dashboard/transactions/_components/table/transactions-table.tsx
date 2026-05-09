@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { PAGINATION_PAGE_LIMIT, PAGINATION_PAGE_START } from '@finiq/shared'
 import type { TransactionControllerFindAll200 } from '@/api/__generated__/models'
@@ -28,29 +29,33 @@ interface TransactionsTableProps {
   onDelete: (id: string) => void
 }
 
-const filterFields: DataTableFilterField<TransactionRow>[] = [
-  {
-    id: 'categoryName',
-    label: 'Category',
-    placeholder: 'Search by category…',
-  },
-  {
-    id: 'type',
-    label: 'Type',
-    options: [
-      { label: 'Income', value: 'income' },
-      { label: 'Expense', value: 'expense' },
-    ],
-  },
-]
-
 export function TransactionsTable({
   year,
   month,
   onDelete,
 }: TransactionsTableProps) {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
   const columns = useGetColumns(formatCurrency)
+
+  const filterFields: DataTableFilterField<TransactionRow>[] = useMemo(
+    () => [
+      {
+        id: 'categoryName',
+        label: t('transactions.category'),
+        placeholder: t('table.searchByCategory'),
+      },
+      {
+        id: 'type',
+        label: t('transactions.type'),
+        options: [
+          { label: t('transactions.income'), value: 'income' },
+          { label: t('transactions.expense'), value: 'expense' },
+        ],
+      },
+    ],
+    [t],
+  )
 
   const [page] = useQueryState(
     'page',

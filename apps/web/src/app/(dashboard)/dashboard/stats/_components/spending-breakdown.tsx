@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import {
   Card,
   CardContent,
@@ -15,10 +17,12 @@ interface SpendingBreakdownProps {
 }
 
 export function SpendingBreakdown({ data, isLoading }: SpendingBreakdownProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Breakdown</CardTitle>
+        <CardTitle>{t('statistics.breakdown')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {isLoading

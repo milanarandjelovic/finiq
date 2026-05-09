@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
 import {
   Bar,
   BarChart,
@@ -31,17 +32,19 @@ interface MonthlyTrendChartProps {
 }
 
 export function MonthlyTrendChart({ data, isLoading }: MonthlyTrendChartProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>6-month trend</CardTitle>
+        <CardTitle>{t('statistics.sixMonthTrend')}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-72 w-full" />
         ) : data.length === 0 ? (
           <p className="text-muted-foreground py-8 text-center text-sm">
-            No data available.
+            {t('statistics.noData')}
           </p>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
@@ -56,13 +59,13 @@ export function MonthlyTrendChart({ data, isLoading }: MonthlyTrendChartProps) {
               <Legend />
               <Bar
                 dataKey="income"
-                name="Income"
+                name={t('statistics.income')}
                 fill="#22c55e"
                 radius={[4, 4, 0, 0]}
               />
               <Bar
                 dataKey="expenses"
-                name="Expenses"
+                name={t('statistics.expenses')}
                 fill="#ef4444"
                 radius={[4, 4, 0, 0]}
               />

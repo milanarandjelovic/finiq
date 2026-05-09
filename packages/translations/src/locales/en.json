@@ -85,6 +85,7 @@
   },
   "sidebar": {
     "toggleSidebar": "Toggle sidebar",
+    "toggleTheme": "Toggle theme",
     "dashboard": "Dashboard",
     "transactions": "Transactions",
     "budget": "Budget",
@@ -100,8 +101,7 @@
     "darkMode": "Dark mode",
     "logout": "Logout",
     "home": "Home",
-    "other": "Other",
-    "menu": "Menu"
+    "other": "Other"
   },
   "userMenu": {
     "profile": "Profile",
@@ -109,6 +109,8 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "overview": "Overview",
+    "overviewDescription": "Your financial summary for this month.",
     "income": "Income",
     "expenses": "Expenses",
     "balance": "Balance",
@@ -139,8 +141,15 @@
     "notePlaceholder": "What was this for?",
     "transactionAdded": "Transaction added",
     "failedToAdd": "Failed to add transaction",
+    "transactionDeleted": "Transaction deleted",
+    "transactionsDeleted": "{{count}} transactions deleted",
+    "failedToDelete": "Failed to delete transaction",
+    "failedToDeleteMultiple": "Failed to delete transactions",
     "deleteTransaction": "Delete transaction",
-    "deleteTransactionConfirm": "Are you sure you want to delete this transaction? This action cannot be undone."
+    "deleteTransactions": "Delete transactions",
+    "deleteCount": "Delete ({{count}})",
+    "deleteTransactionConfirm": "Are you sure you want to delete this transaction? This action cannot be undone.",
+    "deleteTransactionsConfirm": "Are you sure you want to delete {{count}} transactions? This action cannot be undone."
   },
   "budget": {
     "title": "Budget",
@@ -159,7 +168,12 @@
     "assignBudget": "Assign budget",
     "amount": "Amount",
     "assign": "Assign",
-    "resetBudgetConfirm": "Are you sure you want to reset the budget to $0 for {{count}} {{category}}?"
+    "resetBudgetConfirm": "Are you sure you want to reset the budget to $0 for {{count}} {{category}}?",
+    "resetCount": "Reset ({{count}})",
+    "resetBudget": "Reset budget",
+    "resetBudgets": "Reset budgets",
+    "resetBudgetSingleConfirm": "Are you sure you want to reset the budget to $0 for {{name}}?",
+    "resetBudgetMultipleConfirm": "Are you sure you want to reset the budget to $0 for {{count}} categories?"
   },
   "categories": {
     "title": "Categories",
@@ -185,7 +199,13 @@
     "budgetPrefix": "Budget: $",
     "perMonth": "/mo",
     "goalCategory": "Goal category",
-    "filterByName": "Filter by name..."
+    "deleteCount": "Delete ({{count}})",
+    "deleteCategory": "Delete category",
+    "deleteCategories": "Delete categories",
+    "categoriesDeleted": "{{count}} categories deleted",
+    "failedToDeleteMultiple": "Failed to delete categories",
+    "deleteCategoryConfirm": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+    "deleteCategoriesConfirm": "Are you sure you want to delete {{count}} categories? This action cannot be undone."
   },
   "goals": {
     "title": "Goals",
@@ -198,8 +218,10 @@
     "failedToCreate": "Failed to create goal",
     "goalUpdated": "Goal updated",
     "failedToUpdate": "Failed to update goal",
+    "deleteGoal": "Delete goal",
     "goalDeleted": "Goal deleted",
     "failedToDelete": "Failed to delete goal",
+    "deleteConfirm": "Are you sure you want to delete {{name}}? This action cannot be undone.",
     "saved": "saved",
     "of": "of",
     "percentComplete": "% complete",
@@ -240,7 +262,6 @@
     "currency": "Currency",
     "currencyDescription": "Set your currency preference.",
     "language": "Language",
-    "languageUpdated": "Language updated",
     "saveSettings": "Save settings",
     "theme": "Theme",
     "settingsSaved": "Settings saved",
@@ -266,6 +287,10 @@
     "byName": "Search by name..."
   },
   "table": {
+    "filterByName": "Filter by name…",
+    "searchByCategory": "Search by category…",
+    "filterBy": "Filter by {{label}}…",
+    "allOf": "{{label}}: All",
     "rowsPerPage": "Rows per page",
     "of": "of",
     "rowsSelected": "row(s) selected",

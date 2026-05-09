@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { useRegister } from '@/hooks/auth/use-register'
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function RegisterScreen() {
   const { t } = useTranslation()
@@ -36,7 +36,7 @@ export default function RegisterScreen() {
     const { passwordConfirmation: _, ...payload } = values
     try {
       await register(payload)
-      router.replace(routes.login)
+      router.replace(ROUTES.LOGIN)
     } catch {
       setError('root', { message: t('general.somethingWentWrong') })
     }
@@ -142,7 +142,7 @@ export default function RegisterScreen() {
           <Button
             label={`${t('auth.registerHasAccount')} ${t('auth.loginSubmit')}`}
             variant="ghost"
-            onPress={() => router.replace(routes.login)}
+            onPress={() => router.replace(ROUTES.LOGIN)}
           />
         </ScrollView>
       </KeyboardAvoidingView>

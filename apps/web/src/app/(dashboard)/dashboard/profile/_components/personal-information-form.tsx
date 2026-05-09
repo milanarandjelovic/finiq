@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { profileFormSchema, type ProfileFormValues } from '@finiq/schemas'
@@ -30,6 +31,7 @@ import {
 import { formMutationOptions } from '@/lib/form-validation'
 
 export function PersonalInformationForm() {
+  const { t } = useTranslation()
   const { data: profileData, refetch } = useUserProfileControllerFindOne()
   const user =
     profileData?.status === 200 ? profileData.data.data?.user : undefined
@@ -56,7 +58,7 @@ export function PersonalInformationForm() {
         }
 
         refetch()
-        toast.success('Profile updated')
+        toast.success(t('profile.profileUpdated'))
       }),
     )
 
@@ -67,8 +69,10 @@ export function PersonalInformationForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Personal information</CardTitle>
-        <CardDescription>Update your name and email.</CardDescription>
+        <CardTitle>{t('profile.personalInformation')}</CardTitle>
+        <CardDescription>
+          {t('profile.personalInformationDescription')}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -81,7 +85,7 @@ export function PersonalInformationForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full name</FormLabel>
+                  <FormLabel>{t('profile.fullName')}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -94,7 +98,7 @@ export function PersonalInformationForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('general.email')}</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} disabled />
                   </FormControl>
@@ -103,7 +107,7 @@ export function PersonalInformationForm() {
               )}
             />
             <LoadingButton type="submit" isLoading={isPending}>
-              Save changes
+              {t('profile.saveChanges')}
             </LoadingButton>
           </form>
         </Form>

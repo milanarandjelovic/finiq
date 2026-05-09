@@ -20,7 +20,7 @@ import { LoadingButton } from '@finiq/ui/components/loading-button'
 import { PasswordInput } from '@finiq/ui/components/password-input'
 import { useAuthControllerRegister } from '@/api/__generated__/auth/auth'
 import { formMutationOptions } from '@/lib/form-validation'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function RegisterForm() {
   const { t } = useTranslation()
@@ -39,7 +39,7 @@ export function RegisterForm() {
   const { mutateAsync: register, isPending } = useAuthControllerRegister(
     formMutationOptions(form, () => {
       toast.success(t('auth.registerSuccess'))
-      router.push(routes.login)
+      router.push(ROUTES.LOGIN)
     }),
   )
 

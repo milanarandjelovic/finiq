@@ -1,19 +1,18 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
-import { routeNames, routes } from '@/lib/routes'
-
-const PAGE_TITLES = Object.fromEntries(
-  (Object.keys(routes) as (keyof typeof routes)[]).map((key) => [
-    routes[key],
-    routeNames[key],
-  ]),
-) as Record<string, string>
+import { PATH_TO_ROUTE_KEY } from '@/util/routes'
 
 export function PageBreadcrumb() {
+  const { t } = useTranslation()
   const pathname = usePathname()
-  const title = PAGE_TITLES[pathname] ?? routeNames.dashboard
+  const routeKey = PATH_TO_ROUTE_KEY[pathname] ?? 'dashboard'
 
-  return <h1 className="text-foreground text-xl font-semibold">{title}</h1>
+  return (
+    <h1 className="text-foreground text-xl font-semibold">
+      {t(`sidebar.${routeKey}`)}
+    </h1>
+  )
 }

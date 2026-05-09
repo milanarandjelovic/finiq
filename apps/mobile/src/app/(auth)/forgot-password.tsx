@@ -23,7 +23,7 @@ import { FormField } from '@/components/ui/form-field'
 import { MutedText } from '@/components/ui/muted-text'
 import { useForgotPassword } from '@/hooks/auth/use-forgot-password'
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ForgotPasswordScreen() {
   const { t } = useTranslation()
@@ -63,7 +63,7 @@ export default function ForgotPasswordScreen() {
           <Button
             label={t('auth.forgotPasswordBackToSignIn')}
             variant="outline"
-            onPress={() => router.replace(routes.login)}
+            onPress={() => router.replace(ROUTES.LOGIN)}
           />
         </View>
       </SafeAreaView>
@@ -118,7 +118,7 @@ export default function ForgotPasswordScreen() {
           <Button
             label={t('auth.forgotPasswordBackToSignIn')}
             variant="ghost"
-            onPress={() => router.replace(routes.login)}
+            onPress={() => router.replace(ROUTES.LOGIN)}
           />
         </ScrollView>
       </KeyboardAvoidingView>

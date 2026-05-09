@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import {
   isOverBudget,
@@ -41,22 +42,26 @@ interface BudgetTableProps {
   onUpsert: (categoryId: string, amount: number) => void
 }
 
-const filterFields: DataTableFilterField<BudgetRow>[] = [
-  {
-    id: 'categoryName',
-    label: 'Category',
-    placeholder: 'Filter by name…',
-  },
-]
-
 export function BudgetTable({
   year,
   month,
   breakdownMap,
   onUpsert,
 }: BudgetTableProps) {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
   const columns = useGetColumns(formatCurrency)
+
+  const filterFields: DataTableFilterField<BudgetRow>[] = useMemo(
+    () => [
+      {
+        id: 'categoryName',
+        label: t('transactions.category'),
+        placeholder: t('table.filterByName'),
+      },
+    ],
+    [t],
+  )
 
   const [page] = useQueryState(
     'page',

@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
 import { I18nextProvider } from 'react-i18next'
 
-import { THEME_COOKIE_NAME } from '@finiq/shared'
 import { Toaster } from '@finiq/ui/components/sonner'
 import { TooltipProvider } from '@finiq/ui/components/tooltip'
 import { AuthProvider } from '@/context/auth-context'
@@ -44,21 +42,14 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem={false}
-        storageKey={THEME_COOKIE_NAME}
-      >
-        <I18nextProvider i18n={i18n}>
-          <TooltipProvider>
-            <AuthProvider>
-              {children}
-              <Toaster richColors position="top-right" />
-            </AuthProvider>
-          </TooltipProvider>
-        </I18nextProvider>
-      </ThemeProvider>
+      <I18nextProvider i18n={i18n}>
+        <TooltipProvider>
+          <AuthProvider>
+            {children}
+            <Toaster richColors position="top-right" />
+          </AuthProvider>
+        </TooltipProvider>
+      </I18nextProvider>
     </QueryClientProvider>
   )
 }

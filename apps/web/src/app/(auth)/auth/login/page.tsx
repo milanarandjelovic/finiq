@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { LoginForm } from '@/app/(auth)/auth/login/_components/login-form'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function LoginPage() {
   const { t } = useTranslation()
@@ -28,7 +28,7 @@ export default function LoginPage() {
 
         <p className="text-muted-foreground mt-4 text-center text-sm">
           {t('auth.loginNoAccount')}{' '}
-          <Link href={routes.register} className="text-primary hover:underline">
+          <Link href={ROUTES.REGISTER} className="text-primary hover:underline">
             {t('auth.signUp')}
           </Link>
         </p>

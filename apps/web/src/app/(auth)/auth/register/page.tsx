@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { RegisterForm } from '@/app/(auth)/auth/register/_components/register-form'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
         <p className="text-muted-foreground mt-4 text-center text-sm">
           {t('auth.registerHasAccount')}{' '}
-          <Link href={routes.login} className="text-primary hover:underline">
+          <Link href={ROUTES.LOGIN} className="text-primary hover:underline">
             {t('auth.signIn')}
           </Link>
         </p>

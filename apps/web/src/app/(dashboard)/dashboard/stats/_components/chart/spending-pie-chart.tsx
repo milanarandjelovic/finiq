@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 
 import {
@@ -25,17 +26,19 @@ interface SpendingPieChartProps {
 }
 
 export function SpendingPieChart({ data, isLoading }: SpendingPieChartProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Spending by category</CardTitle>
+        <CardTitle>{t('statistics.spendingByCategory')}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-64 w-full" />
         ) : (data?.length ?? 0) === 0 ? (
           <p className="text-muted-foreground py-8 text-center text-sm">
-            No expense data.
+            {t('statistics.noExpenseData')}
           </p>
         ) : (
           <ResponsiveContainer width="100%" height={260}>
@@ -59,7 +62,7 @@ export function SpendingPieChart({ data, isLoading }: SpendingPieChartProps) {
               <Tooltip
                 formatter={(value) => [
                   `$${Number(value).toFixed(2)}`,
-                  'Amount',
+                  t('transactions.amount'),
                 ]}
               />
             </PieChart>

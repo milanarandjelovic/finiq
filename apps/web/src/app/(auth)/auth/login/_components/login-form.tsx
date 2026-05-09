@@ -21,7 +21,7 @@ import { PasswordInput } from '@finiq/ui/components/password-input'
 import { useAuthControllerLogin } from '@/api/__generated__/auth/auth'
 import { useAuth } from '@/context/auth-context'
 import { formMutationOptions } from '@/lib/form-validation'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function LoginForm() {
   const { t } = useTranslation()
@@ -38,10 +38,13 @@ export function LoginForm() {
 
   const { mutateAsync: submitLogin, isPending } = useAuthControllerLogin(
     formMutationOptions(form, (response) => {
-      if (response.status !== 200) return
+      if (response.status !== 200) {
+        return
+      }
+
       const { accessToken, refreshToken } = response.data.data!
       login(accessToken, refreshToken)
-      router.push(routes.dashboard)
+      router.push(ROUTES.DASHBOARD)
     }),
   )
 
@@ -82,7 +85,7 @@ export function LoginForm() {
               <div className="flex items-center justify-between">
                 <FormLabel>{t('general.password')}</FormLabel>
                 <Link
-                  href={routes.forgotPassword}
+                  href={ROUTES.FORGOT_PASSWORD}
                   className="text-primary text-sm hover:underline"
                 >
                   {t('auth.loginForgotPassword')}

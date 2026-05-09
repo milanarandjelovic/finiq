@@ -1,6 +1,7 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import {
   Dialog,
@@ -22,14 +23,15 @@ interface EditGoalDialogProps {
 }
 
 export function EditGoalDialog({ goal, onClose }: EditGoalDialogProps) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
 
   const { mutateAsync: updateGoal, isPending: isUpdating } =
     useCategoryControllerUpdate(
       crudMutationOptions(qc, {
         queryKeys: [getCategoryControllerFindAllQueryKey()],
-        successMessage: 'Goal updated',
-        errorMessage: 'Failed to update goal',
+        successMessage: t('goals.goalUpdated'),
+        errorMessage: t('goals.failedToUpdate'),
         onSuccess: onClose,
       }),
     )
@@ -38,7 +40,7 @@ export function EditGoalDialog({ goal, onClose }: EditGoalDialogProps) {
     <Dialog open={!!goal} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit goal</DialogTitle>
+          <DialogTitle>{t('goals.editGoal')}</DialogTitle>
         </DialogHeader>
         {goal && (
           <GoalForm

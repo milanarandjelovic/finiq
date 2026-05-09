@@ -22,7 +22,7 @@ import {
 import type { DashboardControllerGetDashboard200 } from '@/api/__generated__/models'
 import { BudgetTable } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 interface CategoryBreakdownItem {
   categoryId: string
@@ -105,7 +105,7 @@ export default function BudgetPage() {
             {t('budget.copyFromPreviousMonth')}
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link href={routes.categories}>
+            <Link href={ROUTES.CATEGORIES}>
               <TagIcon className="size-3.5" />
               {t('budget.manageCategories')}
             </Link>

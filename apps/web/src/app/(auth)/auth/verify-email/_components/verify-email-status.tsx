@@ -18,7 +18,7 @@ import {
 import { Spinner } from '@finiq/ui/components/spinner'
 import { authControllerVerifyEmail } from '@/api/__generated__/auth/auth'
 import type { VerifyEmailPayloadDto } from '@/api/__generated__/models'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 type Status = 'verifying' | 'success' | 'error'
 
@@ -78,7 +78,7 @@ export function VerifyEmailStatus() {
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button onClick={() => router.push(routes.login)}>
+          <Button onClick={() => router.push(ROUTES.LOGIN)}>
             {t('auth.verifyEmailBackToSignIn')}
           </Button>
         </CardFooter>
@@ -97,7 +97,7 @@ export function VerifyEmailStatus() {
       </CardHeader>
       <CardFooter className="justify-center">
         <Link
-          href={routes.login}
+          href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
         >
           {t('auth.verifyEmailBackToSignIn')}

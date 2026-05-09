@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { ResetPasswordForm } from '@/app/(auth)/auth/reset-password/_components/reset-password-form'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ResetPasswordPage() {
   const { t } = useTranslation()
@@ -30,7 +30,7 @@ export default function ResetPasswordPage() {
 
       <CardFooter className="justify-center">
         <Link
-          href={routes.login}
+          href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
         >
           {t('auth.resetPasswordBackToSignIn')}

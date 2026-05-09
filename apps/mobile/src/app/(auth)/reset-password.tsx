@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { useResetPassword } from '@/hooks/auth/use-reset-password'
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ResetPasswordScreen() {
   const { t } = useTranslation()
@@ -41,7 +41,7 @@ export default function ResetPasswordScreen() {
   const onSubmit = async (values: ResetPasswordFormValues) => {
     try {
       await resetPassword({ ...values, token })
-      router.replace(routes.login)
+      router.replace(ROUTES.LOGIN)
     } catch {
       setError('root', {
         message: t('general.somethingWentWrong'),

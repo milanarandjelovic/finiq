@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -20,6 +21,7 @@ import { GoalForm } from '@/app/(dashboard)/dashboard/goals/_components/goal-for
 import { crudMutationOptions } from '@/lib/mutation'
 
 export function AddGoalDialog() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const qc = useQueryClient()
 
@@ -27,8 +29,8 @@ export function AddGoalDialog() {
     useCategoryControllerCreate(
       crudMutationOptions(qc, {
         queryKeys: [getCategoryControllerFindAllQueryKey()],
-        successMessage: 'Goal created',
-        errorMessage: 'Failed to create goal',
+        successMessage: t('goals.goalCreated'),
+        errorMessage: t('goals.failedToCreate'),
         onSuccess: () => setOpen(false),
       }),
     )
@@ -38,12 +40,12 @@ export function AddGoalDialog() {
       <DialogTrigger asChild>
         <Button>
           <Plus />
-          New goal
+          {t('goals.newGoal')}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New savings goal</DialogTitle>
+          <DialogTitle>{t('goals.newSavingsGoal')}</DialogTitle>
         </DialogHeader>
         <GoalForm
           onSubmit={async (v) => {

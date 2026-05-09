@@ -81,7 +81,6 @@ export function SettingsForm() {
     setCurrentLang(lang)
     Cookies.set(LANGUAGE_STORAGE_KEY, lang, { expires: 365 })
     await changeLanguage(lang)
-    toast.success(t('settings.languageUpdated'))
   }
 
   const { mutateAsync: updateSettings, isPending } = useSettingControllerUpdate(
@@ -91,7 +90,8 @@ export function SettingsForm() {
           qc.invalidateQueries({
             queryKey: getSettingControllerFindAllQueryKey(),
           })
-          toast.success('Settings saved')
+
+          toast.success(t('settings.settingsSaved'))
         },
         onError(error: {
           statusCode?: number
@@ -100,7 +100,7 @@ export function SettingsForm() {
           if (error.statusCode === 400) {
             applyValidationErrors(form, error.errors)
           } else {
-            toast.error('Failed to save settings')
+            toast.error(t('settings.failedToSave'))
           }
         },
       },

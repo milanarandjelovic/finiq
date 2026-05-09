@@ -1,5 +1,5 @@
 import { NetworkClient } from '@/network/network-client'
-import { urls } from '@/network/urls'
+import { URLS } from '@/network/urls'
 import {
   type ForgotPasswordPayload,
   type ForgotPasswordResponse,
@@ -46,145 +46,153 @@ import {
 } from '@/types/user'
 
 export class FiniqAPI {
+  // Auth
   static readonly auth = {
     login: (data: LoginPayload) => {
       return NetworkClient.getInstance().post<LoginResponse>(
-        urls.api.auth.login,
+        URLS.API.AUTH.LOGIN,
         data,
       )
     },
     register: (data: RegisterPayload) => {
       return NetworkClient.getInstance().post<RegisterResponse>(
-        urls.api.auth.register,
+        URLS.API.AUTH.REGISTER,
         data,
       )
     },
     forgotPassword: (data: ForgotPasswordPayload) => {
       return NetworkClient.getInstance().post<ForgotPasswordResponse>(
-        urls.api.auth.forgotPassword,
+        URLS.API.AUTH.FORGOT_PASSWORD,
         data,
       )
     },
     resetPassword: (data: ResetPasswordPayload) => {
       return NetworkClient.getInstance().post<ResetPasswordResponse>(
-        urls.api.auth.resetPassword,
+        URLS.API.AUTH.RESET_PASSWORD,
         data,
       )
     },
     logout: () => {
-      return NetworkClient.getInstance().post<void>(urls.api.auth.logout)
+      return NetworkClient.getInstance().post<void>(URLS.API.AUTH.LOGOUT)
     },
   }
 
+  // Dashboard
   static readonly dashboard = {
     get: (params: DashboardQuery) => {
       return NetworkClient.getInstance().get<DashboardResponse>(
-        urls.api.dashboard.get,
+        URLS.API.DASHBOARD.GET,
         { params },
       )
     },
   }
 
+  // Transactions
   static readonly transactions = {
     findAll: (params: TransactionsFindAllQuery) => {
       return NetworkClient.getInstance().get<TransactionsResponse>(
-        urls.api.transactions.findAll,
+        URLS.API.TRANSACTIONS.FIND_ALL,
         { params },
       )
     },
     create: (data: CreateTransactionPayload) => {
       return NetworkClient.getInstance().post<TransactionResponse>(
-        urls.api.transactions.create,
+        URLS.API.TRANSACTIONS.CREATE,
         data,
       )
     },
     delete: (id: string) => {
       return NetworkClient.getInstance().delete<TransactionResponse>(
-        urls.api.transactions.delete(id),
+        URLS.API.TRANSACTIONS.DELETE(id),
       )
     },
   }
 
+  // Categories
   static readonly categories = {
     findAll: (params?: CategoriesFindAllQuery) => {
       return NetworkClient.getInstance().get<CategoriesResponse>(
-        urls.api.categories.findAll,
+        URLS.API.CATEGORIES.FIND_ALL,
         { params },
       )
     },
     create: (data: CreateCategoryPayload) => {
       return NetworkClient.getInstance().post<CategoryResponse>(
-        urls.api.categories.create,
+        URLS.API.CATEGORIES.CREATE,
         data,
       )
     },
     update: (id: string, data: UpdateCategoryPayload) => {
       return NetworkClient.getInstance().put<CategoryResponse>(
-        urls.api.categories.update(id),
+        URLS.API.CATEGORIES.UPDATE(id),
         data,
       )
     },
     delete: (id: string) => {
       return NetworkClient.getInstance().delete<CategoryResponse>(
-        urls.api.categories.delete(id),
+        URLS.API.CATEGORIES.DELETE(id),
       )
     },
   }
 
+  // Budgets
   static readonly budgets = {
     findAll: (params: BudgetQuery) => {
       return NetworkClient.getInstance().get<BudgetsResponse>(
-        urls.api.budgets.findAll,
+        URLS.API.BUDGETS.FIND_ALL,
         { params },
       )
     },
     upsert: (data: UpsertBudgetPayload) => {
       return NetworkClient.getInstance().put<BudgetResponse>(
-        urls.api.budgets.upsert,
+        URLS.API.BUDGETS.UPSERT,
         data,
       )
     },
     copyFromPreviousMonth: (data: CopyBudgetPayload) => {
       return NetworkClient.getInstance().post<BudgetsResponse>(
-        urls.api.budgets.copy,
+        URLS.API.BUDGETS.COPY,
         data,
       )
     },
   }
 
+  // Statistics
   static readonly statistics = {
     get: (params: StatisticsQuery) => {
       return NetworkClient.getInstance().get<StatisticsResponse>(
-        urls.api.statistics.get,
+        URLS.API.STATISTICS.GET,
         { params },
       )
     },
   }
 
+  // Settings
   static readonly settings = {
     findAll: () => {
       return NetworkClient.getInstance().get<SettingResponse>(
-        urls.api.settings.findAll,
+        URLS.API.SETTINGS.FIND_ALL,
       )
     },
     update: (data: UpdateSettingPayload) => {
       return NetworkClient.getInstance().put<SettingResponse>(
-        urls.api.settings.update,
+        URLS.API.SETTINGS.UPDATE,
         data,
       )
     },
   }
 
+  // Profile
   static readonly profile = {
     update: (data: UpdateProfilePayload) => {
       return NetworkClient.getInstance().post<UserProfileResponse>(
-        urls.api.profile.update,
+        URLS.API.PROFILE.UPDATE,
         data,
       )
     },
     changePassword: (data: ChangePasswordPayload) => {
       return NetworkClient.getInstance().post<UserProfileResponse>(
-        urls.api.password.change,
+        URLS.API.PASSWORD.CHANGE,
         data,
       )
     },

@@ -3,11 +3,16 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
-import { APPLICATION_DESCRIPTION, APPLICATION_NAME } from '@finiq/shared'
+import {
+  APPLICATION_DESCRIPTION,
+  APPLICATION_NAME,
+  THEME_COOKIE_NAME,
+} from '@finiq/shared'
 
 import '../assets/css/globals.css'
 
 import { Providers } from '@/providers/providers'
+import { ThemeProvider } from '@/providers/theme-provider'
 
 const geistSans = localFont({
   src: '../assets/fonts/GeistVF.woff',
@@ -37,9 +42,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans`}
         suppressHydrationWarning
       >
-        <NuqsAdapter>
-          <Providers>{children}</Providers>
-        </NuqsAdapter>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          storageKey={THEME_COOKIE_NAME}
+        >
+          <NuqsAdapter>
+            <Providers>{children}</Providers>
+          </NuqsAdapter>
+        </ThemeProvider>
       </body>
     </html>
   )
