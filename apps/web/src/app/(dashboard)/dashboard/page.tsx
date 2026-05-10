@@ -18,40 +18,32 @@ import { cn } from '@finiq/ui/lib/utils'
 import { useDashboardControllerGetDashboard } from '@/api/__generated__/dashboard/dashboard'
 import type { DashboardControllerGetDashboard200 } from '@/api/__generated__/models'
 import { SummaryCard } from '@/app/(dashboard)/dashboard/transactions/_components/summary-card'
+import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
-
-interface CategoryBreakdownItem {
-  categoryId: string
-  name: string
-  emoji: string
-  color: string
-  budgeted: number
-  spent: number
-  available: number
-}
-
-interface DashboardData {
-  totalIncome: number
-  totalExpenses: number
-  balance: number
-  readyToAssign: number
-  categoryBreakdown: CategoryBreakdownItem[]
-}
+import { unwrapApiResponse } from '@/lib/api-response'
 
 export default function DashboardPage() {
   const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
   const { year, month, date, setDate } = useMonthNavigation()
 
-  const { data: dashboardResult, isLoading } =
-    useDashboardControllerGetDashboard(
-      { year, month },
-      { query: { queryKey: ['dashboard', year, month] } },
-    )
+  const {
+    data: dashboardResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useDashboardControllerGetDashboard(
+    { year, month },
+    { query: { queryKey: ['dashboard', year, month] } },
+  )
 
-  const data = (
-    dashboardResult?.data as DashboardControllerGetDashboard200 | undefined
-  )?.data?.dashboard as DashboardData | undefined
+  const data = unwrapApiResponse<DashboardControllerGetDashboard200>(
+    dashboardResult?.data,
+  )?.data?.dashboard
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   return (
     <div className="space-y-6">

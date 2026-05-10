@@ -22,6 +22,7 @@ import {
 import { AddTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/add-transaction-dialog'
 import { DeleteTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/delete-transaction-dialog'
 import { TransactionsTable } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { crudMutationOptions } from '@/lib/mutation'
 
 export default function TransactionsPage() {
@@ -35,8 +36,8 @@ export default function TransactionsPage() {
     query: { queryKey: getCategoryControllerFindAllQueryKey() },
   })
   const categories =
-    (categoriesResult?.data as CategoryControllerFindAll200 | undefined)?.data
-      ?.categories?.data ?? []
+    unwrapApiResponse<CategoryControllerFindAll200>(categoriesResult?.data)
+      ?.data?.categories?.data ?? []
 
   const transactionQueryKeys = [
     getTransactionControllerFindAllQueryKey(),

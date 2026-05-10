@@ -19,7 +19,7 @@ import {
 import { Input } from '@finiq/ui/components/input'
 import { LoadingButton } from '@finiq/ui/components/loading-button'
 import { useAuthControllerForgotPassword } from '@/api/__generated__/auth/auth'
-import { formMutationOptions } from '@/lib/form-validation'
+import { formMutationOptions } from '@/lib/mutation'
 
 export function ForgotPasswordForm({
   onSuccess,

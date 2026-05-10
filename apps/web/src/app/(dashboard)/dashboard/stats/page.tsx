@@ -15,15 +15,9 @@ import type { StatisticsControllerGetStatistics200 } from '@/api/__generated__/m
 import { useStatisticsControllerGetStatistics } from '@/api/__generated__/statistics/statistics'
 import { MonthlyTrendChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/monthly-trend-chart'
 import { SpendingPieChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
-import type { SpendingByCategoryItem } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
 import { SpendingBreakdown } from '@/app/(dashboard)/dashboard/stats/_components/spending-breakdown'
-
-interface MonthlyTrendItem {
-  month: number
-  year: number
-  income: number
-  expenses: number
-}
+import { QueryError } from '@/components/shared/query-error'
+import { unwrapApiResponse } from '@/lib/api-response'
 
 export default function StatsPage() {
   const { t } = useTranslation()
@@ -35,25 +29,29 @@ export default function StatsPage() {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
 
-  const { data: statsResult, isLoading } = useStatisticsControllerGetStatistics(
+  const {
+    data: statsResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useStatisticsControllerGetStatistics(
     { year, month },
     { query: { queryKey: ['statistics', year, month] } },
   )
 
-  const data = (
-    statsResult?.data as StatisticsControllerGetStatistics200 | undefined
-  )?.data?.statistics as
-    | {
-        spendingByCategory: SpendingByCategoryItem[]
-        monthlyTrend: MonthlyTrendItem[]
-      }
-    | undefined
+  const data = unwrapApiResponse<StatisticsControllerGetStatistics200>(
+    statsResult?.data,
+  )?.data?.statistics
 
   const trendData = (data?.monthlyTrend ?? []).map((item) => ({
     name: `${MONTH_NAMES[item.month - 1]} ${item.year}`,
     income: Number(item.income),
     expenses: Number(item.expenses),
   }))
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   return (
     <div className="space-y-6">

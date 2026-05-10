@@ -25,7 +25,8 @@
     "openMenu": "Otvori meni",
     "reset": "Resetuj",
     "deleting": "Brisanje...",
-    "menu": "Meni"
+    "menu": "Meni",
+    "tryAgain": "Pokušaj ponovo"
   },
   "validation": {
     "emailNotEmpty": "Email ne sme biti prazan.",

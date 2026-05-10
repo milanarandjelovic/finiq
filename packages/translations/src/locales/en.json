@@ -25,7 +25,8 @@
     "openMenu": "Open menu",
     "reset": "Reset",
     "deleting": "Deleting...",
-    "menu": "Menu"
+    "menu": "Menu",
+    "tryAgain": "Try again"
   },
   "validation": {
     "emailNotEmpty": "Email should not be empty.",

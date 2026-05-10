@@ -9,10 +9,10 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { Skeleton } from '@finiq/ui/components/skeleton'
-import type { SpendingByCategoryItem } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
+import type { SpendingByCategoryItemDto } from '@/api/__generated__/models'
 
 interface SpendingBreakdownProps {
-  data: SpendingByCategoryItem[] | undefined
+  data: SpendingByCategoryItemDto[] | undefined
   isLoading: boolean
 }
 

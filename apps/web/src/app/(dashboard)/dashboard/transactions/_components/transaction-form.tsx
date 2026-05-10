@@ -1,8 +1,6 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { useForm, type Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -34,6 +32,7 @@ import {
   SelectValue,
 } from '@finiq/ui/components/select'
 import type { Category } from '@/api/__generated__/models'
+import { useZodForm } from '@/hooks/use-zod-form'
 
 export function TransactionForm({
   defaultValues,
@@ -47,10 +46,7 @@ export function TransactionForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useForm<TransactionFormValues>({
-    resolver: zodResolver(
-      transactionFormSchema,
-    ) as Resolver<TransactionFormValues>,
+  const form = useZodForm<TransactionFormValues>(transactionFormSchema, {
     defaultValues: {
       type: 'expense',
       amount: 0,

@@ -1,5 +1,14 @@
-import type { QueryClient, QueryKey } from '@tanstack/react-query'
+import type {
+  MutationOptions,
+  QueryClient,
+  QueryKey,
+} from '@tanstack/react-query'
 import { toast } from 'sonner'
+
+import type {
+  BackendValidationError,
+  MinimalFormError,
+} from '@/types/form-validation'
 
 /**
  * Mutation options for CRUD operations.
@@ -32,6 +41,49 @@ export function crudMutationOptions(
       },
       onError() {
         toast.error(options.errorMessage)
+      },
+    },
+  }
+}
+
+/**
+ * Applies backend validation errors to a form.
+ */
+export const applyValidationErrors = (
+  form: MinimalFormError,
+  errors?: BackendValidationError[],
+): void => {
+  errors?.forEach((error: BackendValidationError) => {
+    if (!error.property) return
+    const message = error.messages?.[0] || 'Invalid field'
+    form.setError(error.property, { message })
+  })
+}
+
+/**
+ * Mutation options for form pages — maps 400 validation errors back onto the
+ * form and calls an optional onSuccess callback.
+ */
+export function formMutationOptions<TSuccess>(
+  form: MinimalFormError,
+  onSuccess?: (response: TSuccess) => void,
+): {
+  mutation: MutationOptions<
+    TSuccess,
+    { statusCode?: number; errors?: BackendValidationError[] },
+    unknown
+  >
+} {
+  return {
+    mutation: {
+      onSuccess,
+      onError(error: {
+        statusCode?: number
+        errors?: BackendValidationError[]
+      }) {
+        if (error.statusCode === 400) {
+          applyValidationErrors(form, error.errors)
+        }
       },
     },
   }

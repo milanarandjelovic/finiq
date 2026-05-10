@@ -1,22 +1,15 @@
 'use client'
 
-import { format } from 'date-fns'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { type TransactionFormValues } from '@finiq/schemas'
 import { Button } from '@finiq/ui/components/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@finiq/ui/components/dialog'
 import type { Category } from '@/api/__generated__/models'
 import { useTransactionControllerCreate } from '@/api/__generated__/transactions/transactions'
 import { TransactionForm } from '@/app/(dashboard)/dashboard/transactions/_components/transaction-form'
+import { CrudDialog } from '@/components/shared/crud-dialog'
 
 export function AddTransactionDialog({
   open,
@@ -54,29 +47,22 @@ export function AddTransactionDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
+    <CrudDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('transactions.addTransaction')}
+      trigger={
         <Button>
           <Plus />
           {t('transactions.addTransaction')}
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t('transactions.addTransaction')}</DialogTitle>
-        </DialogHeader>
-        <TransactionForm
-          defaultValues={{
-            type: 'expense',
-            amount: 0,
-            date: format(new Date(), 'yyyy-MM-dd'),
-            note: '',
-          }}
-          categories={categories}
-          onSubmit={handleSubmit}
-          isPending={isPending}
-        />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <TransactionForm
+        categories={categories}
+        onSubmit={handleSubmit}
+        isPending={isPending}
+      />
+    </CrudDialog>
   )
 }

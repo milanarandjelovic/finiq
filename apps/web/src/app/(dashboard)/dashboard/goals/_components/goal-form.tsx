@@ -1,8 +1,6 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { useForm, type Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { goalFormSchema, type GoalFormValues } from '@finiq/schemas'
@@ -23,6 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@finiq/ui/components/popover'
+import { useZodForm } from '@/hooks/use-zod-form'
 
 export function GoalForm({
   defaultValues,
@@ -34,8 +33,7 @@ export function GoalForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useForm<GoalFormValues>({
-    resolver: zodResolver(goalFormSchema) as Resolver<GoalFormValues>,
+  const form = useZodForm<GoalFormValues>(goalFormSchema, {
     defaultValues: {
       name: '',
       emoji: '🎯',

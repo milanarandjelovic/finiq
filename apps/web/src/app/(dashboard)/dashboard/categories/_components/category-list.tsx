@@ -26,7 +26,7 @@ export function CategoryList({
 
   return (
     <div className="space-y-3">
-      <h2 className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
+      <h2 className="text-muted-foreground text-sm font-medium tracking-wide uppercase">
         {title}
       </h2>
       {isLoading ? (

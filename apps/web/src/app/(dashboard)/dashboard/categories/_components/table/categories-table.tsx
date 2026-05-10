@@ -20,7 +20,9 @@ import { CategoriesTableToolbarActions } from '@/app/(dashboard)/dashboard/categ
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { DataTableSkeleton } from '@/components/shared/data-table/data-table-skeleton'
 import { DataTableToolbar } from '@/components/shared/data-table/data-table-toolbar'
+import { QueryError } from '@/components/shared/query-error'
 import { useDataTable } from '@/hooks/use-data-table'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { type DataTableFilterField } from '@/types/data-table'
 
 interface CategoriesTableProps {
@@ -45,7 +47,12 @@ export function CategoriesTable({
   )
   const [name] = useQueryState('name', parseAsString.withDefault(''))
 
-  const { data: result, isLoading } = useCategoryControllerFindAll(
+  const {
+    data: result,
+    isLoading,
+    isError,
+    refetch,
+  } = useCategoryControllerFindAll(
     {
       isGoal,
       name: name || undefined,
@@ -65,8 +72,8 @@ export function CategoriesTable({
     },
   )
 
-  const categoriesData = (
-    result?.data as CategoryControllerFindAll200 | undefined
+  const categoriesData = unwrapApiResponse<CategoryControllerFindAll200>(
+    result?.data,
   )?.data?.categories
   const pageCount = categoriesData?.meta?.pagination?.lastPage ?? -1
 
@@ -176,6 +183,10 @@ export function CategoriesTable({
       <CategoriesTableToolbarActions table={table} />
     </DataTableToolbar>
   )
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   if (isLoading) {
     return (

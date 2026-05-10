@@ -71,46 +71,43 @@ export const changeLanguage = async (lang: string): Promise<void> => {
 
 export const clearAllI18nCache = async (): Promise<void> => {}
 
+/**
+ * Initializes i18next with bundled translations using 'en' as the default
+ * language. Language detection and switching happen separately after mount
+ * (see Providers) so this init is fast and synchronous-leaning.
+ */
 export const initI18n = async (): Promise<typeof i18next> => {
+  if (i18next.isInitialized) return i18next
   if (typeof window === 'undefined') return i18next
 
-  const languageDetector = {
-    type: 'languageDetector' as const,
-    async: true,
-    detect: async (callback: (lang: string) => void) => {
-      const lang = await detectUserLanguage()
-      callback(lang)
-      return lang
-    },
-    init: () => {},
-    cacheUserLanguage: async (lang: string) => {
-      const code = (lang.split('-')[0] ?? lang) as string
-      Cookies.set(LANGUAGE_STORAGE_KEY, code, { expires: 365 })
-    },
-  }
-
-  await i18next
-    .use(languageDetector)
-    .use(initReactI18next)
-    .init({
-      fallbackLng: 'en',
-      load: 'languageOnly',
-      resources: Object.entries(bundledTranslations).reduce(
-        (acc, [lang, translation]) => {
-          acc[lang] = { translation }
-          return acc
-        },
-        {} as Record<string, { translation: Record<string, unknown> }>,
-      ),
-      interpolation: {
-        escapeValue: false,
+  await i18next.use(initReactI18next).init({
+    lng: 'en',
+    fallbackLng: 'en',
+    resources: Object.entries(bundledTranslations).reduce(
+      (acc, [lang, translation]) => {
+        acc[lang] = { translation }
+        return acc
       },
-      react: {
-        useSuspense: false,
-      },
-    })
+      {} as Record<string, { translation: Record<string, unknown> }>,
+    ),
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+  })
 
   return i18next
+}
+
+/**
+ * Eagerly initialize when the module is first imported so that by the time.
+ * Providers mounts, i18next is already ready. Language detection runs
+ * separately in useEffect without blocking the render tree.
+ */
+if (typeof window !== 'undefined') {
+  initI18n()
 }
 
 export default i18next

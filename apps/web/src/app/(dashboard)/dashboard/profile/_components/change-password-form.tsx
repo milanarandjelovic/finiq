@@ -27,7 +27,7 @@ import {
 import { LoadingButton } from '@finiq/ui/components/loading-button'
 import { PasswordInput } from '@finiq/ui/components/password-input'
 import { useUserPasswordControllerUpdate } from '@/api/__generated__/user-password/user-password'
-import { formMutationOptions } from '@/lib/form-validation'
+import { formMutationOptions } from '@/lib/mutation'
 
 export function ChangePasswordForm() {
   const { t } = useTranslation()

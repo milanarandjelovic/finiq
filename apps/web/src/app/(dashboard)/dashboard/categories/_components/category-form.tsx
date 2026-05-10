@@ -1,7 +1,5 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, type Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { categoryFormSchema, type CategoryFormValues } from '@finiq/schemas'
@@ -16,6 +14,7 @@ import {
 import { Input } from '@finiq/ui/components/input'
 import { LoadingButton } from '@finiq/ui/components/loading-button'
 import { Switch } from '@finiq/ui/components/switch'
+import { useZodForm } from '@/hooks/use-zod-form'
 
 export function CategoryForm({
   defaultValues,
@@ -27,8 +26,7 @@ export function CategoryForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(categoryFormSchema) as Resolver<CategoryFormValues>,
+  const form = useZodForm<CategoryFormValues>(categoryFormSchema, {
     defaultValues: {
       name: '',
       emoji: '💰',

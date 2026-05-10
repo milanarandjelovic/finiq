@@ -10,18 +10,10 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { Skeleton } from '@finiq/ui/components/skeleton'
-
-export interface SpendingByCategoryItem {
-  categoryId: string
-  name: string
-  emoji: string
-  color: string
-  amount: number
-  percentage: number
-}
+import type { SpendingByCategoryItemDto } from '@/api/__generated__/models'
 
 interface SpendingPieChartProps {
-  data: SpendingByCategoryItem[] | undefined
+  data: SpendingByCategoryItemDto[] | undefined
   isLoading: boolean
 }
 

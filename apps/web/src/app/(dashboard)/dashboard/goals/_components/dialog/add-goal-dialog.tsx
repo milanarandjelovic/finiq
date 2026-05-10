@@ -7,17 +7,11 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@finiq/ui/components/dialog'
-import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerCreate,
 } from '@/api/__generated__/categories/categories'
 import { GoalForm } from '@/app/(dashboard)/dashboard/goals/_components/goal-form'
+import { CrudDialog } from '@/components/shared/crud-dialog'
 import { crudMutationOptions } from '@/lib/mutation'
 
 export function AddGoalDialog() {
@@ -36,30 +30,29 @@ export function AddGoalDialog() {
     )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <CrudDialog
+      open={open}
+      onOpenChange={setOpen}
+      title={t('goals.newSavingsGoal')}
+      trigger={
         <Button>
           <Plus />
           {t('goals.newGoal')}
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t('goals.newSavingsGoal')}</DialogTitle>
-        </DialogHeader>
-        <GoalForm
-          onSubmit={async (v) => {
-            await createGoal({
-              data: {
-                ...v,
-                isGoal: true,
-                targetDate: v.targetDate,
-              },
-            })
-          }}
-          isPending={isCreating}
-        />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <GoalForm
+        onSubmit={async (v) => {
+          await createGoal({
+            data: {
+              ...v,
+              isGoal: true,
+              targetDate: v.targetDate,
+            },
+          })
+        }}
+        isPending={isCreating}
+      />
+    </CrudDialog>
   )
 }

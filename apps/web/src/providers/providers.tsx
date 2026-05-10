@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next'
 import { Toaster } from '@finiq/ui/components/sonner'
 import { TooltipProvider } from '@finiq/ui/components/tooltip'
 import { AuthProvider } from '@/context/auth-context'
-import i18n, { changeLanguage, detectUserLanguage, initI18n } from '@/i18n'
+import i18n, { changeLanguage, detectUserLanguage } from '@/i18n'
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -19,26 +19,13 @@ export function Providers({ children }: { children: ReactNode }) {
       }),
   )
 
-  const [i18nReady, setI18nReady] = useState(false)
-  const initRef = useRef(false)
+  const langRef = useRef(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined' || initRef.current) return
-    initRef.current = true
-
-    const initialize = async () => {
-      await initI18n()
-      const lang = await detectUserLanguage()
-      await changeLanguage(lang)
-      setI18nReady(true)
-    }
-
-    initialize()
+    if (langRef.current) return
+    langRef.current = true
+    detectUserLanguage().then(changeLanguage)
   }, [])
-
-  if (!i18nReady) {
-    return null
-  }
 
   return (
     <QueryClientProvider client={queryClient}>

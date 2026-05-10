@@ -4,17 +4,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@finiq/ui/components/dialog'
-import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerUpdate,
 } from '@/api/__generated__/categories/categories'
 import type { Category } from '@/api/__generated__/models'
 import { CategoryForm } from '@/app/(dashboard)/dashboard/categories/_components/category-form'
+import { CrudDialog } from '@/components/shared/crud-dialog'
 import { crudMutationOptions } from '@/lib/mutation'
 
 interface EditCategoryDialogProps {
@@ -40,27 +35,26 @@ export function EditCategoryDialog({
     )
 
   return (
-    <Dialog open={!!category} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t('categories.editCategory')}</DialogTitle>
-        </DialogHeader>
-        {category && (
-          <CategoryForm
-            defaultValues={{
-              name: category.name,
-              emoji: category.emoji,
-              color: category.color,
-              budgetAmount: Number(category.budgetAmount),
-              isGoal: category.isGoal,
-            }}
-            onSubmit={async (v) => {
-              await updateCategory({ id: category.id, data: v })
-            }}
-            isPending={isUpdating}
-          />
-        )}
-      </DialogContent>
-    </Dialog>
+    <CrudDialog
+      open={!!category}
+      onOpenChange={(o) => !o && onClose()}
+      title={t('categories.editCategory')}
+    >
+      {category && (
+        <CategoryForm
+          defaultValues={{
+            name: category.name,
+            emoji: category.emoji,
+            color: category.color,
+            budgetAmount: Number(category.budgetAmount),
+            isGoal: category.isGoal,
+          }}
+          onSubmit={async (v) => {
+            await updateCategory({ id: category.id, data: v })
+          }}
+          isPending={isUpdating}
+        />
+      )}
+    </CrudDialog>
   )
 }

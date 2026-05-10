@@ -3,19 +3,12 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@finiq/ui/components/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@finiq/ui/components/dialog'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerDelete,
 } from '@/api/__generated__/categories/categories'
 import type { Category } from '@/api/__generated__/models'
+import { ConfirmDialog } from '@/components/shared/confirm-dialog'
 import { crudMutationOptions } from '@/lib/mutation'
 
 interface DeleteCategoryDialogProps {
@@ -40,28 +33,16 @@ export function DeleteCategoryDialog({
   )
 
   return (
-    <Dialog open={!!category} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {t('general.delete')} {t('general.name')}
-          </DialogTitle>
-        </DialogHeader>
-        <p className="text-muted-foreground text-sm">
-          {t('categories.deleteConfirm', { name: category?.name })}
-        </p>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            {t('general.cancel')}
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={() => category && deleteCategory({ id: category.id })}
-          >
-            {t('general.delete')}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ConfirmDialog
+      open={!!category}
+      onOpenChange={(o) => !o && onClose()}
+      title={t('categories.deleteCategory')}
+      description={t('categories.deleteCategoryConfirm', {
+        name: category?.name,
+      })}
+      onConfirm={() => {
+        if (category) deleteCategory({ id: category.id })
+      }}
+    />
   )
 }

@@ -19,8 +19,10 @@ import { TransactionsTableToolbarActions } from '@/app/(dashboard)/dashboard/tra
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { DataTableSkeleton } from '@/components/shared/data-table/data-table-skeleton'
 import { DataTableToolbar } from '@/components/shared/data-table/data-table-toolbar'
+import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { useDataTable } from '@/hooks/use-data-table'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { type DataTableFilterField } from '@/types/data-table'
 
 interface TransactionsTableProps {
@@ -71,7 +73,12 @@ export function TransactionsTable({
     parseAsString.withDefault(''),
   )
 
-  const { data: result, isLoading } = useTransactionControllerFindAll(
+  const {
+    data: result,
+    isLoading,
+    isError,
+    refetch,
+  } = useTransactionControllerFindAll(
     {
       year,
       month,
@@ -95,8 +102,8 @@ export function TransactionsTable({
     },
   )
 
-  const transactionsData = (
-    result?.data as TransactionControllerFindAll200 | undefined
+  const transactionsData = unwrapApiResponse<TransactionControllerFindAll200>(
+    result?.data,
   )?.data?.transactions
   const pageCount = transactionsData?.meta?.pagination?.lastPage ?? -1
 
@@ -127,6 +134,10 @@ export function TransactionsTable({
       <TransactionsTableToolbarActions table={table} />
     </DataTableToolbar>
   )
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   if (isLoading) {
     return (

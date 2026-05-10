@@ -28,7 +28,7 @@ import {
   useUserProfileControllerFindOne,
   useUserProfileControllerUpdate,
 } from '@/api/__generated__/user-profile/user-profile'
-import { formMutationOptions } from '@/lib/form-validation'
+import { formMutationOptions } from '@/lib/mutation'
 
 export function PersonalInformationForm() {
   const { t } = useTranslation()
