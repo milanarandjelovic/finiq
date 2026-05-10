@@ -74,7 +74,7 @@ export function ThemeToggle({
   // Icon variant - a single button that cycles through modes
   const Icon = icons[preference]
   const iconColor =
-    colorScheme === 'dark' ? colors.foreground : colors.foreground
+    colorScheme === 'dark' ? colors.foreground : colors.mutedForeground
 
   return (
     <TouchableOpacity

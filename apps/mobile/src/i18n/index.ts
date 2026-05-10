@@ -8,8 +8,8 @@ import { Env } from '@/util/env'
 
 export const detectUserLanguage = async (): Promise<string> => {
   const saved = await SecureStore.getItemAsync(LANGUAGE_STORAGE_KEY)
-
-  return saved ?? Localization.getLocales()[0]?.languageCode ?? 'en'
+  const code = saved ?? Localization.getLocales()[0]?.languageCode ?? 'en'
+  return code.split('-')[0]
 }
 
 const languageDetector: LanguageDetectorAsyncModule = {
@@ -18,12 +18,11 @@ const languageDetector: LanguageDetectorAsyncModule = {
   detect: async (callback: (lang: string) => void) => {
     const lang = await detectUserLanguage()
     callback(lang)
-
     return lang
   },
   init: () => {},
   cacheUserLanguage: async (lang: string) => {
-    await SecureStore.setItemAsync(LANGUAGE_STORAGE_KEY, lang)
+    await SecureStore.setItemAsync(LANGUAGE_STORAGE_KEY, lang.split('-')[0])
   },
 }
 
@@ -31,33 +30,41 @@ const fetchTranslations = async (
   lang: string,
 ): Promise<Record<string, unknown> | null> => {
   try {
-    const response = await fetch(`${Env.i18nUrl}/locales/${lang}`)
+    const response = await fetch(`${Env.i18nUrl}/locales/${lang}`, {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
 
     if (!response.ok) {
-      if (lang !== 'en') {
-        return fetchTranslations('en')
-      }
-
       return null
     }
 
     return response.json()
   } catch {
-    console.error(`[i18n] Failed to fetch translations for "${lang}"`)
-
     return null
   }
 }
 
 export const changeLanguage = async (lang: string): Promise<void> => {
-  const translations = await fetchTranslations(lang)
+  const normalizedLang = lang.split('-')[0]
+  const translations = await fetchTranslations(normalizedLang)
 
   if (translations) {
-    i18next.addResourceBundle(lang, 'translation', translations, true, true)
+    i18next.addResourceBundle(
+      normalizedLang,
+      'translation',
+      translations,
+      true,
+      true,
+    )
   }
 
-  await i18next.changeLanguage(lang)
+  await i18next.changeLanguage(normalizedLang)
 }
+
+export const clearAllI18nCache = async (): Promise<void> => {}
 
 i18next
   .use(languageDetector)
@@ -65,6 +72,7 @@ i18next
   .init({
     compatibilityJSON: 'v4',
     fallbackLng: 'en',
+    load: 'languageOnly',
     resources: {},
     interpolation: {
       escapeValue: false,

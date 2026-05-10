@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { PageSpinner } from '@finiq/ui/components/spinner'
 import { useAuth } from '@/context/auth-context'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -13,7 +13,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace(routes.login)
+      router.replace(ROUTES.LOGIN)
     }
   }, [isAuthenticated, isLoading, router])
 

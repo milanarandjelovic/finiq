@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
+import { I18nextProvider } from 'react-i18next'
 
 import { Toaster } from '@finiq/ui/components/sonner'
 import { TooltipProvider } from '@finiq/ui/components/tooltip'
 import { AuthProvider } from '@/context/auth-context'
+import i18n, { changeLanguage, detectUserLanguage } from '@/i18n'
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -19,16 +19,24 @@ export function Providers({ children }: { children: ReactNode }) {
       }),
   )
 
+  const langRef = useRef(false)
+
+  useEffect(() => {
+    if (langRef.current) return
+    langRef.current = true
+    detectUserLanguage().then(changeLanguage)
+  }, [])
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+      <I18nextProvider i18n={i18n}>
         <TooltipProvider>
           <AuthProvider>
             {children}
             <Toaster richColors position="top-right" />
           </AuthProvider>
         </TooltipProvider>
-      </ThemeProvider>
+      </I18nextProvider>
     </QueryClientProvider>
   )
 }

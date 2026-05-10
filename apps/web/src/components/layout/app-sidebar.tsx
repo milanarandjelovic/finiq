@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChevronUp, LogOut, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useTranslation } from 'react-i18next'
 
 import { Avatar, AvatarFallback } from '@finiq/ui/components/avatar'
 import {
@@ -29,19 +30,20 @@ import { useUserProfileControllerFindOne } from '@/api/__generated__/user-profil
 import { bottomNavItems, navItems } from '@/components/layout/nav-items'
 import { useAuth } from '@/context/auth-context'
 import { getInitials } from '@/lib/get-initials'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const { logout } = useAuth()
   const { theme, setTheme } = useTheme()
+  const { t } = useTranslation()
   const { data } = useUserProfileControllerFindOne()
   const user = data?.status === 200 ? data.data.data?.user : undefined
 
   function handleLogout() {
     logout()
-    router.push(routes.login)
+    router.push(ROUTES.LOGIN)
   }
 
   const initials = getInitials(user?.name)
@@ -49,7 +51,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-sidebar-border border-b p-4">
-        <Link href={routes.dashboard} className="flex items-center gap-2">
+        <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
           <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg text-sm font-bold">
             F
           </div>
@@ -67,7 +69,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -85,7 +87,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -122,7 +124,9 @@ export function AppSidebar() {
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
                   {theme === 'dark' ? <Sun /> : <Moon />}
-                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+                  {theme === 'dark'
+                    ? t('sidebar.lightMode')
+                    : t('sidebar.darkMode')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -130,7 +134,7 @@ export function AppSidebar() {
                   className="text-destructive focus:text-destructive"
                 >
                   <LogOut />
-                  Logout
+                  {t('sidebar.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

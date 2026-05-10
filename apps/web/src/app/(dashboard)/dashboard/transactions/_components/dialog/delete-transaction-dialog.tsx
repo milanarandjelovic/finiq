@@ -1,13 +1,8 @@
 'use client'
 
-import { Button } from '@finiq/ui/components/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@finiq/ui/components/dialog'
+import { useTranslation } from 'react-i18next'
+
+import { ConfirmDialog } from '@/components/shared/confirm-dialog'
 
 export function DeleteTransactionDialog({
   open,
@@ -18,31 +13,15 @@ export function DeleteTransactionDialog({
   onOpenChange: (v: boolean) => void
   onConfirm: () => Promise<void>
 }) {
+  const { t } = useTranslation()
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete transaction</DialogTitle>
-        </DialogHeader>
-        <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete this transaction? This action cannot
-          be undone.
-        </p>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={async () => {
-              await onConfirm()
-              onOpenChange(false)
-            }}
-          >
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ConfirmDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('transactions.deleteTransaction')}
+      description={t('transactions.deleteTransactionConfirm')}
+      onConfirm={onConfirm}
+    />
   )
 }

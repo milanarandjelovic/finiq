@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,31 +18,33 @@ import {
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
+import { useResetPassword } from '@/hooks/auth/use-reset-password'
 import { useTheme } from '@/hooks/use-theme'
-import { FiniqAPI } from '@/network/api'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ResetPasswordScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { colors } = useTheme()
   const { token } = useLocalSearchParams<{ token: string }>()
+  const { mutateAsync: resetPassword, isPending } = useResetPassword()
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordFormSchema),
   })
 
   const onSubmit = async (values: ResetPasswordFormValues) => {
     try {
-      await FiniqAPI.auth.resetPassword({ ...values, token })
-      router.replace(routes.login)
+      await resetPassword({ ...values, token })
+      router.replace(ROUTES.LOGIN)
     } catch {
       setError('root', {
-        message: 'Failed to reset password. Please try again.',
+        message: t('general.somethingWentWrong'),
       })
     }
   }
@@ -56,19 +59,22 @@ export default function ResetPasswordScreen() {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.title}>Reset password</Text>
+          <Text style={styles.title}>{t('auth.resetPasswordTitle')}</Text>
 
           <Controller
             control={control}
             name="email"
             render={({ field }) => (
-              <FormField label="Email" error={errors.email?.message}>
+              <FormField
+                label={t('general.email')}
+                error={errors.email?.message}
+              >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   error={errors.email?.message}
                 />
               </FormField>
@@ -79,12 +85,15 @@ export default function ResetPasswordScreen() {
             control={control}
             name="password"
             render={({ field }) => (
-              <FormField label="New password" error={errors.password?.message}>
+              <FormField
+                label={t('general.newPassword')}
+                error={errors.password?.message}
+              >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   secureTextEntry
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   error={errors.password?.message}
                 />
               </FormField>
@@ -96,14 +105,14 @@ export default function ResetPasswordScreen() {
             name="passwordConfirmation"
             render={({ field }) => (
               <FormField
-                label="Confirm new password"
+                label={t('profile.confirmNewPassword')}
                 error={errors.passwordConfirmation?.message}
               >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   secureTextEntry
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   error={errors.passwordConfirmation?.message}
                 />
               </FormField>
@@ -117,9 +126,9 @@ export default function ResetPasswordScreen() {
           )}
 
           <Button
-            label="Reset password"
+            label={t('auth.resetPasswordSubmit')}
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
+            loading={isPending}
           />
         </ScrollView>
       </KeyboardAvoidingView>

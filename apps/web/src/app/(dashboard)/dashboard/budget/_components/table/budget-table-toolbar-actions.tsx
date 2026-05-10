@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { type Table } from '@tanstack/react-table'
 import { RotateCcw } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -23,6 +24,7 @@ export function BudgetTableToolbarActions({
   table,
   onUpsert,
 }: BudgetTableToolbarActionsProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   const selected = table
@@ -43,34 +45,33 @@ export function BudgetTableToolbarActions({
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
         <RotateCcw className="mr-1.5 size-4" />
-        Reset ({selected.length})
+        {t('budget.resetCount', { count: selected.length })}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Reset {selected.length === 1 ? 'budget' : 'budgets'}
+              {selected.length === 1
+                ? t('budget.resetBudget')
+                : t('budget.resetBudgets')}
             </DialogTitle>
           </DialogHeader>
           <p className="text-muted-foreground text-sm">
-            Are you sure you want to reset the budget to{' '}
-            <span className="text-foreground font-medium">$0</span> for{' '}
-            {selected.length === 1 ? (
-              <span className="text-foreground font-medium">
-                {selected[0]?.categoryName}
-              </span>
-            ) : (
-              <>{selected.length} categories</>
-            )}
-            ?
+            {selected.length === 1
+              ? t('budget.resetBudgetSingleConfirm', {
+                  name: selected[0]?.categoryName,
+                })
+              : t('budget.resetBudgetMultipleConfirm', {
+                  count: selected.length,
+                })}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {t('general.cancel')}
             </Button>
             <Button onClick={handleReset} variant="destructive">
-              Reset
+              {t('general.reset')}
             </Button>
           </DialogFooter>
         </DialogContent>

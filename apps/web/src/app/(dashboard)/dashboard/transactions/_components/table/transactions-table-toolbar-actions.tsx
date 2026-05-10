@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { Button } from '@finiq/ui/components/button'
@@ -28,13 +29,14 @@ interface TransactionsTableToolbarActionsProps {
 export function TransactionsTableToolbarActions({
   table,
 }: TransactionsTableToolbarActionsProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const qc = useQueryClient()
 
   const { mutateAsync: deleteTransaction, isPending } =
     useTransactionControllerDelete({
       mutation: {
-        onError: () => toast.error('Failed to delete transactions'),
+        onError: () => toast.error(t('transactions.failedToDeleteMultiple')),
       },
     })
 
@@ -58,8 +60,8 @@ export function TransactionsTableToolbarActions({
     ])
     toast.success(
       selected.length === 1
-        ? 'Transaction deleted'
-        : `${selected.length} transactions deleted`,
+        ? t('transactions.transactionDeleted')
+        : t('transactions.transactionsDeleted', { count: selected.length }),
     )
     table.resetRowSelection()
     setOpen(false)
@@ -69,35 +71,35 @@ export function TransactionsTableToolbarActions({
     <>
       <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
         <Trash2 className="mr-1.5 size-4" />
-        Delete ({selected.length})
+        {t('transactions.deleteCount', { count: selected.length })}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Delete {selected.length === 1 ? 'transaction' : 'transactions'}
+              {selected.length === 1
+                ? t('transactions.deleteTransaction')
+                : t('transactions.deleteTransactions')}
             </DialogTitle>
           </DialogHeader>
           <p className="text-muted-foreground text-sm">
-            Are you sure you want to delete{' '}
-            {selected.length === 1 ? (
-              <>this transaction?</>
-            ) : (
-              <>{selected.length} transactions?</>
-            )}{' '}
-            This action cannot be undone.
+            {selected.length === 1
+              ? t('transactions.deleteTransactionConfirm')
+              : t('transactions.deleteTransactionsConfirm', {
+                  count: selected.length,
+                })}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {t('general.cancel')}
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
               disabled={isPending}
             >
-              {isPending ? 'Deleting…' : 'Delete'}
+              {isPending ? t('general.deleting') : t('general.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

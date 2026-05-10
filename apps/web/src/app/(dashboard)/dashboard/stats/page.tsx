@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { MONTH_NAMES } from '@finiq/shared'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import {
   Tabs,
   TabsContent,
@@ -14,17 +14,13 @@ import type { StatisticsControllerGetStatistics200 } from '@/api/__generated__/m
 import { useStatisticsControllerGetStatistics } from '@/api/__generated__/statistics/statistics'
 import { MonthlyTrendChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/monthly-trend-chart'
 import { SpendingPieChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
-import type { SpendingByCategoryItem } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
 import { SpendingBreakdown } from '@/app/(dashboard)/dashboard/stats/_components/spending-breakdown'
-
-interface MonthlyTrendItem {
-  month: number
-  year: number
-  income: number
-  expenses: number
-}
+import { MonthPicker } from '@/components/shared/month-picker'
+import { QueryError } from '@/components/shared/query-error'
+import { unwrapApiResponse } from '@/lib/api-response'
 
 export default function StatsPage() {
+  const { t } = useTranslation()
   const [date, setDate] = useState(() => {
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), 1)
@@ -33,19 +29,19 @@ export default function StatsPage() {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
 
-  const { data: statsResult, isLoading } = useStatisticsControllerGetStatistics(
+  const {
+    data: statsResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useStatisticsControllerGetStatistics(
     { year, month },
     { query: { queryKey: ['statistics', year, month] } },
   )
 
-  const data = (
-    statsResult?.data as StatisticsControllerGetStatistics200 | undefined
-  )?.data?.statistics as
-    | {
-        spendingByCategory: SpendingByCategoryItem[]
-        monthlyTrend: MonthlyTrendItem[]
-      }
-    | undefined
+  const data = unwrapApiResponse<StatisticsControllerGetStatistics200>(
+    statsResult?.data,
+  )?.data?.statistics
 
   const trendData = (data?.monthlyTrend ?? []).map((item) => ({
     name: `${MONTH_NAMES[item.month - 1]} ${item.year}`,
@@ -53,17 +49,25 @@ export default function StatsPage() {
     expenses: Number(item.expenses),
   }))
 
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Statistics</h1>
+        <h1 className="text-2xl font-semibold">{t('statistics.title')}</h1>
         <MonthPicker value={date} onChange={setDate} />
       </div>
 
       <Tabs defaultValue="categories">
         <TabsList>
-          <TabsTrigger value="categories">By category</TabsTrigger>
-          <TabsTrigger value="trend">6-month trend</TabsTrigger>
+          <TabsTrigger value="categories">
+            {t('statistics.byCategory')}
+          </TabsTrigger>
+          <TabsTrigger value="trend">
+            {t('statistics.sixMonthTrend')}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories" className="mt-4">

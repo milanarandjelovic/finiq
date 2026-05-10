@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { Button } from '@finiq/ui/components/button'
@@ -27,13 +28,14 @@ interface CategoriesTableToolbarActionsProps {
 export function CategoriesTableToolbarActions({
   table,
 }: CategoriesTableToolbarActionsProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const qc = useQueryClient()
 
   const { mutateAsync: deleteCategory, isPending } =
     useCategoryControllerDelete({
       mutation: {
-        onError: () => toast.error('Failed to delete categories'),
+        onError: () => toast.error(t('categories.failedToDeleteMultiple')),
       },
     })
 
@@ -52,8 +54,8 @@ export function CategoriesTableToolbarActions({
     })
     toast.success(
       selected.length === 1
-        ? 'Category deleted'
-        : `${selected.length} categories deleted`,
+        ? t('categories.categoryDeleted')
+        : t('categories.categoriesDeleted', { count: selected.length }),
     )
     table.resetRowSelection()
     setOpen(false)
@@ -63,40 +65,37 @@ export function CategoriesTableToolbarActions({
     <>
       <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
         <Trash2 className="mr-1.5 size-4" />
-        Delete ({selected.length})
+        {t('categories.deleteCount', { count: selected.length })}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Delete {selected.length === 1 ? 'category' : 'categories'}
+              {selected.length === 1
+                ? t('categories.deleteCategory')
+                : t('categories.deleteCategories')}
             </DialogTitle>
           </DialogHeader>
           <p className="text-muted-foreground text-sm">
-            Are you sure you want to delete{' '}
-            {selected.length === 1 ? (
-              <>
-                <span className="text-foreground font-medium">
-                  {selected[0]?.name}
-                </span>
-                ?
-              </>
-            ) : (
-              <>{selected.length} categories?</>
-            )}{' '}
-            This action cannot be undone.
+            {selected.length === 1
+              ? t('categories.deleteCategoryConfirm', {
+                  name: selected[0]?.name,
+                })
+              : t('categories.deleteCategoriesConfirm', {
+                  count: selected.length,
+                })}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {t('general.cancel')}
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
               disabled={isPending}
             >
-              {isPending ? 'Deleting…' : 'Delete'}
+              {isPending ? t('general.deleting') : t('general.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

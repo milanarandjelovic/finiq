@@ -22,7 +22,7 @@ import {
 import { useUserProfileControllerFindOne } from '@/api/__generated__/user-profile/user-profile'
 import { useAuth } from '@/context/auth-context'
 import { getInitials } from '@/lib/get-initials'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function SidebarUserMenu() {
   const { logout } = useAuth()
@@ -34,7 +34,7 @@ export function SidebarUserMenu() {
 
   function handleLogout() {
     logout()
-    router.push(routes.login)
+    router.push(ROUTES.LOGIN)
   }
 
   return (
@@ -95,7 +95,7 @@ export function SidebarUserMenu() {
 
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <a href={routes.profile}>
+                <a href={ROUTES.PROFILE}>
                   <UserCircleIcon />
                   Profile
                 </a>

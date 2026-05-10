@@ -1,4 +1,7 @@
+'use client'
+
 import { Pencil, Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import { Card, CardContent } from '@finiq/ui/components/card'
@@ -19,6 +22,8 @@ export function CategoryList({
   onEdit: (c: Category) => void
   onDelete: (c: Category) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-3">
       <h2 className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
@@ -44,7 +49,9 @@ export function CategoryList({
           </CardContent>
         </Card>
       ) : categories.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No categories yet.</p>
+        <p className="text-muted-foreground text-sm">
+          {t('categories.noCategories')}
+        </p>
       ) : (
         <Card>
           <CardContent className="p-0">

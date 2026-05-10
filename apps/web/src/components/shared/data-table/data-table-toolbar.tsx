@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { type Column, type Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import { Input } from '@finiq/ui/components/input'
@@ -62,6 +63,7 @@ export function DataTableToolbar<TData>({
   className,
   children,
 }: DataTableToolbarProps<TData>) {
+  const { t } = useTranslation()
   const isFiltered = table.getState().columnFilters.length > 0
 
   const { searchableColumns, filterableColumns } = useMemo(
@@ -84,7 +86,9 @@ export function DataTableToolbar<TData>({
           <ToolbarSearchInput
             key={String(field.id)}
             column={table.getColumn(String(field.id))}
-            placeholder={field.placeholder ?? `Filter by ${field.label}…`}
+            placeholder={
+              field.placeholder ?? t('table.filterBy', { label: field.label })
+            }
           />
         ))}
 
@@ -108,7 +112,9 @@ export function DataTableToolbar<TData>({
                   <SelectValue placeholder={field.label} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{field.label}: All</SelectItem>
+                  <SelectItem value="all">
+                    {t('table.allOf', { label: field.label })}
+                  </SelectItem>
                   {field.options?.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
@@ -126,7 +132,7 @@ export function DataTableToolbar<TData>({
             className="h-8 px-2"
             onClick={() => table.resetColumnFilters()}
           >
-            Reset
+            {t('general.reset')}
             <X className="ml-1 size-4" />
           </Button>
         )}

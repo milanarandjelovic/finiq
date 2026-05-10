@@ -30,6 +30,8 @@ export const lightColors = {
   destructiveForeground: '#ffffff',
   success: '#30a46c',
   successForeground: '#ffffff',
+  warning: '#eab308',
+  warningForeground: '#000000',
 
   // Border / Input / Ring
   border: '#c0c0c0',
@@ -76,6 +78,8 @@ export const darkColors = {
   destructiveForeground: '#000000',
   success: '#3dd68c',
   successForeground: '#000000',
+  warning: '#fbbf24',
+  warningForeground: '#000000',
 
   // Border / Input / Ring
   border: '#262626',

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MoreHorizontal } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -12,6 +13,7 @@ import { BudgetAssignDialog } from '@/app/(dashboard)/dashboard/budget/_componen
 import { BudgetRow } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-columns'
 
 export function BudgetActionsCell({ row }: { row: BudgetRow }) {
+  const { t } = useTranslation()
   const [showAssignDialog, setShowAssignDialog] = useState(false)
   const isEditing = row.budgeted > 0
 
@@ -29,7 +31,7 @@ export function BudgetActionsCell({ row }: { row: BudgetRow }) {
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t('general.openMenu')}</span>
             <MoreHorizontal className="size-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -38,7 +40,7 @@ export function BudgetActionsCell({ row }: { row: BudgetRow }) {
             className="cursor-pointer"
             onSelect={() => setShowAssignDialog(true)}
           >
-            {isEditing ? 'Edit budget' : 'Assign budget'}
+            {isEditing ? t('budget.editBudget') : t('budget.assignBudget')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

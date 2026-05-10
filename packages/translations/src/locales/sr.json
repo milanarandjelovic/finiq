@@ -1,5 +1,6 @@
 {
   "general": {
+    "welcome": "Dobrodošli",
     "loading": "Učitavanje...",
     "error": "Greška",
     "somethingWentWrong": "Nešto je pošlo naopako",
@@ -20,7 +21,12 @@
     "signOut": "Odjavi se",
     "signUp": "Registruj se",
     "optional": "opciono",
-    "noData": "Nema dostupnih podataka."
+    "noData": "Nema dostupnih podataka.",
+    "openMenu": "Otvori meni",
+    "reset": "Resetuj",
+    "deleting": "Brisanje...",
+    "menu": "Meni",
+    "tryAgain": "Pokušaj ponovo"
   },
   "validation": {
     "emailNotEmpty": "Email ne sme biti prazan.",
@@ -50,7 +56,7 @@
     "loginNoAccount": "Nemate nalog?",
     "loginForgotPassword": "Zaboravili ste lozinku?",
     "loginSubmit": "Prijavi se",
-    "emailPlaceholder": "vi@primer.com",
+    "emailPlaceholder": "hi@example.com",
     "passwordPlaceholder": "••••••••",
     "registerTitle": "Kreirajte nalog",
     "registerDescription": "Počnite da upravljate finansijama sa Finiqom",
@@ -80,6 +86,7 @@
   },
   "sidebar": {
     "toggleSidebar": "Preklopi bočnu traku",
+    "toggleTheme": "Promeni temu",
     "dashboard": "Kontrolna tabla",
     "transactions": "Transakcije",
     "budget": "Budžet",
@@ -93,7 +100,9 @@
     "account": "Nalog",
     "lightMode": "Svetli mod",
     "darkMode": "Tamni mod",
-    "logout": "Odjavi se"
+    "logout": "Odjavi se",
+    "home": "Početna",
+    "other": "Ostalo"
   },
   "userMenu": {
     "profile": "Profil",
@@ -101,6 +110,8 @@
   },
   "dashboard": {
     "title": "Kontrolna tabla",
+    "overview": "Pregled",
+    "overviewDescription": "Vaš finansijski pregled za ovaj mesec.",
     "income": "Prihodi",
     "expenses": "Rashodi",
     "balance": "Stanje",
@@ -111,6 +122,7 @@
   },
   "transactions": {
     "title": "Transakcije",
+    "description": "Pratite i upravljajte svojim prihodima i rashodima.",
     "allTypes": "Svi tipovi",
     "income": "Prihod",
     "expense": "Rashod",
@@ -129,14 +141,40 @@
     "noteOptionalLabel": "Napomena (opciono)",
     "notePlaceholder": "Za šta je ovo bilo?",
     "transactionAdded": "Transakcija dodata",
-    "failedToAdd": "Dodavanje transakcije nije uspelo"
+    "failedToAdd": "Dodavanje transakcije nije uspelo",
+    "transactionDeleted": "Transakcija obrisana",
+    "transactionsDeleted": "{{count}} transakcije obrisane",
+    "failedToDelete": "Brisanje transakcije nije uspelo",
+    "failedToDeleteMultiple": "Brisanje transakcija nije uspelo",
+    "deleteTransaction": "Obriši transakciju",
+    "deleteTransactions": "Obriši transakcije",
+    "deleteCount": "Obriši ({{count}})",
+    "deleteTransactionConfirm": "Da li ste sigurni da želite da obrišete ovu transakciju? Ova akcija se ne može poništiti.",
+    "deleteTransactionsConfirm": "Da li ste sigurni da želite da obrišete {{count}} transakcije? Ova akcija se ne može poništiti."
   },
   "budget": {
     "title": "Budžet",
+    "description": "Upravljajte mesečnim alokacijama budžeta.",
     "copyFromPreviousMonth": "Kopiraj iz prethodnog meseca",
+    "manageCategories": "Upravljaj kategorijama",
+    "readyToAssign": "Spremo za dodelu",
     "overBudget": "Prekoračen budžet",
     "spent": "Potrošeno:",
-    "available": "Dostupno:"
+    "available": "Dostupno:",
+    "assigned": "Dodeljeno",
+    "notAssigned": "Nije dodeljeno",
+    "failedToCopy": "Kopiranje budžeta nije uspelo",
+    "failedToSave": "Čuvanje budžeta nije uspelo",
+    "editBudget": "Uredi budžet",
+    "assignBudget": "Dodeli budžet",
+    "amount": "Iznos",
+    "assign": "Dodeli",
+    "resetBudgetConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} {{kategorija}}?",
+    "resetCount": "Resetuj ({{count}})",
+    "resetBudget": "Resetuj budžet",
+    "resetBudgets": "Resetuj budžete",
+    "resetBudgetSingleConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{name}}?",
+    "resetBudgetMultipleConfirm": "Da li ste sigurni da želite da resetujete budžet na $0 za {{count}} kategorija?"
   },
   "categories": {
     "title": "Kategorije",
@@ -153,7 +191,6 @@
     "categoryDeleted": "Kategorija obrisana",
     "failedToDelete": "Brisanje kategorije nije uspelo",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🛒",
     "color": "Boja",
     "colorPlaceholder": "#6366f1",
     "namePlaceholder": "Namirnice",
@@ -161,10 +198,19 @@
     "monthlyBudgetPlaceholder": "0.00",
     "saveCategory": "Sačuvaj kategoriju",
     "budgetPrefix": "Budžet: ",
-    "perMonth": "/mes"
+    "perMonth": "/mes",
+    "goalCategory": "Kategorija cilja",
+    "deleteCount": "Obriši ({{count}})",
+    "deleteCategory": "Obriši kategoriju",
+    "deleteCategories": "Obriši kategorije",
+    "categoriesDeleted": "{{count}} kategorija obrisano",
+    "failedToDeleteMultiple": "Brisanje kategorija nije uspelo",
+    "deleteCategoryConfirm": "Da li ste sigurni da želite da obrišete {{name}}? Ova radnja se ne može poništiti.",
+    "deleteCategoriesConfirm": "Da li ste sigurni da želite da obrišete {{count}} kategorija? Ova radnja se ne može poništiti."
   },
   "goals": {
     "title": "Ciljevi",
+    "description": "Pratite svoje ciljeve štednje.",
     "newGoal": "Novi cilj",
     "newSavingsGoal": "Novi cilj štednje",
     "editGoal": "Uredi cilj",
@@ -173,14 +219,15 @@
     "failedToCreate": "Kreiranje cilja nije uspelo",
     "goalUpdated": "Cilj ažuriran",
     "failedToUpdate": "Ažuriranje cilja nije uspelo",
+    "deleteGoal": "Obriši cilj",
     "goalDeleted": "Cilj obrisan",
     "failedToDelete": "Brisanje cilja nije uspelo",
-    "saved": "uštedeno",
+    "deleteConfirm": "Da li ste sigurni da želite da obrišete {{name}}? Ova akcija se ne može poništiti.",
+    "saved": "ušteđeno",
     "of": "od",
     "percentComplete": "% završeno",
     "target": "Cilj:",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🎯",
     "color": "Boja",
     "colorPlaceholder": "#10b981",
     "goalName": "Naziv cilja",
@@ -191,7 +238,8 @@
     "monthlyContributionPlaceholder": "500",
     "targetDate": "Ciljni datum (opciono)",
     "pickADate": "Izaberite datum",
-    "saveGoal": "Sačuvaj cilj"
+    "saveGoal": "Sačuvaj cilj",
+    "due": "Rok"
   },
   "profile": {
     "title": "Profil",
@@ -210,9 +258,13 @@
   },
   "settings": {
     "title": "Podešavanja",
-    "preferences": "Preference",
+    "preferences": "Podešavanja",
     "preferencesDescription": "Podesite vašu valutu.",
     "currency": "Valuta",
+    "currencyDescription": "Podesite vašu valutu.",
+    "language": "Jezik",
+    "saveSettings": "Sačuvaj podešavanja",
+    "theme": "Tema",
     "settingsSaved": "Podešavanja sačuvana",
     "failedToSave": "Čuvanje podešavanja nije uspelo"
   },
@@ -231,5 +283,30 @@
     "noData": "Nema dostupnih podataka.",
     "income": "Prihodi",
     "expenses": "Rashodi"
+  },
+  "search": {
+    "byName": "Pretraži po imenu..."
+  },
+  "monthPicker": {
+    "currentMonth": "Trenutni mesec",
+    "previousMonth": "Prethodni mesec",
+    "nextMonth": "Sledeći mesec"
+  },
+  "table": {
+    "filterByName": "Pretraži po imenu…",
+    "searchByCategory": "Pretraži po kategoriji…",
+    "filterBy": "Filtriraj po {{label}}…",
+    "allOf": "{{label}}: Sve",
+    "rowsPerPage": "Redova po strani",
+    "of": "od",
+    "rowsSelected": "redova izabrano",
+    "page": "Strana",
+    "goToFirstPage": "Idi na prvu stranu",
+    "goToPreviousPage": "Idi na prethodnu stranu",
+    "goToNextPage": "Idi na sledeću stranu",
+    "goToLastPage": "Idi na poslednju stranu",
+    "selectAll": "Izaberi sve",
+    "selectRow": "Izaberi red",
+    "noResults": "Nema rezultata."
   }
 }

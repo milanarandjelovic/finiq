@@ -2,12 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@finiq/ui/lib/utils'
 import { navItems } from '@/components/layout/nav-items'
 
 export function MobileNav() {
   const pathname = usePathname()
+  const { t } = useTranslation()
 
   return (
     <nav className="bg-background fixed bottom-0 left-0 right-0 z-50 border-t md:hidden">
@@ -26,7 +28,7 @@ export function MobileNav() {
               )}
             >
               <item.icon className="size-5" />
-              <span>{item.label}</span>
+              <span>{t(item.labelKey)}</span>
             </Link>
           )
         })}

@@ -1,20 +1,14 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '@finiq/ui/components/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@finiq/ui/components/dialog'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerDelete,
 } from '@/api/__generated__/categories/categories'
 import type { Category } from '@/api/__generated__/models'
+import { ConfirmDialog } from '@/components/shared/confirm-dialog'
 import { crudMutationOptions } from '@/lib/mutation'
 
 interface DeleteCategoryDialogProps {
@@ -26,40 +20,29 @@ export function DeleteCategoryDialog({
   category,
   onClose,
 }: DeleteCategoryDialogProps) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
 
   const { mutateAsync: deleteCategory } = useCategoryControllerDelete(
     crudMutationOptions(qc, {
       queryKeys: [getCategoryControllerFindAllQueryKey()],
-      successMessage: 'Category deleted',
-      errorMessage: 'Failed to delete category',
+      successMessage: t('categories.categoryDeleted'),
+      errorMessage: t('categories.failedToDelete'),
       onSuccess: onClose,
     }),
   )
 
   return (
-    <Dialog open={!!category} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete category</DialogTitle>
-        </DialogHeader>
-        <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete{' '}
-          <span className="text-foreground font-medium">{category?.name}</span>?
-          This action cannot be undone.
-        </p>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={() => category && deleteCategory({ id: category.id })}
-          >
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ConfirmDialog
+      open={!!category}
+      onOpenChange={(o) => !o && onClose()}
+      title={t('categories.deleteCategory')}
+      description={t('categories.deleteCategoryConfirm', {
+        name: category?.name,
+      })}
+      onConfirm={() => {
+        if (category) deleteCategory({ id: category.id })
+      }}
+    />
   )
 }

@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import {
   resetPasswordFormSchema,
@@ -20,10 +21,11 @@ import { Input } from '@finiq/ui/components/input'
 import { LoadingButton } from '@finiq/ui/components/loading-button'
 import { PasswordInput } from '@finiq/ui/components/password-input'
 import { useAuthControllerResetPassword } from '@/api/__generated__/auth/auth'
-import { formMutationOptions } from '@/lib/form-validation'
-import { routes } from '@/lib/routes'
+import { formMutationOptions } from '@/lib/mutation'
+import { ROUTES } from '@/util/routes'
 
 export function ResetPasswordForm() {
+  const { t } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
@@ -40,7 +42,7 @@ export function ResetPasswordForm() {
   const { mutateAsync: resetPassword, isPending } =
     useAuthControllerResetPassword(
       formMutationOptions(form, () => {
-        router.push(routes.login)
+        router.push(ROUTES.LOGIN)
       }),
     )
 
@@ -61,11 +63,11 @@ export function ResetPasswordForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('general.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
                   {...field}
                 />
@@ -80,10 +82,10 @@ export function ResetPasswordForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New password</FormLabel>
+              <FormLabel>{t('auth.newPassword')}</FormLabel>
               <FormControl>
                 <PasswordInput
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
                   {...field}
                 />
@@ -98,10 +100,10 @@ export function ResetPasswordForm() {
           name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm password</FormLabel>
+              <FormLabel>{t('auth.confirmPassword')}</FormLabel>
               <FormControl>
                 <PasswordInput
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
                   {...field}
                 />
@@ -112,7 +114,7 @@ export function ResetPasswordForm() {
         />
 
         <LoadingButton type="submit" isLoading={isPending} className="w-full">
-          Reset password
+          {t('auth.resetPasswordSubmit')}
         </LoadingButton>
       </form>
     </Form>

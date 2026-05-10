@@ -1,4 +1,5 @@
 import { type PropsWithChildren } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   KeyboardAvoidingView,
   Modal,
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useTheme } from '@/hooks/use-theme'
 
@@ -24,7 +26,9 @@ export function BottomSheet({
   title,
   children,
 }: BottomSheetProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
+  const insets = useSafeAreaInsets()
 
   return (
     <Modal
@@ -43,14 +47,23 @@ export function BottomSheet({
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.container}
         >
-          <View style={[styles.sheet, { backgroundColor: colors.card }]}>
+          <View
+            style={[
+              styles.sheet,
+              { backgroundColor: colors.card, paddingBottom: insets.bottom },
+            ]}
+          >
             <View style={[styles.header, { borderBottomColor: colors.border }]}>
               <Text style={[styles.title, { color: colors.foreground }]}>
                 {title}
               </Text>
-              <TouchableOpacity onPress={onClose}>
+              <TouchableOpacity
+                onPress={onClose}
+                accessibilityRole="button"
+                accessibilityLabel={t('general.cancel')}
+              >
                 <Text style={{ color: colors.mutedForeground, fontSize: 15 }}>
-                  Cancel
+                  {t('general.cancel')}
                 </Text>
               </TouchableOpacity>
             </View>

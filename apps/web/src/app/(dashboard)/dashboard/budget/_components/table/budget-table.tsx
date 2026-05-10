@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import {
   isOverBudget,
@@ -17,15 +18,17 @@ import type {
   BudgetControllerFindAll200,
 } from '@/api/__generated__/models'
 import {
-  getColumns,
+  useGetColumns,
   type BudgetRow,
 } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-columns'
 import { BudgetTableToolbarActions } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table-toolbar-actions'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { DataTableSkeleton } from '@/components/shared/data-table/data-table-skeleton'
 import { DataTableToolbar } from '@/components/shared/data-table/data-table-toolbar'
+import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { useDataTable } from '@/hooks/use-data-table'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { type DataTableFilterField } from '@/types/data-table'
 
 interface CategoryBreakdownItem {
@@ -41,22 +44,26 @@ interface BudgetTableProps {
   onUpsert: (categoryId: string, amount: number) => void
 }
 
-const filterFields: DataTableFilterField<BudgetRow>[] = [
-  {
-    id: 'categoryName',
-    label: 'Category',
-    placeholder: 'Filter by name…',
-  },
-]
-
 export function BudgetTable({
   year,
   month,
   breakdownMap,
   onUpsert,
 }: BudgetTableProps) {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
-  const columns = useMemo(() => getColumns(formatCurrency), [formatCurrency])
+  const columns = useGetColumns(formatCurrency)
+
+  const filterFields: DataTableFilterField<BudgetRow>[] = useMemo(
+    () => [
+      {
+        id: 'categoryName',
+        label: t('transactions.category'),
+        placeholder: t('table.filterByName'),
+      },
+    ],
+    [t],
+  )
 
   const [page] = useQueryState(
     'page',
@@ -71,7 +78,12 @@ export function BudgetTable({
     parseAsString.withDefault(''),
   )
 
-  const { data: budgetsResult, isLoading } = useBudgetControllerFindAll(
+  const {
+    data: budgetsResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useBudgetControllerFindAll(
     {
       year,
       month,
@@ -93,8 +105,8 @@ export function BudgetTable({
     },
   )
 
-  const budgetsData = (
-    budgetsResult?.data as BudgetControllerFindAll200 | undefined
+  const budgetsData = unwrapApiResponse<BudgetControllerFindAll200>(
+    budgetsResult?.data,
   )?.data?.budgets
   const pageCount = budgetsData?.meta?.pagination?.lastPage ?? -1
 
@@ -136,6 +148,10 @@ export function BudgetTable({
       <BudgetTableToolbarActions table={table} onUpsert={onUpsert} />
     </DataTableToolbar>
   )
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   if (isLoading) {
     return (

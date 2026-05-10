@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { PAGINATION_PAGE_LIMIT } from '@finiq/shared'
 import { FiniqAPI } from '@/network/api'
 
 interface Params {
@@ -14,7 +15,7 @@ export const useCategoriesInfinite = (params: Params) => {
       const response = await FiniqAPI.categories.findAll({
         ...params,
         currentPage: pageParam,
-        perPage: 10,
+        perPage: PAGINATION_PAGE_LIMIT,
       })
       return response.data?.data?.categories
     },

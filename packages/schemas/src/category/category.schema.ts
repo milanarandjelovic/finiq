@@ -15,3 +15,4 @@ export const categoryFormSchema = z.object({
 })
 
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>
+export type CategoryFormInput = z.input<typeof categoryFormSchema>

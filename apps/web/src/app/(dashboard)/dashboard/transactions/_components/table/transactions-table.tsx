@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { PAGINATION_PAGE_LIMIT, PAGINATION_PAGE_START } from '@finiq/shared'
 import type { TransactionControllerFindAll200 } from '@/api/__generated__/models'
@@ -11,15 +12,17 @@ import {
   useTransactionControllerFindAll,
 } from '@/api/__generated__/transactions/transactions'
 import {
-  getColumns,
+  useGetColumns,
   type TransactionRow,
 } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table-columns'
 import { TransactionsTableToolbarActions } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table-toolbar-actions'
 import { DataTable } from '@/components/shared/data-table/data-table'
 import { DataTableSkeleton } from '@/components/shared/data-table/data-table-skeleton'
 import { DataTableToolbar } from '@/components/shared/data-table/data-table-toolbar'
+import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { useDataTable } from '@/hooks/use-data-table'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { type DataTableFilterField } from '@/types/data-table'
 
 interface TransactionsTableProps {
@@ -28,29 +31,33 @@ interface TransactionsTableProps {
   onDelete: (id: string) => void
 }
 
-const filterFields: DataTableFilterField<TransactionRow>[] = [
-  {
-    id: 'categoryName',
-    label: 'Category',
-    placeholder: 'Search by category…',
-  },
-  {
-    id: 'type',
-    label: 'Type',
-    options: [
-      { label: 'Income', value: 'income' },
-      { label: 'Expense', value: 'expense' },
-    ],
-  },
-]
-
 export function TransactionsTable({
   year,
   month,
   onDelete,
 }: TransactionsTableProps) {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
-  const columns = useMemo(() => getColumns(formatCurrency), [formatCurrency])
+  const columns = useGetColumns(formatCurrency)
+
+  const filterFields: DataTableFilterField<TransactionRow>[] = useMemo(
+    () => [
+      {
+        id: 'categoryName',
+        label: t('transactions.category'),
+        placeholder: t('table.searchByCategory'),
+      },
+      {
+        id: 'type',
+        label: t('transactions.type'),
+        options: [
+          { label: t('transactions.income'), value: 'income' },
+          { label: t('transactions.expense'), value: 'expense' },
+        ],
+      },
+    ],
+    [t],
+  )
 
   const [page] = useQueryState(
     'page',
@@ -66,7 +73,12 @@ export function TransactionsTable({
     parseAsString.withDefault(''),
   )
 
-  const { data: result, isLoading } = useTransactionControllerFindAll(
+  const {
+    data: result,
+    isLoading,
+    isError,
+    refetch,
+  } = useTransactionControllerFindAll(
     {
       year,
       month,
@@ -90,8 +102,8 @@ export function TransactionsTable({
     },
   )
 
-  const transactionsData = (
-    result?.data as TransactionControllerFindAll200 | undefined
+  const transactionsData = unwrapApiResponse<TransactionControllerFindAll200>(
+    result?.data,
   )?.data?.transactions
   const pageCount = transactionsData?.meta?.pagination?.lastPage ?? -1
 
@@ -122,6 +134,10 @@ export function TransactionsTable({
       <TransactionsTableToolbarActions table={table} />
     </DataTableToolbar>
   )
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   if (isLoading) {
     return (

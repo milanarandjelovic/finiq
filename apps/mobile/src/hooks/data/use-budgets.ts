@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { PAGINATION_PAGE_LIMIT } from '@finiq/shared'
 import { FiniqAPI } from '@/network/api'
 import type { BudgetQuery } from '@/types/budget'
 
@@ -10,7 +11,7 @@ export const useBudgets = (params: BudgetQuery) => {
       const response = await FiniqAPI.budgets.findAll({
         ...params,
         currentPage: pageParam,
-        perPage: 10,
+        perPage: PAGINATION_PAGE_LIMIT,
       })
       return response.data?.data?.budgets
     },

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,9 +17,10 @@ import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { useAuthSession } from '@/hooks/use-auth-session'
 import { useTheme } from '@/hooks/use-theme'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function LoginScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { login } = useAuthSession()
   const { colors } = useTheme()
@@ -33,9 +35,9 @@ export default function LoginScreen() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       await login(values)
-      router.replace(routes.dashboard)
+      router.replace(ROUTES.DASHBOARD)
     } catch {
-      setError('root', { message: 'Invalid email or password.' })
+      setError('root', { message: t('errors.unauthorized') })
     }
   }
 
@@ -49,19 +51,22 @@ export default function LoginScreen() {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.title}>{t('auth.loginTitle')}</Text>
 
           <Controller
             control={control}
             name="email"
             render={({ field }) => (
-              <FormField label="Email" error={errors.email?.message}>
+              <FormField
+                label={t('general.email')}
+                error={errors.email?.message}
+              >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   error={errors.email?.message}
                 />
               </FormField>
@@ -72,12 +77,15 @@ export default function LoginScreen() {
             control={control}
             name="password"
             render={({ field }) => (
-              <FormField label="Password" error={errors.password?.message}>
+              <FormField
+                label={t('general.password')}
+                error={errors.password?.message}
+              >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   secureTextEntry
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   error={errors.password?.message}
                 />
               </FormField>
@@ -91,21 +99,21 @@ export default function LoginScreen() {
           )}
 
           <Button
-            label="Log in"
+            label={t('auth.loginSubmit')}
             onPress={handleSubmit(onSubmit)}
             loading={isSubmitting}
           />
 
           <Button
-            label="Forgot password?"
+            label={t('auth.loginForgotPassword')}
             variant="ghost"
-            onPress={() => router.push(routes.forgotPassword)}
+            onPress={() => router.push(ROUTES.FORGOT_PASSWORD)}
           />
 
           <Button
-            label="Don't have an account? Sign up"
+            label={`${t('auth.loginNoAccount')} ${t('general.signUp')}`}
             variant="ghost"
-            onPress={() => router.push(routes.register)}
+            onPress={() => router.push(ROUTES.REGISTER)}
           />
         </ScrollView>
       </KeyboardAvoidingView>

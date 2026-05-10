@@ -1,13 +1,8 @@
 'use client'
 
-import { Button } from '@finiq/ui/components/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@finiq/ui/components/dialog'
+import { useTranslation } from 'react-i18next'
+
+import { ConfirmDialog } from '@/components/shared/confirm-dialog'
 
 interface DeleteGoalDialogProps {
   open: boolean
@@ -22,26 +17,15 @@ export function DeleteGoalDialog({
   onConfirm,
   onCancel,
 }: DeleteGoalDialogProps) {
+  const { t } = useTranslation()
+
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onCancel()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete goal</DialogTitle>
-        </DialogHeader>
-        <p className="text-muted-foreground text-sm">
-          Are you sure you want to delete{' '}
-          <span className="text-foreground font-medium">{goalName}</span>? This
-          action cannot be undone.
-        </p>
-        <DialogFooter>
-          <Button variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ConfirmDialog
+      open={open}
+      onOpenChange={(o) => !o && onCancel()}
+      title={t('goals.deleteGoal')}
+      description={t('goals.deleteConfirm', { name: goalName })}
+      onConfirm={onConfirm}
+    />
   )
 }

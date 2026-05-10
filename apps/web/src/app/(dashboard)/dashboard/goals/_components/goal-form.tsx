@@ -1,8 +1,7 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { useForm, type Resolver } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { goalFormSchema, type GoalFormValues } from '@finiq/schemas'
 import { Button } from '@finiq/ui/components/button'
@@ -22,6 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@finiq/ui/components/popover'
+import { useZodForm } from '@/hooks/use-zod-form'
 
 export function GoalForm({
   defaultValues,
@@ -32,8 +32,8 @@ export function GoalForm({
   onSubmit: (values: GoalFormValues) => Promise<void>
   isPending: boolean
 }) {
-  const form = useForm<GoalFormValues>({
-    resolver: zodResolver(goalFormSchema) as Resolver<GoalFormValues>,
+  const { t } = useTranslation()
+  const form = useZodForm<GoalFormValues>(goalFormSchema, {
     defaultValues: {
       name: '',
       emoji: '🎯',
@@ -53,7 +53,7 @@ export function GoalForm({
             name="emoji"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Emoji</FormLabel>
+                <FormLabel>{t('goals.emoji')}</FormLabel>
                 <FormControl>
                   <Input placeholder="🎯" {...field} />
                 </FormControl>
@@ -66,7 +66,7 @@ export function GoalForm({
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Color</FormLabel>
+                <FormLabel>{t('goals.color')}</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
                     <input
@@ -75,7 +75,10 @@ export function GoalForm({
                       onChange={(e) => field.onChange(e.target.value)}
                       className="size-9 cursor-pointer rounded-md border"
                     />
-                    <Input placeholder="#10b981" {...field} />
+                    <Input
+                      placeholder={t('goals.colorPlaceholder')}
+                      {...field}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -88,9 +91,12 @@ export function GoalForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Goal name</FormLabel>
+              <FormLabel>{t('goals.goalName')}</FormLabel>
               <FormControl>
-                <Input placeholder="Emergency fund" {...field} />
+                <Input
+                  placeholder={t('goals.goalNamePlaceholder')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,13 +107,13 @@ export function GoalForm({
           name="targetAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Target amount</FormLabel>
+              <FormLabel>{t('goals.targetAmount')}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   min="0"
                   step="0.01"
-                  placeholder="10000"
+                  placeholder={t('goals.targetAmountPlaceholder')}
                   {...field}
                 />
               </FormControl>
@@ -120,13 +126,13 @@ export function GoalForm({
           name="budgetAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Monthly contribution</FormLabel>
+              <FormLabel>{t('goals.monthlyContribution')}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   min="0"
                   step="0.01"
-                  placeholder="500"
+                  placeholder={t('goals.monthlyContributionPlaceholder')}
                   {...field}
                 />
               </FormControl>
@@ -139,7 +145,7 @@ export function GoalForm({
           name="targetDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Target date (optional)</FormLabel>
+              <FormLabel>{t('goals.targetDate')}</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -148,8 +154,8 @@ export function GoalForm({
                       className="w-full justify-start font-normal"
                     >
                       {field.value
-                        ? format(new Date(field.value), 'PPP')
-                        : 'Pick a date'}
+                        ? format(new Date(field.value), 'dd.MM.yyyy')
+                        : t('goals.pickADate')}
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -171,7 +177,7 @@ export function GoalForm({
           )}
         />
         <LoadingButton type="submit" className="w-full" isLoading={isPending}>
-          Save goal
+          {t('goals.saveGoal')}
         </LoadingButton>
       </form>
     </Form>

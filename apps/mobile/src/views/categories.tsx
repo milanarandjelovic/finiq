@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActivityIndicator,
   Alert,
@@ -20,6 +21,7 @@ import { useCategoryDelete } from '@/hooks/data/use-category-delete'
 import type { Category } from '@/types/category'
 
 export default function CategoriesView() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [createVisible, setCreateVisible] = useState(false)
   const [editTarget, setEditTarget] = useState<Category | null>(null)
@@ -34,10 +36,10 @@ export default function CategoriesView() {
   return (
     <Screen>
       <ScreenHeader
-        title="Categories"
+        title={t('categories.title')}
         rightElement={
           <Button
-            label="Add"
+            label={t('categories.addCategory')}
             size="sm"
             onPress={() => setCreateVisible(true)}
           />
@@ -48,7 +50,7 @@ export default function CategoriesView() {
         <AppTextInput
           value={search}
           onChangeText={setSearch}
-          placeholder="Search by name..."
+          placeholder={t('search.byName')}
           style={styles.search}
         />
       </View>
@@ -59,7 +61,9 @@ export default function CategoriesView() {
         <FlatList
           data={categories}
           keyExtractor={(c) => c.id}
-          ListEmptyComponent={<EmptyState message="No categories found." />}
+          ListEmptyComponent={
+            <EmptyState message={t('categories.noCategories')} />
+          }
           ListFooterComponent={
             isFetchingNextPage ? (
               <ActivityIndicator style={styles.footer} />
@@ -75,12 +79,12 @@ export default function CategoriesView() {
               onEdit={() => setEditTarget(item)}
               onDelete={() =>
                 Alert.alert(
-                  'Delete Category',
-                  'Are you sure you want to delete this category?',
+                  `${t('general.delete')} ${t('categories.title')}`,
+                  t('general.somethingWentWrong'),
                   [
-                    { text: 'Cancel', style: 'cancel' },
+                    { text: t('general.cancel'), style: 'cancel' },
                     {
-                      text: 'Delete',
+                      text: t('general.delete'),
                       style: 'destructive',
                       onPress: () => deleteCategory(item.id),
                     },

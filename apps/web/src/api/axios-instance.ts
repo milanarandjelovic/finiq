@@ -7,12 +7,12 @@ import {
   getRefreshToken,
   setAccessToken,
 } from '@/lib/cookies'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 function clearAuthAndRedirect() {
   clearAccessToken()
   clearRefreshToken()
-  window.location.href = routes.login
+  window.location.href = ROUTES.LOGIN
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'

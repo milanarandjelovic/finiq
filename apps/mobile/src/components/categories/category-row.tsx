@@ -30,14 +30,24 @@ export function CategoryRow({
       <Text style={styles.rowEmoji}>{category.emoji}</Text>
       <Text style={styles.rowName}>{category.name}</Text>
       <View style={styles.rowActions}>
-        <TouchableOpacity onPress={onEdit} hitSlop={8}>
+        <TouchableOpacity
+          onPress={onEdit}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={`Edit ${category.name}`}
+        >
           <Ionicons
             name="pencil-outline"
             size={18}
             color={colors.mutedForeground}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete} hitSlop={8}>
+        <TouchableOpacity
+          onPress={onDelete}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={`Delete ${category.name}`}
+        >
           <Ionicons
             name="trash-outline"
             size={18}

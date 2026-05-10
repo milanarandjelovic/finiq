@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActivityIndicator,
   Alert,
@@ -24,6 +25,7 @@ import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import type { TransactionType } from '@/types/transaction'
 
 export default function TransactionsView() {
+  const { t } = useTranslation()
   const [typeFilter, setTypeFilter] = useState<TransactionType | undefined>()
   const [addVisible, setAddVisible] = useState(false)
   const { year, month, prevMonth, nextMonth } = useMonthNavigation()
@@ -38,9 +40,13 @@ export default function TransactionsView() {
   return (
     <Screen>
       <ScreenHeader
-        title="Transactions"
+        title={t('transactions.title')}
         rightElement={
-          <Button label="Add" size="sm" onPress={() => setAddVisible(true)} />
+          <Button
+            label={t('transactions.addTransaction')}
+            size="sm"
+            onPress={() => setAddVisible(true)}
+          />
         }
       />
 
@@ -53,9 +59,9 @@ export default function TransactionsView() {
         />
         <View style={styles.segment}>
           {[
-            { label: 'All', value: undefined },
-            { label: 'Income', value: 'income' as const },
-            { label: 'Expense', value: 'expense' as const },
+            { label: t('transactions.allTypes'), value: undefined },
+            { label: t('transactions.income'), value: 'income' as const },
+            { label: t('transactions.expense'), value: 'expense' as const },
           ].map((opt) => (
             <Button
               key={opt.label}
@@ -76,7 +82,7 @@ export default function TransactionsView() {
             data={transactions}
             keyExtractor={(t) => t.id}
             ListEmptyComponent={
-              <EmptyState message="No transactions this month." />
+              <EmptyState message={t('transactions.noTransactionsFound')} />
             }
             ListFooterComponent={
               isFetchingNextPage ? (
@@ -95,12 +101,12 @@ export default function TransactionsView() {
                 format={format}
                 onDelete={() =>
                   Alert.alert(
-                    'Delete Transaction',
-                    'Are you sure you want to delete this transaction?',
+                    `${t('general.delete')} ${t('transactions.transaction')}`,
+                    t('general.somethingWentWrong'),
                     [
-                      { text: 'Cancel', style: 'cancel' },
+                      { text: t('general.cancel'), style: 'cancel' },
                       {
-                        text: 'Delete',
+                        text: t('general.delete'),
                         style: 'destructive',
                         onPress: () => deleteTransaction(item.id),
                       },

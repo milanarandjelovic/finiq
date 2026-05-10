@@ -19,3 +19,4 @@ export const goalFormSchema = z.object({
 })
 
 export type GoalFormValues = z.infer<typeof goalFormSchema>
+export type GoalFormInput = z.input<typeof goalFormSchema>

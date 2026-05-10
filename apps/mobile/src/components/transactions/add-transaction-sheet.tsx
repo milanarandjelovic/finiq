@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm, type Resolver } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   Alert,
   ScrollView,
@@ -13,7 +14,7 @@ import {
   transactionFormSchema,
   type TransactionFormValues,
 } from '@finiq/schemas'
-import { BottomSheet } from '@/components/shared/bottom-sheet'
+import { FormSheet } from '@/components/shared/form-sheet'
 import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { DateInput } from '@/components/ui/date-input'
@@ -33,6 +34,7 @@ export function AddTransactionSheet({
   onClose,
   categories,
 }: AddTransactionSheetProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const { mutate, isPending } = useTransactionCreate()
   const {
@@ -41,10 +43,8 @@ export function AddTransactionSheet({
     watch,
     reset,
     formState: { errors },
-  } = useForm<TransactionFormValues>({
-    resolver: zodResolver(
-      transactionFormSchema,
-    ) as Resolver<TransactionFormValues>,
+  } = useForm({
+    resolver: zodResolver(transactionFormSchema),
   })
 
   const type = watch('type')
@@ -55,119 +55,132 @@ export function AddTransactionSheet({
         reset()
         onClose()
       },
-      onError: () => Alert.alert('Error', 'Could not save transaction.'),
+      onError: () =>
+        Alert.alert(t('general.error'), t('transactions.failedToAdd')),
     })
   }
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} title="Add Transaction">
-      <View style={styles.content}>
-        <Controller
-          name="type"
-          control={control}
-          render={({ field }) => (
-            <View style={styles.typeRow}>
-              {(['income', 'expense'] as const).map((t) => (
-                <Button
-                  key={t}
-                  label={t.charAt(0).toUpperCase() + t.slice(1)}
-                  variant={field.value === t ? 'primary' : 'outline'}
-                  onPress={() => field.onChange(t)}
-                  size="sm"
-                />
-              ))}
-            </View>
-          )}
-        />
-
-        <Controller
-          name="amount"
-          control={control}
-          render={({ field }) => (
-            <FormField label="Amount" error={errors.amount?.message}>
-              <AppTextInput
-                value={field.value?.toString()}
-                onChangeText={(v) => field.onChange(parseFloat(v) || 0)}
-                keyboardType="decimal-pad"
-                placeholder="0.00"
-                error={errors.amount?.message}
+    <FormSheet
+      visible={visible}
+      onClose={onClose}
+      title={t('transactions.addTransaction')}
+    >
+      <Controller
+        name="type"
+        control={control}
+        render={({ field }) => (
+          <View style={styles.typeRow}>
+            {(
+              [
+                { value: 'income', label: t('transactions.income') },
+                { value: 'expense', label: t('transactions.expense') },
+              ] as const
+            ).map((opt) => (
+              <Button
+                key={opt.value}
+                label={opt.label}
+                variant={field.value === opt.value ? 'primary' : 'outline'}
+                onPress={() => field.onChange(opt.value)}
+                size="sm"
               />
-            </FormField>
-          )}
-        />
-
-        <Controller
-          name="date"
-          control={control}
-          render={({ field }) => (
-            <FormField label="Date" error={errors.date?.message}>
-              <DateInput value={field.value} onChange={field.onChange} />
-            </FormField>
-          )}
-        />
-
-        {type === 'expense' && (
-          <Controller
-            name="categoryId"
-            control={control}
-            render={({ field }) => (
-              <FormField label="Category">
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={styles.chipRow}>
-                    {categories.map((cat) => (
-                      <TouchableOpacity
-                        key={cat.id}
-                        onPress={() => field.onChange(cat.id)}
-                        style={[
-                          styles.catChip,
-                          { borderColor: colors.border },
-                          field.value === cat.id && {
-                            backgroundColor: colors.primary + '20',
-                            borderColor: colors.primary,
-                          },
-                        ]}
-                      >
-                        <Text>
-                          {cat.emoji} {cat.name}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </ScrollView>
-              </FormField>
-            )}
-          />
+            ))}
+          </View>
         )}
+      />
 
+      <Controller
+        name="amount"
+        control={control}
+        render={({ field }) => (
+          <FormField
+            label={t('transactions.amount')}
+            error={errors.amount?.message}
+          >
+            <AppTextInput
+              value={field.value?.toString()}
+              onChangeText={(v) => field.onChange(parseFloat(v) || 0)}
+              keyboardType="decimal-pad"
+              placeholder={t('transactions.amountPlaceholder')}
+              error={errors.amount?.message}
+            />
+          </FormField>
+        )}
+      />
+
+      <Controller
+        name="date"
+        control={control}
+        render={({ field }) => (
+          <FormField
+            label={t('transactions.date')}
+            error={errors.date?.message}
+          >
+            <DateInput value={field.value} onChange={field.onChange} />
+          </FormField>
+        )}
+      />
+
+      {type === 'expense' && (
         <Controller
-          name="note"
+          name="categoryId"
           control={control}
           render={({ field }) => (
-            <FormField label="Note (optional)">
-              <AppTextInput
-                value={field.value ?? ''}
-                onChangeText={field.onChange}
-                placeholder="Optional note"
-              />
+            <FormField label={t('transactions.category')}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.chipRow}>
+                  {categories.map((cat) => (
+                    <TouchableOpacity
+                      key={cat.id}
+                      onPress={() => field.onChange(cat.id)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${cat.emoji} ${cat.name}`}
+                      accessibilityState={{ selected: field.value === cat.id }}
+                      style={[
+                        styles.catChip,
+                        { borderColor: colors.border },
+                        field.value === cat.id && {
+                          backgroundColor: colors.primary + '20',
+                          borderColor: colors.primary,
+                        },
+                      ]}
+                    >
+                      <Text>
+                        {cat.emoji} {cat.name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
             </FormField>
           )}
         />
+      )}
 
-        <Button
-          label="Add Transaction"
-          onPress={handleSubmit(onSubmit)}
-          loading={isPending}
-        />
-      </View>
-    </BottomSheet>
+      <Controller
+        name="note"
+        control={control}
+        render={({ field }) => (
+          <FormField label={t('transactions.noteOptionalLabel')}>
+            <AppTextInput
+              value={field.value ?? ''}
+              onChangeText={field.onChange}
+              placeholder={t('transactions.notePlaceholder')}
+            />
+          </FormField>
+        )}
+      />
+
+      <Button
+        label={t('transactions.addTransaction')}
+        onPress={handleSubmit(onSubmit)}
+        loading={isPending}
+      />
+    </FormSheet>
   )
 }
 
 const styles = StyleSheet.create({
-  content: {
-    padding: 16,
-    gap: 12,
-  },
   typeRow: {
     flexDirection: 'row',
     gap: 8,

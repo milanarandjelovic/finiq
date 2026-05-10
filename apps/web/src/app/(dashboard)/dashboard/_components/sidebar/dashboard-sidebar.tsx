@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import {
   BarChart3Icon,
@@ -9,6 +11,7 @@ import {
   TargetIcon,
   WalletIcon,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   Sidebar,
@@ -19,46 +22,48 @@ import {
 } from '@finiq/ui/components/sidebar'
 import { DashboardLinks } from '@/app/(dashboard)/dashboard/_components/sidebar/dashboard-links'
 import { SidebarUserMenu } from '@/app/(dashboard)/dashboard/_components/sidebar/sidebar-user-menu'
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export function DashboardSidebar() {
+  const { t } = useTranslation()
+
   const menuLinks = [
     {
-      name: 'Home',
-      url: routes.dashboard,
+      name: t('sidebar.home'),
+      url: ROUTES.DASHBOARD,
       icon: <HomeIcon className="size-4" />,
     },
     {
-      name: 'Budget',
-      url: routes.budget,
+      name: t('sidebar.budget'),
+      url: ROUTES.BUDGET,
       icon: <PiggyBankIcon className="size-4" />,
     },
     {
-      name: 'Transactions',
-      url: routes.transactions,
+      name: t('sidebar.transactions'),
+      url: ROUTES.TRANSACTIONS,
       icon: <WalletIcon className="size-4" />,
     },
     {
-      name: 'Stats',
-      url: routes.stats,
+      name: t('sidebar.stats'),
+      url: ROUTES.STATS,
       icon: <BarChart3Icon className="size-4" />,
     },
     {
-      name: 'Goals',
-      url: routes.goals,
+      name: t('sidebar.goals'),
+      url: ROUTES.GOALS,
       icon: <TargetIcon className="size-4" />,
     },
   ]
 
   const otherLinks = [
     {
-      name: 'Categories',
-      url: routes.categories,
+      name: t('sidebar.categories'),
+      url: ROUTES.CATEGORIES,
       icon: <TagIcon className="size-4" />,
     },
     {
-      name: 'Settings',
-      url: routes.settings,
+      name: t('sidebar.settings'),
+      url: ROUTES.SETTINGS,
       icon: <SettingsIcon className="size-4" />,
     },
   ]
@@ -67,7 +72,7 @@ export function DashboardSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link
-          href={routes.dashboard}
+          href={ROUTES.DASHBOARD}
           className="my-2 flex flex-row items-center gap-2.5"
         >
           <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-7 shrink-0 items-center justify-center rounded-md text-xs font-bold tracking-tight">
@@ -80,8 +85,8 @@ export function DashboardSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <DashboardLinks groupLabel="Menu" items={menuLinks} />
-        <DashboardLinks groupLabel="Other" items={otherLinks} />
+        <DashboardLinks groupLabel={t('sidebar.general')} items={menuLinks} />
+        <DashboardLinks groupLabel={t('sidebar.other')} items={otherLinks} />
       </SidebarContent>
 
       <SidebarFooter>

@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { useMonthNavigation } from '@finiq/hooks'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerFindAll,
@@ -21,9 +21,12 @@ import {
 import { AddTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/add-transaction-dialog'
 import { DeleteTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/delete-transaction-dialog'
 import { TransactionsTable } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table'
+import { MonthPicker } from '@/components/shared/month-picker'
+import { unwrapApiResponse } from '@/lib/api-response'
 import { crudMutationOptions } from '@/lib/mutation'
 
 export default function TransactionsPage() {
+  const { t } = useTranslation()
   const { year, month, date, setDate } = useMonthNavigation()
   const [open, setOpen] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -33,8 +36,8 @@ export default function TransactionsPage() {
     query: { queryKey: getCategoryControllerFindAllQueryKey() },
   })
   const categories =
-    (categoriesResult?.data as CategoryControllerFindAll200 | undefined)?.data
-      ?.categories?.data ?? []
+    unwrapApiResponse<CategoryControllerFindAll200>(categoriesResult?.data)
+      ?.data?.categories?.data ?? []
 
   const transactionQueryKeys = [
     getTransactionControllerFindAllQueryKey(),
@@ -44,8 +47,8 @@ export default function TransactionsPage() {
   const { mutateAsync: deleteTransaction } = useTransactionControllerDelete(
     crudMutationOptions(qc, {
       queryKeys: transactionQueryKeys,
-      successMessage: 'Transaction deleted',
-      errorMessage: 'Failed to delete transaction',
+      successMessage: t('transactions.transactionDeleted'),
+      errorMessage: t('transactions.failedToDelete'),
     }),
   )
 
@@ -53,9 +56,11 @@ export default function TransactionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Transactions</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t('transactions.title')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Track and manage your income and expenses.
+            {t('transactions.description')}
           </p>
         </div>
 

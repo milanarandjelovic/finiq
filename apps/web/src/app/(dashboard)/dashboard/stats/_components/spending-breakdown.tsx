@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import {
   Card,
   CardContent,
@@ -7,18 +9,20 @@ import {
   CardTitle,
 } from '@finiq/ui/components/card'
 import { Skeleton } from '@finiq/ui/components/skeleton'
-import type { SpendingByCategoryItem } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
+import type { SpendingByCategoryItemDto } from '@/api/__generated__/models'
 
 interface SpendingBreakdownProps {
-  data: SpendingByCategoryItem[] | undefined
+  data: SpendingByCategoryItemDto[] | undefined
   isLoading: boolean
 }
 
 export function SpendingBreakdown({ data, isLoading }: SpendingBreakdownProps) {
+  const { t } = useTranslation()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Breakdown</CardTitle>
+        <CardTitle>{t('statistics.breakdown')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {isLoading

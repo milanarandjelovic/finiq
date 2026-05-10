@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, FlatList, StyleSheet } from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
@@ -14,6 +15,7 @@ import { useBudgets } from '@/hooks/data/use-budgets'
 import { useDashboard } from '@/hooks/data/use-dashboard'
 
 export default function BudgetView() {
+  const { t } = useTranslation()
   const { year, month, prevMonth, nextMonth } = useMonthNavigation()
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useBudgets({ year, month })
@@ -30,7 +32,7 @@ export default function BudgetView() {
   return (
     <Screen>
       <ScreenHeader
-        title="Budget"
+        title={t('budget.title')}
         rightElement={
           <MonthNavigator
             year={year}
@@ -50,13 +52,13 @@ export default function BudgetView() {
           contentContainerStyle={styles.list}
           ListHeaderComponent={
             <Button
-              label="Copy prev month"
+              label={t('budget.copyFromPreviousMonth')}
               variant="outline"
               loading={copying}
               onPress={() => copy({ year, month })}
             />
           }
-          ListEmptyComponent={<EmptyState message="No budgets this month." />}
+          ListEmptyComponent={<EmptyState message={t('general.noData')} />}
           ListFooterComponent={
             isFetchingNextPage ? (
               <ActivityIndicator style={styles.footer} />

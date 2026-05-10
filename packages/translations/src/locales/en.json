@@ -1,5 +1,6 @@
 {
   "general": {
+    "welcome": "Welcome",
     "loading": "Loading...",
     "error": "Error",
     "somethingWentWrong": "Something went wrong",
@@ -20,7 +21,12 @@
     "signOut": "Sign out",
     "signUp": "Sign up",
     "optional": "optional",
-    "noData": "No data available."
+    "noData": "No data available.",
+    "openMenu": "Open menu",
+    "reset": "Reset",
+    "deleting": "Deleting...",
+    "menu": "Menu",
+    "tryAgain": "Try again"
   },
   "validation": {
     "emailNotEmpty": "Email should not be empty.",
@@ -50,7 +56,7 @@
     "loginNoAccount": "No account?",
     "loginForgotPassword": "Forgot password?",
     "loginSubmit": "Sign in",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "hi@example.com",
     "passwordPlaceholder": "••••••••",
     "registerTitle": "Create account",
     "registerDescription": "Start managing your finances with Finiq",
@@ -80,6 +86,7 @@
   },
   "sidebar": {
     "toggleSidebar": "Toggle sidebar",
+    "toggleTheme": "Toggle theme",
     "dashboard": "Dashboard",
     "transactions": "Transactions",
     "budget": "Budget",
@@ -93,7 +100,9 @@
     "account": "Account",
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
-    "logout": "Logout"
+    "logout": "Logout",
+    "home": "Home",
+    "other": "Other"
   },
   "userMenu": {
     "profile": "Profile",
@@ -101,6 +110,8 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "overview": "Overview",
+    "overviewDescription": "Your financial summary for this month.",
     "income": "Income",
     "expenses": "Expenses",
     "balance": "Balance",
@@ -111,6 +122,7 @@
   },
   "transactions": {
     "title": "Transactions",
+    "description": "Track and manage your income and expenses.",
     "allTypes": "All types",
     "income": "Income",
     "expense": "Expense",
@@ -129,14 +141,40 @@
     "noteOptionalLabel": "Note (optional)",
     "notePlaceholder": "What was this for?",
     "transactionAdded": "Transaction added",
-    "failedToAdd": "Failed to add transaction"
+    "failedToAdd": "Failed to add transaction",
+    "transactionDeleted": "Transaction deleted",
+    "transactionsDeleted": "{{count}} transactions deleted",
+    "failedToDelete": "Failed to delete transaction",
+    "failedToDeleteMultiple": "Failed to delete transactions",
+    "deleteTransaction": "Delete transaction",
+    "deleteTransactions": "Delete transactions",
+    "deleteCount": "Delete ({{count}})",
+    "deleteTransactionConfirm": "Are you sure you want to delete this transaction? This action cannot be undone.",
+    "deleteTransactionsConfirm": "Are you sure you want to delete {{count}} transactions? This action cannot be undone."
   },
   "budget": {
     "title": "Budget",
+    "description": "Manage your monthly budget allocations.",
     "copyFromPreviousMonth": "Copy from previous month",
+    "manageCategories": "Manage categories",
+    "readyToAssign": "Ready to assign",
     "overBudget": "Over budget",
     "spent": "Spent:",
-    "available": "Available:"
+    "available": "Available:",
+    "assigned": "Assigned",
+    "notAssigned": "Not assigned",
+    "failedToCopy": "Failed to copy budgets",
+    "failedToSave": "Failed to save budget",
+    "editBudget": "Edit budget",
+    "assignBudget": "Assign budget",
+    "amount": "Amount",
+    "assign": "Assign",
+    "resetBudgetConfirm": "Are you sure you want to reset the budget to $0 for {{count}} {{category}}?",
+    "resetCount": "Reset ({{count}})",
+    "resetBudget": "Reset budget",
+    "resetBudgets": "Reset budgets",
+    "resetBudgetSingleConfirm": "Are you sure you want to reset the budget to $0 for {{name}}?",
+    "resetBudgetMultipleConfirm": "Are you sure you want to reset the budget to $0 for {{count}} categories?"
   },
   "categories": {
     "title": "Categories",
@@ -153,7 +191,6 @@
     "categoryDeleted": "Category deleted",
     "failedToDelete": "Failed to delete category",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🛒",
     "color": "Color",
     "colorPlaceholder": "#6366f1",
     "namePlaceholder": "Groceries",
@@ -161,10 +198,19 @@
     "monthlyBudgetPlaceholder": "0.00",
     "saveCategory": "Save category",
     "budgetPrefix": "Budget: $",
-    "perMonth": "/mo"
+    "perMonth": "/mo",
+    "goalCategory": "Goal category",
+    "deleteCount": "Delete ({{count}})",
+    "deleteCategory": "Delete category",
+    "deleteCategories": "Delete categories",
+    "categoriesDeleted": "{{count}} categories deleted",
+    "failedToDeleteMultiple": "Failed to delete categories",
+    "deleteCategoryConfirm": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+    "deleteCategoriesConfirm": "Are you sure you want to delete {{count}} categories? This action cannot be undone."
   },
   "goals": {
     "title": "Goals",
+    "description": "Track your savings targets.",
     "newGoal": "New goal",
     "newSavingsGoal": "New savings goal",
     "editGoal": "Edit goal",
@@ -173,14 +219,15 @@
     "failedToCreate": "Failed to create goal",
     "goalUpdated": "Goal updated",
     "failedToUpdate": "Failed to update goal",
+    "deleteGoal": "Delete goal",
     "goalDeleted": "Goal deleted",
     "failedToDelete": "Failed to delete goal",
+    "deleteConfirm": "Are you sure you want to delete {{name}}? This action cannot be undone.",
     "saved": "saved",
     "of": "of",
     "percentComplete": "% complete",
     "target": "Target:",
     "emoji": "Emoji",
-    "emojiPlaceholder": "🎯",
     "color": "Color",
     "colorPlaceholder": "#10b981",
     "goalName": "Goal name",
@@ -191,7 +238,8 @@
     "monthlyContributionPlaceholder": "500",
     "targetDate": "Target date (optional)",
     "pickADate": "Pick a date",
-    "saveGoal": "Save goal"
+    "saveGoal": "Save goal",
+    "due": "Due"
   },
   "profile": {
     "title": "Profile",
@@ -213,6 +261,10 @@
     "preferences": "Preferences",
     "preferencesDescription": "Set your currency preference.",
     "currency": "Currency",
+    "currencyDescription": "Set your currency preference.",
+    "language": "Language",
+    "saveSettings": "Save settings",
+    "theme": "Theme",
     "settingsSaved": "Settings saved",
     "failedToSave": "Failed to save settings"
   },
@@ -231,5 +283,30 @@
     "noData": "No data available.",
     "income": "Income",
     "expenses": "Expenses"
+  },
+  "search": {
+    "byName": "Search by name..."
+  },
+  "monthPicker": {
+    "currentMonth": "Current month",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "table": {
+    "filterByName": "Filter by name…",
+    "searchByCategory": "Search by category…",
+    "filterBy": "Filter by {{label}}…",
+    "allOf": "{{label}}: All",
+    "rowsPerPage": "Rows per page",
+    "of": "of",
+    "rowsSelected": "row(s) selected",
+    "page": "Page",
+    "goToFirstPage": "Go to first page",
+    "goToPreviousPage": "Go to previous page",
+    "goToNextPage": "Go to next page",
+    "goToLastPage": "Go to last page",
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "noResults": "No results."
   }
 }

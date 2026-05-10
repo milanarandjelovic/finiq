@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import {
   getCategoryControllerFindAllQueryKey,
@@ -15,6 +16,7 @@ import { EditGoalDialog } from '@/app/(dashboard)/dashboard/goals/_components/di
 import { crudMutationOptions } from '@/lib/mutation'
 
 export default function GoalsPage() {
+  const { t } = useTranslation()
   const [editTarget, setEditTarget] = useState<Category | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null)
   const qc = useQueryClient()
@@ -22,8 +24,8 @@ export default function GoalsPage() {
   const { mutateAsync: deleteGoal } = useCategoryControllerDelete(
     crudMutationOptions(qc, {
       queryKeys: [getCategoryControllerFindAllQueryKey()],
-      successMessage: 'Goal deleted',
-      errorMessage: 'Failed to delete goal',
+      successMessage: t('goals.goalDeleted'),
+      errorMessage: t('goals.failedToDelete'),
       onSuccess: () => setDeleteTarget(null),
     }),
   )
@@ -32,9 +34,11 @@ export default function GoalsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Goals</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t('goals.title')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Track your savings targets.
+            {t('goals.description')}
           </p>
         </div>
         <AddGoalDialog />

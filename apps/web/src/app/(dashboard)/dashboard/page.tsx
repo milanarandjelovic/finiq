@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { useMonthNavigation } from '@finiq/hooks'
 import { calculateProgress, isOverBudget } from '@finiq/shared'
 import { Badge } from '@finiq/ui/components/badge'
@@ -9,54 +11,49 @@ import {
   CardHeader,
   CardTitle,
 } from '@finiq/ui/components/card'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import { Progress } from '@finiq/ui/components/progress'
 import { Skeleton } from '@finiq/ui/components/skeleton'
 import { cn } from '@finiq/ui/lib/utils'
 import { useDashboardControllerGetDashboard } from '@/api/__generated__/dashboard/dashboard'
 import type { DashboardControllerGetDashboard200 } from '@/api/__generated__/models'
 import { SummaryCard } from '@/app/(dashboard)/dashboard/transactions/_components/summary-card'
+import { MonthPicker } from '@/components/shared/month-picker'
+import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
-
-interface CategoryBreakdownItem {
-  categoryId: string
-  name: string
-  emoji: string
-  color: string
-  budgeted: number
-  spent: number
-  available: number
-}
-
-interface DashboardData {
-  totalIncome: number
-  totalExpenses: number
-  balance: number
-  readyToAssign: number
-  categoryBreakdown: CategoryBreakdownItem[]
-}
+import { unwrapApiResponse } from '@/lib/api-response'
 
 export default function DashboardPage() {
+  const { t } = useTranslation()
   const formatCurrency = useCurrencyFormatter()
   const { year, month, date, setDate } = useMonthNavigation()
 
-  const { data: dashboardResult, isLoading } =
-    useDashboardControllerGetDashboard(
-      { year, month },
-      { query: { queryKey: ['dashboard', year, month] } },
-    )
+  const {
+    data: dashboardResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useDashboardControllerGetDashboard(
+    { year, month },
+    { query: { queryKey: ['dashboard', year, month] } },
+  )
 
-  const data = (
-    dashboardResult?.data as DashboardControllerGetDashboard200 | undefined
-  )?.data?.dashboard as DashboardData | undefined
+  const data = unwrapApiResponse<DashboardControllerGetDashboard200>(
+    dashboardResult?.data,
+  )?.data?.dashboard
+
+  if (isError) {
+    return <QueryError onRetry={refetch} />
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Overview</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t('dashboard.overview')}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Your financial summary for this month.
+            {t('dashboard.overviewDescription')}
           </p>
         </div>
         <MonthPicker value={date} onChange={setDate} />
@@ -77,28 +74,28 @@ export default function DashboardPage() {
         ) : (
           <>
             <SummaryCard
-              label="Income"
+              label={t('dashboard.income')}
               value={data?.totalIncome ?? 0}
               variant="income"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Expenses"
+              label={t('dashboard.expenses')}
               value={data?.totalExpenses ?? 0}
               variant="expense"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Balance"
+              label={t('dashboard.balance')}
               value={data?.balance ?? 0}
               variant="balance"
               formatCurrency={formatCurrency}
             />
 
             <SummaryCard
-              label="Ready to assign"
+              label={t('dashboard.readyToAssign')}
               value={data?.readyToAssign ?? 0}
               variant="assign"
               formatCurrency={formatCurrency}
@@ -110,7 +107,7 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-medium">
-            Category breakdown
+            {t('dashboard.categoryBreakdown')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -123,7 +120,7 @@ export default function DashboardPage() {
             ))
           ) : data?.categoryBreakdown.length === 0 ? (
             <p className="text-muted-foreground py-4 text-center text-sm">
-              No categories yet.
+              {t('dashboard.noCategoriesYet')}
             </p>
           ) : (
             data?.categoryBreakdown.map((item) => {
@@ -150,7 +147,7 @@ export default function DashboardPage() {
                           variant="destructive"
                           className="h-5 px-1.5 text-xs"
                         >
-                          Over
+                          {t('dashboard.over')}
                         </Badge>
                       )}
                     </div>

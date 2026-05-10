@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 
-import { routes } from '@/lib/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function RootPage() {
-  redirect(routes.dashboard)
+  redirect(ROUTES.DASHBOARD)
 }

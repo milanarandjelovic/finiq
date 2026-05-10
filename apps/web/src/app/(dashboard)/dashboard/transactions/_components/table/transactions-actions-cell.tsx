@@ -1,4 +1,5 @@
 import { MoreHorizontal } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
 import {
@@ -10,11 +11,13 @@ import {
 import { TransactionRow } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table-columns'
 
 export function TransactionActionsCell({ row }: { row: TransactionRow }) {
+  const { t } = useTranslation()
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
+          <span className="sr-only">{t('general.openMenu')}</span>
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -23,7 +26,7 @@ export function TransactionActionsCell({ row }: { row: TransactionRow }) {
           className="text-destructive cursor-pointer"
           onSelect={() => row.onDelete(row.id)}
         >
-          Delete
+          {t('general.delete')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

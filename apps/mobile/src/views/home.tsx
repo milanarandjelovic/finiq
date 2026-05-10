@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
@@ -14,8 +15,11 @@ import { SurfaceView } from '@/components/ui/surface-view'
 import { Text } from '@/components/ui/text'
 import { useDashboard } from '@/hooks/data/use-dashboard'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
+import { useTheme } from '@/hooks/use-theme'
 
 export default function HomeView() {
+  const { t } = useTranslation()
+  const { colors } = useTheme()
   const { year, month, prevMonth, nextMonth } = useMonthNavigation()
   const { data: dashboard, isLoading } = useDashboard({ year, month })
   const format = useCurrencyFormatter()
@@ -32,7 +36,7 @@ export default function HomeView() {
     <Screen>
       <ScrollView>
         <ScreenHeader
-          title="Dashboard"
+          title={t('dashboard.title')}
           rightElement={
             <MonthNavigator
               year={year}
@@ -45,32 +49,36 @@ export default function HomeView() {
 
         <View style={styles.grid}>
           <SummaryCard
-            label="Income"
+            label={t('dashboard.income')}
             value={format(dashboard?.totalIncome ?? 0)}
-            color="#16a34a"
+            color={colors.income}
           />
 
           <SummaryCard
-            label="Expenses"
+            label={t('dashboard.expenses')}
             value={format(dashboard?.totalExpenses ?? 0)}
-            color="#dc2626"
+            color={colors.expense}
           />
 
           <SummaryCard
-            label="Balance"
+            label={t('dashboard.balance')}
             value={format(dashboard?.balance ?? 0)}
-            color={(dashboard?.balance ?? 0) >= 0 ? '#16a34a' : '#dc2626'}
+            color={
+              (dashboard?.balance ?? 0) >= 0 ? colors.income : colors.expense
+            }
           />
 
           <SummaryCard
-            label="Ready to assign"
+            label={t('dashboard.readyToAssign')}
             value={format(dashboard?.readyToAssign ?? 0)}
-            color="#eab308"
+            color={colors.readyToAssign}
           />
         </View>
 
         <SurfaceView style={styles.card}>
-          <Text style={styles.cardTitle}>Category breakdown</Text>
+          <Text style={styles.cardTitle}>
+            {t('dashboard.categoryBreakdown')}
+          </Text>
           {(dashboard?.categoryBreakdown ?? []).map((item) => (
             <View key={item.categoryId} style={styles.breakdownRow}>
               <View style={styles.breakdownHeader}>
@@ -78,7 +86,7 @@ export default function HomeView() {
                   {item.emoji} {item.name}
                 </Text>
                 {item.spent > item.budgeted && item.budgeted > 0 && (
-                  <Badge label="Over budget" variant="destructive" />
+                  <Badge label={t('budget.overBudget')} variant="destructive" />
                 )}
               </View>
               <ProgressBar
@@ -86,8 +94,12 @@ export default function HomeView() {
                 color={item.color}
               />
               <View style={styles.breakdownAmounts}>
-                <MutedText>{format(item.spent)} spent</MutedText>
-                <MutedText>of {format(item.budgeted)}</MutedText>
+                <MutedText>
+                  {t('budget.spent')} {format(item.spent)}
+                </MutedText>
+                <MutedText>
+                  {t('goals.of')} {format(item.budgeted)}
+                </MutedText>
               </View>
             </View>
           ))}

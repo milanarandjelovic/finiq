@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { format, parseISO } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet } from 'react-native'
 
 import { Text } from '@/components/ui/text'
@@ -12,16 +13,14 @@ interface DateInputProps {
   placeholder?: string
 }
 
-export function DateInput({
-  value,
-  onChange,
-  placeholder = 'Select date',
-}: DateInputProps) {
+export function DateInput({ value, onChange, placeholder }: DateInputProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const [open, setOpen] = useState(false)
 
   const date = value ? parseISO(value) : new Date()
-  const displayValue = value ? format(parseISO(value), 'MMM d, yyyy') : null
+  const displayValue = value ? format(parseISO(value), 'dd.MM.yyyy') : null
+  const resolvedPlaceholder = placeholder ?? t('general.selectDate')
 
   return (
     <>
@@ -41,7 +40,7 @@ export function DateInput({
             !displayValue && { color: colors.mutedForeground },
           ]}
         >
-          {displayValue ?? placeholder}
+          {displayValue ?? resolvedPlaceholder}
         </Text>
       </Pressable>
 

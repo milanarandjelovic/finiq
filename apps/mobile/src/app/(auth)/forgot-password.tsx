@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -20,30 +21,32 @@ import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { FormField } from '@/components/ui/form-field'
 import { MutedText } from '@/components/ui/muted-text'
+import { useForgotPassword } from '@/hooks/auth/use-forgot-password'
 import { useTheme } from '@/hooks/use-theme'
-import { FiniqAPI } from '@/network/api'
-import { routes } from '@/util/routes'
+import { ROUTES } from '@/util/routes'
 
 export default function ForgotPasswordScreen() {
+  const { t } = useTranslation()
   const router = useRouter()
   const { colors } = useTheme()
   const [sentEmail, setSentEmail] = useState<string | null>(null)
+  const { mutateAsync: forgotPassword, isPending } = useForgotPassword()
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
   })
 
   const onSubmit = async ({ email }: ForgotPasswordFormValues) => {
     try {
-      await FiniqAPI.auth.forgotPassword({ email })
+      await forgotPassword({ email })
       setSentEmail(email)
     } catch {
-      setError('root', { message: 'Something went wrong. Please try again.' })
+      setError('root', { message: t('general.somethingWentWrong') })
     }
   }
 
@@ -51,12 +54,16 @@ export default function ForgotPasswordScreen() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.center}>
-          <Text style={styles.title}>Check your inbox</Text>
-          <MutedText>We sent a reset link to {sentEmail}</MutedText>
+          <Text style={styles.title}>
+            {t('auth.forgotPasswordCheckEmailTitle')}
+          </Text>
+          <MutedText>
+            {t('auth.forgotPasswordCheckEmailDescription')} {sentEmail}
+          </MutedText>
           <Button
-            label="Back to login"
+            label={t('auth.forgotPasswordBackToSignIn')}
             variant="outline"
-            onPress={() => router.replace(routes.login)}
+            onPress={() => router.replace(ROUTES.LOGIN)}
           />
         </View>
       </SafeAreaView>
@@ -73,22 +80,23 @@ export default function ForgotPasswordScreen() {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.title}>Forgot password</Text>
-          <MutedText>
-            Enter your email and we&apos;ll send you a reset link.
-          </MutedText>
+          <Text style={styles.title}>{t('auth.forgotPasswordTitle')}</Text>
+          <MutedText>{t('auth.forgotPasswordDescription')}</MutedText>
 
           <Controller
             control={control}
             name="email"
             render={({ field }) => (
-              <FormField label="Email" error={errors.email?.message}>
+              <FormField
+                label={t('general.email')}
+                error={errors.email?.message}
+              >
                 <AppTextInput
                   value={field.value}
                   onChangeText={field.onChange}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   error={errors.email?.message}
                 />
               </FormField>
@@ -102,15 +110,15 @@ export default function ForgotPasswordScreen() {
           )}
 
           <Button
-            label="Send reset link"
+            label={t('auth.forgotPasswordSubmit')}
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
+            loading={isPending}
           />
 
           <Button
-            label="Back to login"
+            label={t('auth.forgotPasswordBackToSignIn')}
             variant="ghost"
-            onPress={() => router.replace(routes.login)}
+            onPress={() => router.replace(ROUTES.LOGIN)}
           />
         </ScrollView>
       </KeyboardAvoidingView>

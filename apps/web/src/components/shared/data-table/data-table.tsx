@@ -2,6 +2,7 @@
 
 import { HTMLAttributes } from 'react'
 import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 
 import {
   Table,
@@ -26,6 +27,8 @@ export function DataTable<TData>({
   withPagination = true,
   ...props
 }: DataTableProps<TData>) {
+  const { t } = useTranslation()
+
   return (
     <div className={cn('w-full space-y-2.5', className)} {...props}>
       {children}
@@ -75,7 +78,7 @@ export function DataTable<TData>({
                   colSpan={table.getAllColumns().length}
                   className="h-12 text-center"
                 >
-                  No results.
+                  {t('table.noResults')}
                 </TableCell>
               </TableRow>
             )}

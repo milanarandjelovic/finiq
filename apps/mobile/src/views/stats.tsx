@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { useMonthNavigation } from '@finiq/hooks'
@@ -18,6 +19,7 @@ import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { useTheme } from '@/hooks/use-theme'
 
 export default function StatsView() {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<'category' | 'trend'>('category')
   const { year, month, prevMonth, nextMonth } = useMonthNavigation()
   const { data: statistics, isLoading } = useStatistics({ year, month })
@@ -27,7 +29,7 @@ export default function StatsView() {
   return (
     <Screen>
       <ScreenHeader
-        title="Statistics"
+        title={t('statistics.title')}
         rightElement={
           <MonthNavigator
             year={year}
@@ -40,13 +42,13 @@ export default function StatsView() {
 
       <View style={styles.tabs}>
         <Button
-          label="By Category"
+          label={t('statistics.byCategory')}
           variant={tab === 'category' ? 'primary' : 'ghost'}
           size="sm"
           onPress={() => setTab('category')}
         />
         <Button
-          label="6-Month Trend"
+          label={t('statistics.sixMonthTrend')}
           variant={tab === 'trend' ? 'primary' : 'ghost'}
           size="sm"
           onPress={() => setTab('trend')}
@@ -91,7 +93,7 @@ export default function StatsView() {
                       { backgroundColor: colors.success },
                     ]}
                   />
-                  <MutedText>Income</MutedText>
+                  <MutedText>{t('statistics.income')}</MutedText>
                 </View>
                 <View style={styles.legendItem}>
                   <View
@@ -100,7 +102,7 @@ export default function StatsView() {
                       { backgroundColor: colors.destructive },
                     ]}
                   />
-                  <MutedText>Expenses</MutedText>
+                  <MutedText>{t('statistics.expenses')}</MutedText>
                 </View>
               </View>
             </SurfaceView>

@@ -1,14 +1,18 @@
 'use client'
 
-import { useEffect } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { settingsFormSchema, type SettingsFormValues } from '@finiq/schemas'
 import type { CurrencyValue } from '@finiq/shared'
-import { CURRENCIES } from '@finiq/shared'
+import {
+  CURRENCIES,
+  LANGUAGE_AVAILABLE_NAMES,
+  LANGUAGE_STORAGE_KEY,
+} from '@finiq/shared'
 import {
   Card,
   CardContent,
@@ -42,19 +46,31 @@ import {
   useSettingControllerFindAll,
   useSettingControllerUpdate,
 } from '@/api/__generated__/settings/settings'
-import { applyValidationErrors } from '@/lib/form-validation'
+import { QueryError } from '@/components/shared/query-error'
+import { useZodForm } from '@/hooks/use-zod-form'
+import { changeLanguage } from '@/i18n'
+import { unwrapApiResponse } from '@/lib/api-response'
+import { applyValidationErrors } from '@/lib/mutation'
 import type { BackendValidationError } from '@/types/form-validation'
 
 export function SettingsForm() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
+  const [currentLang, setCurrentLang] = useState(
+    Cookies.get(LANGUAGE_STORAGE_KEY) || 'en',
+  )
 
-  const { data: settingsResult, isLoading } = useSettingControllerFindAll()
-  const settings = (
-    settingsResult?.data as SettingControllerFindAll200 | undefined
+  const {
+    data: settingsResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useSettingControllerFindAll()
+  const settings = unwrapApiResponse<SettingControllerFindAll200>(
+    settingsResult?.data,
   )?.data?.settings
 
-  const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(settingsFormSchema),
+  const form = useZodForm<SettingsFormValues>(settingsFormSchema, {
     defaultValues: {
       currency: CURRENCIES[0].value,
     },
@@ -66,6 +82,12 @@ export function SettingsForm() {
     }
   }, [settings, form])
 
+  const handleLanguageChange = async (lang: string) => {
+    setCurrentLang(lang)
+    Cookies.set(LANGUAGE_STORAGE_KEY, lang, { expires: 365 })
+    await changeLanguage(lang)
+  }
+
   const { mutateAsync: updateSettings, isPending } = useSettingControllerUpdate(
     {
       mutation: {
@@ -73,7 +95,8 @@ export function SettingsForm() {
           qc.invalidateQueries({
             queryKey: getSettingControllerFindAllQueryKey(),
           })
-          toast.success('Settings saved')
+
+          toast.success(t('settings.settingsSaved'))
         },
         onError(error: {
           statusCode?: number
@@ -82,7 +105,7 @@ export function SettingsForm() {
           if (error.statusCode === 400) {
             applyValidationErrors(form, error.errors)
           } else {
-            toast.error('Failed to save settings')
+            toast.error(t('settings.failedToSave'))
           }
         },
       },
@@ -95,57 +118,100 @@ export function SettingsForm() {
     })
   }
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Preferences</CardTitle>
-        <CardDescription>Set your currency preference.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
+  const cardHeader = (
+    <CardHeader>
+      <CardTitle>{t('settings.preferences')}</CardTitle>
+      <CardDescription>{t('settings.preferencesDescription')}</CardDescription>
+    </CardHeader>
+  )
+
+  if (isError) {
+    return (
+      <Card>
+        {cardHeader}
+        <CardContent>
+          <QueryError onRetry={refetch} />
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <Card>
+        {cardHeader}
+        <CardContent>
           <div className="space-y-4">
             <Skeleton className="h-10 w-full" />
           </div>
-        ) : (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-4"
-            >
-              <FormField
-                control={form.control}
-                name="currency"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Currency</FormLabel>
-                    <Select
-                      key={field.value}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="w-full">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {CURRENCIES.map((c) => (
-                          <SelectItem key={c.value} value={c.value}>
-                            {c.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton type="submit" isLoading={isPending}>
-                Save settings
-              </LoadingButton>
-            </form>
-          </Form>
-        )}
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      {cardHeader}
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="currency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('settings.currency')}</FormLabel>
+                  <Select
+                    key={field.value}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl className="w-full">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {CURRENCIES.map((c) => (
+                        <SelectItem key={c.value} value={c.value}>
+                          {c.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormItem>
+              <FormLabel>{t('settings.language')}</FormLabel>
+              <Select value={currentLang} onValueChange={handleLanguageChange}>
+                <FormControl className="w-full">
+                  <SelectTrigger>
+                    <SelectValue>
+                      {LANGUAGE_AVAILABLE_NAMES[currentLang] || currentLang}
+                    </SelectValue>
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.entries(LANGUAGE_AVAILABLE_NAMES).map(
+                    ([code, name]) => (
+                      <SelectItem key={code} value={code}>
+                        {name}
+                      </SelectItem>
+                    ),
+                  )}
+                </SelectContent>
+              </Select>
+            </FormItem>
+            <LoadingButton type="submit" isLoading={isPending}>
+              {t('settings.saveSettings')}
+            </LoadingButton>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   )
