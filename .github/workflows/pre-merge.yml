@@ -86,5 +86,5 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run build
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_I18N_URL: ${{ secrets.NEXT_PUBLIC_I18N_URL }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'https://placeholder.example.com' }}
+          NEXT_PUBLIC_I18N_URL: ${{ secrets.NEXT_PUBLIC_I18N_URL || 'https://placeholder.example.com' }}
