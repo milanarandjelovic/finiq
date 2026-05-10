@@ -34,7 +34,7 @@ export function SummaryCard({
   return (
     <Card className="gap-3">
       <CardHeader className="pb-0">
-        <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium tracking-wide uppercase">
+        <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide">
           <span
             className={cn(
               'inline-block size-1.5 rounded-full',

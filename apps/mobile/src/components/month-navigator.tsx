@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons'
+import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { MONTH_NAMES } from '@finiq/shared'
+import { useDateLocale } from '@/hooks/use-date-locale'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 interface MonthNavigatorProps {
@@ -17,17 +19,29 @@ export function MonthNavigator({
   onPrev,
   onNext,
 }: MonthNavigatorProps) {
+  const { t } = useTranslation()
+  const locale = useDateLocale()
   const text = useThemeColor('text')
 
   return (
     <View style={styles.row}>
-      <TouchableOpacity onPress={onPrev} hitSlop={8}>
+      <TouchableOpacity
+        onPress={onPrev}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel={t('monthPicker.previousMonth')}
+      >
         <Ionicons name="chevron-back" size={20} color={text} />
       </TouchableOpacity>
       <Text style={[styles.label, { color: text }]}>
-        {MONTH_NAMES[month - 1]} {year}
+        {format(new Date(year, month - 1, 1), 'MMMM yyyy', { locale })}
       </Text>
-      <TouchableOpacity onPress={onNext} hitSlop={8}>
+      <TouchableOpacity
+        onPress={onNext}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel={t('monthPicker.nextMonth')}
+      >
         <Ionicons name="chevron-forward" size={20} color={text} />
       </TouchableOpacity>
     </View>

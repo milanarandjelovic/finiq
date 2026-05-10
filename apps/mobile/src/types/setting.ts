@@ -1,9 +1,11 @@
+import type { CurrencyValue } from '@finiq/shared'
+
 export type Setting = {
-  currency: string
+  currency: CurrencyValue
 }
 
 export type UpdateSettingPayload = {
-  currency?: string
+  currency?: CurrencyValue
 }
 
 export type SettingResponse = {

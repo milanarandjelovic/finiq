@@ -9,6 +9,7 @@ export const useCategoryDelete = () => {
     mutationFn: (id: string) => FiniqAPI.categories.delete(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['categories'] })
+      qc.invalidateQueries({ queryKey: ['goals'] })
     },
   })
 }

@@ -119,7 +119,7 @@ export function TransactionForm({
                       className="w-full justify-start text-left font-normal"
                     >
                       {field.value
-                        ? format(new Date(field.value), 'PPP')
+                        ? format(new Date(field.value), 'dd.MM.yyyy')
                         : t('transactions.pickADate')}
                     </Button>
                   </FormControl>

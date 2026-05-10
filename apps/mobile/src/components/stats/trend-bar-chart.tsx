@@ -3,9 +3,11 @@ import { Rect, Svg, Text as SvgText } from 'react-native-svg'
 
 import { MONTH_NAMES } from '@finiq/shared'
 import { View } from '@/components/ui/view'
+import { useTheme } from '@/hooks/use-theme'
 import type { MonthlyTrendItem } from '@/types/statistics'
 
 export function TrendBarChart({ data }: { data: MonthlyTrendItem[] }) {
+  const { colors } = useTheme()
   const chartWidth = Dimensions.get('window').width - 32
   const chartHeight = 180
   const maxValue = Math.max(...data.flatMap((d) => [d.income, d.expenses]), 1)
@@ -25,7 +27,7 @@ export function TrendBarChart({ data }: { data: MonthlyTrendItem[] }) {
               y={chartHeight - incomeH}
               width={barWidth}
               height={incomeH}
-              fill="#16a34a"
+              fill={colors.income}
               rx={3}
             />
             <Rect
@@ -33,14 +35,14 @@ export function TrendBarChart({ data }: { data: MonthlyTrendItem[] }) {
               y={chartHeight - expenseH}
               width={barWidth}
               height={expenseH}
-              fill="#dc2626"
+              fill={colors.expense}
               rx={3}
             />
             <SvgText
               x={x + barWidth}
               y={chartHeight + 16}
               fontSize={10}
-              fill="#71717a"
+              fill={colors.mutedForeground}
               textAnchor="middle"
             >
               {MONTH_NAMES[item.month - 1]?.slice(0, 3)}

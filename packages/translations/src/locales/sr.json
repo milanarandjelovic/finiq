@@ -287,6 +287,11 @@
   "search": {
     "byName": "Pretraži po imenu..."
   },
+  "monthPicker": {
+    "currentMonth": "Trenutni mesec",
+    "previousMonth": "Prethodni mesec",
+    "nextMonth": "Sledeći mesec"
+  },
   "table": {
     "filterByName": "Pretraži po imenu…",
     "searchByCategory": "Pretraži po kategoriji…",

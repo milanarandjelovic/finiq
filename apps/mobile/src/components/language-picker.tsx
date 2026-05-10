@@ -64,6 +64,9 @@ export function LanguagePicker() {
         ]}
         onPress={() => setOpen(true)}
         disabled={loading}
+        accessibilityRole="button"
+        accessibilityLabel={`Language: ${getLanguageName(currentLang)}`}
+        accessibilityState={{ disabled: loading }}
       >
         <Text style={{ color: text }}>{getLanguageName(currentLang)}</Text>
         {loading ? (
@@ -92,6 +95,9 @@ export function LanguagePicker() {
                 <TouchableOpacity
                   style={[styles.row, { borderBottomColor: border }]}
                   onPress={() => handleSelect(item)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Language: ${getLanguageName(item)}`}
+                  accessibilityState={{ selected: item === currentLang }}
                 >
                   <Text style={{ color: text }}>{getLanguageName(item)}</Text>
                   {item === currentLang && (

@@ -9,7 +9,6 @@ import { toast } from 'sonner'
 import { useMonthNavigation } from '@finiq/hooks'
 import { Button } from '@finiq/ui/components/button'
 import { Card, CardContent } from '@finiq/ui/components/card'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import {
   getBudgetControllerFindAllQueryKey,
   useBudgetControllerCopyFromPreviousMonth,
@@ -21,6 +20,7 @@ import {
 } from '@/api/__generated__/dashboard/dashboard'
 import type { DashboardControllerGetDashboard200 } from '@/api/__generated__/models'
 import { BudgetTable } from '@/app/(dashboard)/dashboard/budget/_components/table/budget-table'
+import { MonthPicker } from '@/components/shared/month-picker'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { ROUTES } from '@/util/routes'
 

@@ -154,7 +154,7 @@ export function GoalForm({
                       className="w-full justify-start font-normal"
                     >
                       {field.value
-                        ? format(new Date(field.value), 'PPP')
+                        ? format(new Date(field.value), 'dd.MM.yyyy')
                         : t('goals.pickADate')}
                     </Button>
                   </FormControl>

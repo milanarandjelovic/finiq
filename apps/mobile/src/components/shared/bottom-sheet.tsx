@@ -1,4 +1,5 @@
 import { type PropsWithChildren } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   KeyboardAvoidingView,
   Modal,
@@ -25,6 +26,7 @@ export function BottomSheet({
   title,
   children,
 }: BottomSheetProps) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const insets = useSafeAreaInsets()
 
@@ -55,9 +57,13 @@ export function BottomSheet({
               <Text style={[styles.title, { color: colors.foreground }]}>
                 {title}
               </Text>
-              <TouchableOpacity onPress={onClose}>
+              <TouchableOpacity
+                onPress={onClose}
+                accessibilityRole="button"
+                accessibilityLabel={t('general.cancel')}
+              >
                 <Text style={{ color: colors.mutedForeground, fontSize: 15 }}>
-                  Cancel
+                  {t('general.cancel')}
                 </Text>
               </TouchableOpacity>
             </View>

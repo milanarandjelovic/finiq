@@ -10,6 +10,7 @@ export const useTransactionDelete = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transactions'] })
       qc.invalidateQueries({ queryKey: ['transactions-all'] })
+      qc.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }

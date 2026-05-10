@@ -8,6 +8,7 @@ const Colors = {
     muted: lightColors.mutedForeground,
     income: lightColors.success,
     expense: lightColors.destructive,
+    readyToAssign: lightColors.warning,
   },
   dark: {
     ...darkColors,
@@ -16,6 +17,7 @@ const Colors = {
     muted: darkColors.mutedForeground,
     income: darkColors.success,
     expense: darkColors.destructive,
+    readyToAssign: darkColors.warning,
   },
 } as const
 

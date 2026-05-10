@@ -70,7 +70,7 @@ export function useGetColumns(
         size: 100,
         cell: ({ row }) => (
           <span className="text-muted-foreground tabular-nums">
-            {format(new Date(row.original.date), 'MMM d')}
+            {format(new Date(row.original.date), 'dd.MM.yyyy')}
           </span>
         ),
       },

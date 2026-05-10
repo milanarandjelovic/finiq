@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
+import { format as formatDate, parseISO } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
 import { Text } from '@/components/ui/text'
@@ -15,6 +17,7 @@ export function TransactionRow({
   format: (amount: number) => string
   onDelete: () => void
 }) {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const isIncome = transaction.type === 'income'
 
@@ -27,7 +30,7 @@ export function TransactionRow({
     >
       <View style={[styles.rowLeft]}>
         <Text style={[styles.rowDate, { color: colors.mutedForeground }]}>
-          {transaction.date}
+          {formatDate(parseISO(transaction.date), 'dd.MM.yyyy')}
         </Text>
         {transaction.category && (
           <Text style={styles.rowCategory}>
@@ -53,7 +56,12 @@ export function TransactionRow({
           {isIncome ? '+' : '-'}
           {format(transaction.amount)}
         </Text>
-        <TouchableOpacity onPress={onDelete} hitSlop={8}>
+        <TouchableOpacity
+          onPress={onDelete}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={t('transactions.deleteTransaction')}
+        >
           <Ionicons
             name="trash-outline"
             size={18}

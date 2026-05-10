@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { MONTH_NAMES } from '@finiq/shared'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import {
   Tabs,
   TabsContent,
@@ -16,6 +15,7 @@ import { useStatisticsControllerGetStatistics } from '@/api/__generated__/statis
 import { MonthlyTrendChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/monthly-trend-chart'
 import { SpendingPieChart } from '@/app/(dashboard)/dashboard/stats/_components/chart/spending-pie-chart'
 import { SpendingBreakdown } from '@/app/(dashboard)/dashboard/stats/_components/spending-breakdown'
+import { MonthPicker } from '@/components/shared/month-picker'
 import { QueryError } from '@/components/shared/query-error'
 import { unwrapApiResponse } from '@/lib/api-response'
 

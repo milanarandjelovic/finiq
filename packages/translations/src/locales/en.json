@@ -287,6 +287,11 @@
   "search": {
     "byName": "Search by name..."
   },
+  "monthPicker": {
+    "currentMonth": "Current month",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
   "table": {
     "filterByName": "Filter by name…",
     "searchByCategory": "Search by category…",

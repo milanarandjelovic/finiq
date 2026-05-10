@@ -15,9 +15,11 @@ import { SurfaceView } from '@/components/ui/surface-view'
 import { Text } from '@/components/ui/text'
 import { useDashboard } from '@/hooks/data/use-dashboard'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
+import { useTheme } from '@/hooks/use-theme'
 
 export default function HomeView() {
   const { t } = useTranslation()
+  const { colors } = useTheme()
   const { year, month, prevMonth, nextMonth } = useMonthNavigation()
   const { data: dashboard, isLoading } = useDashboard({ year, month })
   const format = useCurrencyFormatter()
@@ -49,25 +51,27 @@ export default function HomeView() {
           <SummaryCard
             label={t('dashboard.income')}
             value={format(dashboard?.totalIncome ?? 0)}
-            color="#16a34a"
+            color={colors.income}
           />
 
           <SummaryCard
             label={t('dashboard.expenses')}
             value={format(dashboard?.totalExpenses ?? 0)}
-            color="#dc2626"
+            color={colors.expense}
           />
 
           <SummaryCard
             label={t('dashboard.balance')}
             value={format(dashboard?.balance ?? 0)}
-            color={(dashboard?.balance ?? 0) >= 0 ? '#16a34a' : '#dc2626'}
+            color={
+              (dashboard?.balance ?? 0) >= 0 ? colors.income : colors.expense
+            }
           />
 
           <SummaryCard
             label={t('dashboard.readyToAssign')}
             value={format(dashboard?.readyToAssign ?? 0)}
-            color="#eab308"
+            color={colors.readyToAssign}
           />
         </View>
 

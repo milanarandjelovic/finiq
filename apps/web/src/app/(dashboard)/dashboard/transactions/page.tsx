@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { useMonthNavigation } from '@finiq/hooks'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerFindAll,
@@ -22,6 +21,7 @@ import {
 import { AddTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/add-transaction-dialog'
 import { DeleteTransactionDialog } from '@/app/(dashboard)/dashboard/transactions/_components/dialog/delete-transaction-dialog'
 import { TransactionsTable } from '@/app/(dashboard)/dashboard/transactions/_components/table/transactions-table'
+import { MonthPicker } from '@/components/shared/month-picker'
 import { unwrapApiResponse } from '@/lib/api-response'
 import { crudMutationOptions } from '@/lib/mutation'
 

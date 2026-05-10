@@ -37,7 +37,7 @@ export default function SettingsView() {
 
   useEffect(() => {
     if (settings?.currency) {
-      setValue('currency', settings.currency as SettingsFormValues['currency'])
+      setValue('currency', settings.currency)
     }
   }, [settings, setValue])
 

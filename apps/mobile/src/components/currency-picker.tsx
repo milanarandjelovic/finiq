@@ -34,6 +34,8 @@ export function CurrencyPicker({ value, onChange }: CurrencyPickerProps) {
           { borderColor: border, backgroundColor: surface },
         ]}
         onPress={() => setOpen(true)}
+        accessibilityRole="button"
+        accessibilityLabel={`Currency: ${value}`}
       >
         <Text style={{ color: text }}>{value}</Text>
         <Ionicons name="chevron-down" size={16} color={text} />
@@ -61,6 +63,9 @@ export function CurrencyPicker({ value, onChange }: CurrencyPickerProps) {
                     onChange(item.value)
                     setOpen(false)
                   }}
+                  accessibilityRole="button"
+                  accessibilityLabel={item.label}
+                  accessibilityState={{ selected: item.value === value }}
                 >
                   <Text style={{ color: text }}>{item.label}</Text>
                   {item.value === value && (

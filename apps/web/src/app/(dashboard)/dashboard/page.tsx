@@ -11,13 +11,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@finiq/ui/components/card'
-import { MonthPicker } from '@finiq/ui/components/month-picker'
 import { Progress } from '@finiq/ui/components/progress'
 import { Skeleton } from '@finiq/ui/components/skeleton'
 import { cn } from '@finiq/ui/lib/utils'
 import { useDashboardControllerGetDashboard } from '@/api/__generated__/dashboard/dashboard'
 import type { DashboardControllerGetDashboard200 } from '@/api/__generated__/models'
 import { SummaryCard } from '@/app/(dashboard)/dashboard/transactions/_components/summary-card'
+import { MonthPicker } from '@/components/shared/month-picker'
 import { QueryError } from '@/components/shared/query-error'
 import { useCurrencyFormatter } from '@/hooks/use-currency-formatter'
 import { unwrapApiResponse } from '@/lib/api-response'
