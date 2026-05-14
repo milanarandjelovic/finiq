@@ -2,17 +2,107 @@
 
 Finiq is a personal finance management application for tracking transactions, budgets, categories, and statistics. It is built as a full-stack monorepo targeting web and mobile platforms.
 
-Finiq gives individuals full visibility and control over their personal finances - across web and mobile. You can record every income and expense, organise them into colour-coded emoji categories, set monthly budgets per category, and track savings goals with target amounts and deadlines. A statistics module surfaces 6-month income/expense trends and a per-category spending breakdown so patterns are immediately obvious. On the dashboard you see a live month summary: total income, total expenses, balance, and a "ready to assign" figure showing unbudgeted income still available for planning.
+---
 
-**Transactions** are the core of the app. Each entry has a type (income or expense), amount, date, optional note, optional category, and an optional receipt file you can upload and retrieve later. The transaction list supports filtering by month/year, type, and category name, with pagination throughout.
+## Project Structure
 
-**Budgets** are set per category per month. A single action copies last month's budgets to the current month, making recurring monthly planning fast. The dashboard shows budgeted vs. spent per category with a progress bar and an "over budget" badge when a limit is exceeded.
+The repo is a Turborepo monorepo. `apps/` contains runnable applications; `packages/` contains shared libraries consumed by those apps; `tooling/` contains shared config only (no runtime code).
 
-**Categories** are fully customisable - name, hex colour, and emoji icon. They split into two kinds: regular spending categories (used for budgets and transactions) and goal categories (savings goals with a target amount and target date). Both kinds live in the same management UI with filtering between them.
-
-**Settings** store per-user preferences such as the display currency (default USD), with an extensible key-value model for future options.
-
-Authentication uses JWT access/refresh tokens with email verification, forgot-password/reset flows, and standard profile management.
+```
+finiq/
+├── apps/
+│   ├── web/                            # Next.js 16 App Router - main web application
+│   ├── api/                            # NestJS REST API
+│   ├── mobile/                         # Expo (React Native) mobile client
+│   └── i18n-static/                    # NestJS static i18n assets service
+│
+├── packages/
+│   ├── ui/                             # Shared React component library
+│   │   └── src/
+│   │       ├── components/             # Avatar, Badge, Button, Card, Checkbox,
+│   │       │                           # Dialog, DropdownMenu, Form, Input, Label,
+│   │       │                           # LoadingButton, PasswordInput, Popover,
+│   │       │                           # Select, Separator, Sheet, Sidebar,
+│   │       │                           # Skeleton, Sonner, Switch, Table, Tooltip
+│   │       ├── hooks/use-mobile.ts
+│   │       └── lib/utils.ts            # cn() - clsx + tailwind-merge helper
+│   │
+│   ├── schemas/                        # Zod validation schemas
+│   │   └── src/
+│   │       ├── auth/
+│   │       │   ├── login.schema.ts
+│   │       │   ├── register.schema.ts
+│   │       │   ├── forgot-password.schema.ts
+│   │       │   └── reset-password.schema.ts
+│   │       ├── budget/budget.schema.ts
+│   │       ├── category/category.schema.ts
+│   │       ├── goal/goal.schema.ts
+│   │       ├── profile/
+│   │       │   ├── profile.schema.ts
+│   │       │   └── change-password.schema.ts
+│   │       ├── settings/settings.schema.ts
+│   │       ├── transaction/transaction.schema.ts
+│   │       └── index.ts                # Re-exports all schemas
+│   │
+│   ├── shared/                         # Pure TypeScript - no runtime dependencies
+│   │   └── src/
+│   │       ├── constants/
+│   │       │   ├── application.ts      # APPLICATION_NAME
+│   │       │   ├── cookies.ts
+│   │       │   ├── currencies.ts
+│   │       │   ├── date.ts
+│   │       │   ├── i18n.ts
+│   │       │   ├── jwt.ts
+│   │       │   └── pagination.ts
+│   │       ├── enums/
+│   │       │   ├── entity.ts
+│   │       │   └── transaction.ts
+│   │       ├── lib/budget.ts
+│   │       ├── types/
+│   │       └── validator-rules/
+│   │           └── exceptions.ts       # GENERAL_VALIDATION_RULES
+│   │
+│   ├── hooks/                          # Shared React hooks
+│   │   └── src/
+│   │       ├── use-month-navigation.ts
+│   │       └── index.ts
+│   │
+│   └── translations/                   # i18n locale files + validation scripts
+│       └── src/
+│           ├── locales/
+│           │   ├── en.json
+│           │   └── sr.json             # Serbian locale
+│           ├── scripts/
+│           │   ├── check-translations.ts
+│           │   └── find-missing-translations.ts
+│           └── index.ts
+│
+├── tooling/                            # Shared config packages - no runtime code
+│   ├── eslint-config/
+│   │   ├── base.js                     # JS + TS + Turbo + Prettier rules
+│   │   ├── next.js                     # Extends base + Next.js + React Hooks
+│   │   └── react-internal.js           # Extends base + React Hooks (for library packages)
+│   ├── prettier-config/                # singleQuote, no semi, sort-imports, tailwindcss plugin
+│   ├── tailwind-config/
+│   │   └── style.css                   # CSS vars (oklch, full light + dark mode)
+│   └── typescript-config/
+│       ├── base.json                   # NodeNext strict
+│       ├── nextjs.json                 # ESNext + Bundler resolution
+│       ├── nestjs.json                 # NestJS-specific config
+│       └── react-library.json          # jsx: react-jsx
+│
+├── .github/
+│   └── workflows/
+│       └── pre-merge.yml               # CI: type check + lint on PRs
+├── .husky/
+│   ├── commit-msg                      # Runs commitlint
+│   ├── pre-commit                      # Runs lint-staged (ESLint + Prettier on staged files)
+│   └── pre-push                        # Blocks push to master, runs tests
+├── commitlint.config.cjs               # Conventional Commits enforcement
+├── lint-staged.config.cjs              # Staged file linting config
+├── turbo.json                          # Pipeline: build, dev, lint, check-types, clean
+└── package.json                        # Root workspace (bun@1.3.8, turbo, husky)
+```
 
 ---
 
@@ -27,16 +117,17 @@ Authentication uses JWT access/refresh tokens with email verification, forgot-pa
 
 ## Packages
 
-| Package                    | Description                                    |
-| -------------------------- | ---------------------------------------------- |
-| `@finiq/ui`                | Shared React component library                 |
-| `@finiq/hooks`             | Shared React hooks (Orval-generated API hooks) |
-| `@finiq/schemas`           | Shared Zod validation schemas                  |
-| `@finiq/shared`            | Shared types and utilities used across apps    |
-| `@finiq/eslint-config`     | Shared ESLint configurations                   |
-| `@finiq/prettier-config`   | Shared Prettier configuration                  |
-| `@finiq/tailwind-config`   | Shared Tailwind CSS v4 base styles             |
-| `@finiq/typescript-config` | Shared `tsconfig.json` presets                 |
+| Package                    | Description                                |
+| -------------------------- | ------------------------------------------ |
+| `@finiq/ui`                | Shared React component library (shadcn/ui) |
+| `@finiq/hooks`             | Shared React hooks                         |
+| `@finiq/schemas`           | Shared Zod validation schemas              |
+| `@finiq/shared`            | Shared constants, types, and utilities     |
+| `@finiq/translations`      | i18n locale files (en, sr) and scripts     |
+| `@finiq/eslint-config`     | Shared ESLint configurations               |
+| `@finiq/prettier-config`   | Shared Prettier configuration              |
+| `@finiq/tailwind-config`   | Shared Tailwind CSS v4 base styles         |
+| `@finiq/typescript-config` | Shared `tsconfig.json` presets             |
 
 ## Tech Stack
 
@@ -85,7 +176,10 @@ bun build
 bun db:create              # Create the database
 bun db:migration:run       # Run pending migrations
 bun db:seed:run            # Run seeders
-bun db:migration:generate  # Generate a new migration (use --name=<name>)
+bun db:seed:dynamic        # Run dynamic seeders
+bun db:seed:dynamic:fresh  # Drop and re-seed with dynamic data
+bun db:migration:generate  # Generate a new migration
+bun db:migration:create    # Create an empty migration file
 bun db:migration:revert    # Revert the last migration
 ```
 
@@ -95,6 +189,15 @@ Regenerate typed API hooks for the web app from the OpenAPI spec:
 
 ```sh
 bun web:generate:api
+```
+
+### Testing
+
+```sh
+bun test:web               # Run web unit tests
+bun test:web:coverage      # Run with coverage report
+bun test:web:watch         # Run in watch mode
+bun test:web:e2e           # Run Playwright end-to-end tests
 ```
 
 ### Other Commands
