@@ -26,6 +26,13 @@ interface CategorySheetProps {
   defaultValues?: Partial<CategoryFormValues>
 }
 
+const toFormInput = (
+  values?: Partial<CategoryFormValues>,
+): Partial<CategoryFormInput> =>
+  values
+    ? { ...values, budgetAmount: values.budgetAmount?.toString() }
+    : { color: PRESET_COLORS[0] }
+
 export function CategorySheet({
   visible,
   onClose,
@@ -44,15 +51,15 @@ export function CategorySheet({
     reset,
     formState: { errors },
   } = useForm<CategoryFormInput, unknown, CategoryFormValues>({
-    resolver: zodResolver(categoryFormSchema),
-    defaultValues: defaultValues ?? { color: PRESET_COLORS[0] },
+    resolver: zodResolver(categoryFormSchema(t)),
+    defaultValues: toFormInput(defaultValues),
   })
 
   const selectedColor = watch('color')
 
   useEffect(() => {
     if (visible) {
-      reset(defaultValues ?? { color: PRESET_COLORS[0] })
+      reset(toFormInput(defaultValues))
     }
   }, [visible, defaultValues, reset])
 

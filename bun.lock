@@ -22,6 +22,7 @@
       "version": "1.0.0",
       "dependencies": {
         "@finiq/shared": "workspace:*",
+        "@finiq/translations": "workspace:*",
         "@jozefazz/nestjs-redoc": "^1.0.7",
         "@nestjs/common": "^11.0.1",
         "@nestjs/config": "^4.0.2",
@@ -275,6 +276,7 @@
       "version": "1.0.0",
       "dependencies": {
         "@finiq/shared": "workspace:*",
+        "@finiq/translations": "workspace:*",
         "zod": "^4.3.6",
       },
       "devDependencies": {

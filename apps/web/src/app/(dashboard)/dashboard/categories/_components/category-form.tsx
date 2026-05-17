@@ -26,7 +26,7 @@ export function CategoryForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useZodForm<CategoryFormValues>(categoryFormSchema, {
+  const form = useZodForm<CategoryFormValues>(categoryFormSchema(t), {
     defaultValues: {
       name: '',
       emoji: '💰',
@@ -38,7 +38,7 @@ export function CategoryForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleApiSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}

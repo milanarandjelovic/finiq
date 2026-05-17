@@ -32,7 +32,7 @@ import { formMutationOptions } from '@/lib/mutation'
 export function ChangePasswordForm() {
   const { t } = useTranslation()
   const form = useForm<ChangePasswordFormValues>({
-    resolver: zodResolver(changePasswordFormSchema),
+    resolver: zodResolver(changePasswordFormSchema(t)),
     defaultValues: {
       currentPassword: '',
       password: '',

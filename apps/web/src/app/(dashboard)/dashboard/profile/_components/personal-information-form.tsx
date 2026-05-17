@@ -37,7 +37,7 @@ export function PersonalInformationForm() {
     profileData?.status === 200 ? profileData.data.data?.user : undefined
 
   const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
+    resolver: zodResolver(profileFormSchema(t)),
     defaultValues: {
       name: '',
       email: '',

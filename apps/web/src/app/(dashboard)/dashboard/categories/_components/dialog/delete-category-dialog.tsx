@@ -32,17 +32,23 @@ export function DeleteCategoryDialog({
     }),
   )
 
+  const handleOpenChange = (o: boolean) => !o && onClose()
+
+  const handleConfirm = () => {
+    if (category) {
+      deleteCategory({ id: category.id })
+    }
+  }
+
   return (
     <ConfirmDialog
       open={!!category}
-      onOpenChange={(o) => !o && onClose()}
+      onOpenChange={handleOpenChange}
       title={t('categories.deleteCategory')}
       description={t('categories.deleteCategoryConfirm', {
         name: category?.name,
       })}
-      onConfirm={() => {
-        if (category) deleteCategory({ id: category.id })
-      }}
+      onConfirm={handleConfirm}
     />
   )
 }

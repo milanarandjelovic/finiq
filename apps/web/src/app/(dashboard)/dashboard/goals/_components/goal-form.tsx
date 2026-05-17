@@ -33,7 +33,7 @@ export function GoalForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useZodForm<GoalFormValues>(goalFormSchema, {
+  const form = useZodForm<GoalFormValues>(goalFormSchema(t), {
     defaultValues: {
       name: '',
       emoji: '🎯',
@@ -46,7 +46,7 @@ export function GoalForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleApiSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}

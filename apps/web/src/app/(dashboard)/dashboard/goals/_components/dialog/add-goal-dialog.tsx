@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { type GoalFormValues } from '@finiq/schemas'
 import { Button } from '@finiq/ui/components/button'
 import {
   getCategoryControllerFindAllQueryKey,
@@ -29,6 +30,16 @@ export function AddGoalDialog() {
       }),
     )
 
+  const handleSubmit = async (values: GoalFormValues) => {
+    await createGoal({
+      data: {
+        ...values,
+        isGoal: true,
+        targetDate: values.targetDate,
+      },
+    })
+  }
+
   return (
     <CrudDialog
       open={open}
@@ -41,18 +52,7 @@ export function AddGoalDialog() {
         </Button>
       }
     >
-      <GoalForm
-        onSubmit={async (v) => {
-          await createGoal({
-            data: {
-              ...v,
-              isGoal: true,
-              targetDate: v.targetDate,
-            },
-          })
-        }}
-        isPending={isCreating}
-      />
+      <GoalForm onSubmit={handleSubmit} isPending={isCreating} />
     </CrudDialog>
   )
 }

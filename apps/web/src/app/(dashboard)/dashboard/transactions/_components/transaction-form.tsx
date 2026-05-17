@@ -46,7 +46,7 @@ export function TransactionForm({
   isPending: boolean
 }) {
   const { t } = useTranslation()
-  const form = useZodForm<TransactionFormValues>(transactionFormSchema, {
+  const form = useZodForm<TransactionFormValues>(transactionFormSchema(t), {
     defaultValues: {
       type: 'expense',
       amount: 0,
@@ -60,7 +60,7 @@ export function TransactionForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleApiSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="type"

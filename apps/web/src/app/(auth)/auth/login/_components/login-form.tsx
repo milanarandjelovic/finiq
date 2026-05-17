@@ -29,7 +29,7 @@ export function LoginForm() {
   const { login } = useAuth()
 
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(loginFormSchema(t)),
     defaultValues: {
       email: '',
       password: '',

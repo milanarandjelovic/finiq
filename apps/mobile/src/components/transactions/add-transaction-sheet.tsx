@@ -12,6 +12,7 @@ import {
 
 import {
   transactionFormSchema,
+  type TransactionFormInput,
   type TransactionFormValues,
 } from '@finiq/schemas'
 import { FormSheet } from '@/components/shared/form-sheet'
@@ -43,8 +44,8 @@ export function AddTransactionSheet({
     watch,
     reset,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(transactionFormSchema),
+  } = useForm<TransactionFormInput, unknown, TransactionFormValues>({
+    resolver: zodResolver(transactionFormSchema(t)),
   })
 
   const type = watch('type')

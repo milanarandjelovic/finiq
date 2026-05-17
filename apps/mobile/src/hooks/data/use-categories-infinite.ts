@@ -17,12 +17,17 @@ export const useCategoriesInfinite = (params: Params) => {
         currentPage: pageParam,
         perPage: PAGINATION_PAGE_LIMIT,
       })
+
       return response.data?.data?.categories
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       const pagination = lastPage?.meta?.pagination
-      if (!pagination) return undefined
+
+      if (!pagination) {
+        return undefined
+      }
+
       return pagination.currentPage < pagination.lastPage
         ? pagination.currentPage + 1
         : undefined

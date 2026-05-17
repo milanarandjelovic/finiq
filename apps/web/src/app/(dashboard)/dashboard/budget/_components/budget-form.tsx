@@ -34,7 +34,7 @@ export function BudgetForm({
 }: BudgetFormProps) {
   const { t } = useTranslation()
   const form = useForm<BudgetFormValues>({
-    resolver: zodResolver(budgetFormSchema),
+    resolver: zodResolver(budgetFormSchema(t)),
     defaultValues: { amount: currentAmount },
   })
 

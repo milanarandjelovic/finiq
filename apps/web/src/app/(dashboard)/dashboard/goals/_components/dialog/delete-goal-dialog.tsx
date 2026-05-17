@@ -19,10 +19,12 @@ export function DeleteGoalDialog({
 }: DeleteGoalDialogProps) {
   const { t } = useTranslation()
 
+  const handleOpenChange = (o: boolean) => !o && onCancel()
+
   return (
     <ConfirmDialog
       open={open}
-      onOpenChange={(o) => !o && onCancel()}
+      onOpenChange={handleOpenChange}
       title={t('goals.deleteGoal')}
       description={t('goals.deleteConfirm', { name: goalName })}
       onConfirm={onConfirm}
