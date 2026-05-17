@@ -1,18 +1,29 @@
 import { z } from 'zod'
 
-export const categoryFormSchema = z.object({
-  name: z
-    .string({ message: 'Name is required' })
-    .min(1, { message: 'Name is required' }),
-  emoji: z
-    .string({ message: 'Emoji is required' })
-    .min(1, { message: 'Emoji is required' }),
-  color: z
-    .string({ message: 'Color is required' })
-    .regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a hex color'),
-  budgetAmount: z.coerce.number().min(0).optional(),
-  isGoal: z.boolean().default(false),
-})
+import { noInvalidSpaces } from '../helpers'
+import { type TranslateFunction } from '../types'
 
-export type CategoryFormValues = z.infer<typeof categoryFormSchema>
-export type CategoryFormInput = z.input<typeof categoryFormSchema>
+export const categoryFormSchema = (t: TranslateFunction) =>
+  z.object({
+    name: z
+      .string({ message: t('validation.nameNotEmpty') })
+      .min(1, { message: t('validation.nameNotEmpty') })
+      .superRefine(noInvalidSpaces(t)),
+    emoji: z
+      .string({ message: t('validation.emojiRequired') })
+      .min(1, { message: t('validation.emojiRequired') }),
+    color: z
+      .string({ message: t('validation.colorRequired') })
+      .regex(/^#[0-9A-Fa-f]{6}$/, { message: t('validation.colorHexInvalid') }),
+    budgetAmount: z
+      .string()
+      .optional()
+      .transform((val) =>
+        val !== undefined && val !== '' ? Number(val) : undefined,
+      )
+      .pipe(z.number().min(0).optional()),
+    isGoal: z.boolean().default(false),
+  })
+
+export type CategoryFormValues = z.infer<ReturnType<typeof categoryFormSchema>>
+export type CategoryFormInput = z.input<ReturnType<typeof categoryFormSchema>>

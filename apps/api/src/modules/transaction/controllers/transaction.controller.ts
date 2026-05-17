@@ -63,9 +63,9 @@ export class TransactionController {
   })
   async findAll(
     @Query() query: TransactionsFindAllPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionsResponseDto>> {
-    return this.transactionService.findAll(query, request)
+    return this.transactionService.findAll(query, req.user.id)
   }
 
   @Get('/:id')
@@ -82,9 +82,9 @@ export class TransactionController {
   })
   async findOne(
     @Param() params: TransactionRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.findOne(params.id, request)
+    return this.transactionService.findOne(params.id, req.user.id)
   }
 
   @Post()
@@ -101,9 +101,9 @@ export class TransactionController {
   })
   async create(
     @Body() body: CreateTransactionPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.create(body, request)
+    return this.transactionService.create(body, req.user.id)
   }
 
   @Put('/:id')
@@ -121,9 +121,9 @@ export class TransactionController {
   async update(
     @Param() params: TransactionRequestDto,
     @Body() body: UpdateTransactionPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.update(params.id, body, request)
+    return this.transactionService.update(params.id, body, req.user.id)
   }
 
   @Delete('/:id')
@@ -140,9 +140,9 @@ export class TransactionController {
   })
   async delete(
     @Param() params: TransactionRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.delete(params.id, request)
+    return this.transactionService.delete(params.id, req.user.id)
   }
 
   @Post('/:id/receipt')
@@ -168,9 +168,9 @@ export class TransactionController {
   async uploadReceipt(
     @Param() params: TransactionRequestDto,
     @UploadedFile() file: Express.Multer.File,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.uploadReceipt(params.id, file, request)
+    return this.transactionService.uploadReceipt(params.id, file, req.user.id)
   }
 
   @Delete('/:id/receipt')
@@ -187,9 +187,9 @@ export class TransactionController {
   })
   async deleteReceipt(
     @Param() params: TransactionRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
-    return this.transactionService.deleteReceipt(params.id, request)
+    return this.transactionService.deleteReceipt(params.id, req.user.id)
   }
 
   @Get('/:id/receipt')
@@ -200,12 +200,12 @@ export class TransactionController {
   })
   async downloadReceipt(
     @Param() params: TransactionRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
     const filePath = await this.transactionService.getReceiptFilePath(
       params.id,
-      request,
+      req.user.id,
     )
     res.sendFile(filePath)
   }

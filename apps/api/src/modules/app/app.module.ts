@@ -1,9 +1,11 @@
+import { LANG_DEFAULT_LOCALES } from '@finiq/translations'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { ThrottlerModule } from '@nestjs/throttler'
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { ClsModule } from 'nestjs-cls'
+import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n'
 import { LoggerModule } from 'nestjs-pino'
 
 import configuration from '@/config/configuration'
@@ -22,12 +24,17 @@ import { TransactionModule } from '@/modules/transaction/transaction.module'
 import { UserModule } from '@/modules/user/user.module'
 import { typeormConfig } from '@/providers/db/typeorm.config'
 import { EmailModule } from '@/providers/email/email.module'
+import { JsonTranslationsLoader } from '@/providers/i18n/json-translations.loader'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
     }),
     ThrottlerModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
@@ -52,12 +59,17 @@ import { EmailModule } from '@/providers/email/email.module'
       },
       inject: [ConfigService],
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: LANG_DEFAULT_LOCALES,
+      loader: JsonTranslationsLoader,
+      loaderOptions: {},
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        new HeaderResolver(['x-lang']),
+      ],
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: async (): Promise<TypeOrmModuleOptions> => typeormConfig,
-    }),
-    ClsModule.forRoot({
-      global: true,
-      middleware: { mount: true },
     }),
     LoggerModule.forRoot({
       exclude: ['status'],

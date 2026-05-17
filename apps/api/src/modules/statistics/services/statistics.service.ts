@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
 import { Repository } from 'typeorm'
 
 import { TransactionType } from '@finiq/shared'
@@ -20,10 +19,9 @@ export class StatisticsService {
 
   async getStatistics(
     query: StatisticsQueryDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<StatisticsResponseDto>> {
     const { month, year } = query
-    const userId = request.user.id
 
     // Build last six-month range
     const months: { month: number; year: number }[] = []

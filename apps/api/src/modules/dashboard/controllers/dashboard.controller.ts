@@ -47,8 +47,8 @@ export class DashboardController {
   })
   async getDashboard(
     @Query() query: DashboardQueryDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<DashboardResponseDto>> {
-    return this.dashboardService.getDashboard(query, request)
+    return this.dashboardService.getDashboard(query, req.user.id)
   }
 }

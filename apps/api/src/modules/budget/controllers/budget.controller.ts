@@ -55,9 +55,9 @@ export class BudgetController {
   })
   async findAll(
     @Query() query: BudgetQueryDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<BudgetsResponseDto>> {
-    return this.budgetService.findAll(query, request)
+    return this.budgetService.findAll(query, req.user.id)
   }
 
   @Put()
@@ -76,9 +76,9 @@ export class BudgetController {
   })
   async upsert(
     @Body() body: UpsertBudgetPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<BudgetResponseDto>> {
-    return this.budgetService.upsert(body, request)
+    return this.budgetService.upsert(body, req.user.id)
   }
 
   @Post('/copy')
@@ -95,8 +95,8 @@ export class BudgetController {
   })
   async copyFromPreviousMonth(
     @Body() body: CopyBudgetPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<BudgetsResponseDto>> {
-    return this.budgetService.copyFromPreviousMonth(body, request)
+    return this.budgetService.copyFromPreviousMonth(body, req.user.id)
   }
 }

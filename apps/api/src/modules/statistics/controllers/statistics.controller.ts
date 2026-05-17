@@ -47,8 +47,8 @@ export class StatisticsController {
   })
   async getStatistics(
     @Query() query: StatisticsQueryDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<StatisticsResponseDto>> {
-    return this.statisticsService.getStatistics(query, request)
+    return this.statisticsService.getStatistics(query, req.user.id)
   }
 }

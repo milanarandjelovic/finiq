@@ -1,9 +1,14 @@
 import { z } from 'zod'
 
-export const forgotPasswordFormSchema = z.object({
-  email: z
-    .string({ message: 'Enter a valid email' })
-    .email({ message: 'Enter a valid email' }),
-})
+import { type TranslateFunction } from '../types'
 
-export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>
+export const forgotPasswordFormSchema = (t: TranslateFunction) =>
+  z.object({
+    email: z
+      .string({ message: t('validation.emailNotEmpty') })
+      .email({ message: t('validation.emailValid') }),
+  })
+
+export type ForgotPasswordFormValues = z.infer<
+  ReturnType<typeof forgotPasswordFormSchema>
+>

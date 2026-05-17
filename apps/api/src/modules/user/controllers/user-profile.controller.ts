@@ -56,9 +56,9 @@ export class UserProfileController {
     description: 'Unauthorized',
   })
   async findOne(
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<UserResponseDto>> {
-    return await this.userProfileService.findOne(request)
+    return await this.userProfileService.findOne(req.user.id)
   }
 
   @Post()
@@ -84,9 +84,9 @@ export class UserProfileController {
     description: 'Unauthorized',
   })
   async update(
-    @Req() request: Request,
+    @Req() req: Request,
     @Body() body: UserProfilePayloadDto,
   ): Promise<RestfulResponseDto<UserResponseDto>> {
-    return await this.userProfileService.update(request, body)
+    return await this.userProfileService.update(req.user.id, body)
   }
 }

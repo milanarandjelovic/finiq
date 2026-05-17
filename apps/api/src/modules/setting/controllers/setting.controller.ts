@@ -47,9 +47,9 @@ export class SettingController {
     description: 'Unauthorized',
   })
   async findAll(
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<SettingsResponseDto>> {
-    return this.settingService.findAll(request)
+    return this.settingService.findAll(req.user.id)
   }
 
   @Put()
@@ -66,8 +66,8 @@ export class SettingController {
   })
   async update(
     @Body() body: UpdateSettingsPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<SettingsResponseDto>> {
-    return this.settingService.update(body, request)
+    return this.settingService.update(body, req.user.id)
   }
 }

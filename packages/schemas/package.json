@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@finiq/shared": "workspace:*",
+    "@finiq/translations": "workspace:*",
     "zod": "^4.3.6"
   },
   "devDependencies": {

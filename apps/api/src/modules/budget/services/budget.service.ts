@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
 import { ValidationException } from '@/exceptions/validation.exception'
@@ -16,6 +16,7 @@ import { CopyBudgetPayloadDto } from '@/modules/budget/dtos/copy-budget-payload.
 import { UpsertBudgetPayloadDto } from '@/modules/budget/dtos/upsert-budget-payload.dto'
 import { Budget } from '@/modules/budget/entities/budget.entity'
 import { Category } from '@/modules/category/entities/category.entity'
+import { User } from '@/modules/user/entities/user.entity'
 import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 
 @Injectable()
@@ -26,16 +27,17 @@ export class BudgetService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly budgetQueryBuilder: BudgetQueryBuilder,
+    private readonly i18n: I18nService,
   ) {}
 
   async findAll(
     query: BudgetQueryDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<BudgetsResponseDto>> {
     const { month, year, currentPage, perPage, categoryName } = query
 
     const [budgets, total] = await this.budgetQueryBuilder
-      .findAll(request.user.id, month, year, categoryName)
+      .findAll(userId, month, year, categoryName)
       .skip((currentPage - 1) * perPage)
       .take(perPage)
       .getManyAndCount()
@@ -61,22 +63,25 @@ export class BudgetService {
 
   async upsert(
     data: UpsertBudgetPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<BudgetResponseDto>> {
     const { categoryId, month, year, amount } = data
 
     const category = await this.categoryRepository.findOne({
-      where: { id: categoryId, user: { id: request.user.id } },
+      where: { id: categoryId, user: { id: userId } },
     })
 
     if (!category) {
       throw new ValidationException([
-        { property: 'categoryId', messages: ['Category not found.'] },
+        {
+          property: 'categoryId',
+          messages: [this.i18n.t('api.categoryNotFound')],
+        },
       ])
     }
 
     let budget = await this.budgetQueryBuilder
-      .findOne(request.user.id, categoryId, month, year)
+      .findOne(userId, categoryId, month, year)
       .getOne()
 
     if (budget) {
@@ -84,7 +89,7 @@ export class BudgetService {
       await this.budgetRepository.save(budget)
     } else {
       budget = await this.budgetRepository
-        .create({ amount, month, year, category, user: request.user })
+        .create({ amount, month, year, category, user: { id: userId } as User })
         .save()
       budget.category = category
     }
@@ -97,19 +102,19 @@ export class BudgetService {
 
   async copyFromPreviousMonth(
     data: CopyBudgetPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<BudgetsCopiedResponseDto>> {
     const { month, year } = data
 
     const sourceBudgets = await this.budgetQueryBuilder
-      .findPreviousMonth(request.user.id, month, year)
+      .findPreviousMonth(userId, month, year)
       .getMany()
 
     if (sourceBudgets.length === 0) {
       throw new ValidationException([
         {
           property: 'month',
-          messages: ['No budgets found for the previous month to copy from.'],
+          messages: [this.i18n.t('api.noPreviousMonthBudgets')],
         },
       ])
     }
@@ -117,7 +122,7 @@ export class BudgetService {
     const copied: Budget[] = []
     for (const source of sourceBudgets) {
       let existing = await this.budgetQueryBuilder
-        .findOne(request.user.id, source.category.id, month, year)
+        .findOne(userId, source.category.id, month, year)
         .getOne()
 
       if (existing) {
@@ -131,7 +136,7 @@ export class BudgetService {
             month,
             year,
             category: source.category,
-            user: request.user,
+            user: { id: userId } as User,
           })
           .save()
         copied.push(existing)

@@ -2,30 +2,42 @@ import { z } from 'zod'
 
 import { GENERAL_VALIDATION_RULES } from '@finiq/shared'
 
-export const registerFormSchema = z
-  .object({
-    name: z
-      .string({ message: 'Name is required' })
-      .min(2, { message: 'Name must be at least 2 characters' }),
-    email: z
-      .string({ message: 'Email is required' })
-      .email({ message: 'Enter a valid email' }),
-    password: z
-      .string({ message: 'Password is required' })
-      .min(GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH, {
-        message: 'At least 8 characters',
-      })
-      .regex(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_UPPERCASE), {
-        message: 'Must contain an uppercase letter',
-      })
-      .regex(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_NUMBER), {
-        message: 'Must contain a number',
-      }),
-    passwordConfirmation: z.string(),
-  })
-  .refine((d) => d.password === d.passwordConfirmation, {
-    message: 'Passwords do not match',
-    path: ['passwordConfirmation'],
-  })
+import { noInvalidSpaces } from '../helpers'
+import { type TranslateFunction } from '../types'
 
-export type RegisterFormValues = z.infer<typeof registerFormSchema>
+export const registerFormSchema = (t: TranslateFunction) =>
+  z
+    .object({
+      name: z
+        .string({ message: t('validation.nameNotEmpty') })
+        .min(GENERAL_VALIDATION_RULES.NAME_MIN_LENGTH, {
+          message: t('validation.nameMinLength'),
+        })
+        .max(GENERAL_VALIDATION_RULES.NAME_MAX_LENGTH, {
+          message: t('validation.nameMaxLength'),
+        })
+        .superRefine(noInvalidSpaces(t)),
+      email: z
+        .string({ message: t('validation.emailNotEmpty') })
+        .email({ message: t('validation.emailValid') }),
+      password: z
+        .string({ message: t('validation.passwordNotEmpty') })
+        .min(GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH, {
+          message: t('validation.passwordMinLength'),
+        })
+        .regex(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_UPPERCASE), {
+          message: t('validation.passwordRegexUppercase'),
+        })
+        .regex(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_NUMBER), {
+          message: t('validation.passwordRegexNumber'),
+        }),
+      passwordConfirmation: z.string({
+        message: t('validation.passwordConfirmationNotEmpty'),
+      }),
+    })
+    .refine((d) => d.password === d.passwordConfirmation, {
+      message: t('validation.passwordConfirmationMustMatch'),
+      path: ['passwordConfirmation'],
+    })
+
+export type RegisterFormValues = z.infer<ReturnType<typeof registerFormSchema>>

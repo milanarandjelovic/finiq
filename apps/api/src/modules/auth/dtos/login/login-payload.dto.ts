@@ -10,15 +10,14 @@ import {
 import { GENERAL_VALIDATION_RULES } from '@finiq/shared'
 import { IsNotExist } from '@/shared/decorators/is-not-exist.decorator'
 import { IsValidPassword } from '@/shared/decorators/is-valid-password.decorator'
+import { i18nMsg } from '@/shared/helpers/i18n-msg.helper'
 
 export class LoginPayloadDto {
-  @IsEmail({}, { message: 'Email field must be a valid email address.' })
-  @IsNotEmpty({ message: 'Email should not be empty.' })
+  @IsEmail({}, { message: i18nMsg('validation.emailValid') })
+  @IsNotEmpty({ message: i18nMsg('validation.emailNotEmpty') })
   @IsNotExist(
     { tableName: 'users', column: 'email' },
-    {
-      message: "This email isn't associated with an account.",
-    },
+    { message: i18nMsg('validation.emailNotAssociated') },
   )
   @ApiProperty({
     required: true,
@@ -26,35 +25,38 @@ export class LoginPayloadDto {
   })
   email: string
 
-  @IsNotEmpty({ message: 'Password should not be empty.' })
+  @IsNotEmpty({ message: i18nMsg('validation.passwordNotEmpty') })
   @MinLength(GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH, {
     always: true,
-    message: 'Password must be at least 8 characters long.',
+    message: i18nMsg('validation.passwordMinLength'),
   })
   @MaxLength(GENERAL_VALIDATION_RULES.PASSWORD_MAX_LENGTH, {
     always: true,
-    message: 'Password must be at most 30 characters long.',
+    message: i18nMsg('validation.passwordMaxLength'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_LOWERCASE), {
     always: true,
-    message: 'Password must have one lowercase character.',
+    message: i18nMsg('validation.passwordRegexLowercase'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_UPPERCASE), {
     always: true,
-    message: 'Password must have one uppercase character.',
+    message: i18nMsg('validation.passwordRegexUppercase'),
   })
   @Matches(
     new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_SPECIAL_CHARACTERS),
     {
       always: true,
-      message: 'Password must have one special character.',
+      message: i18nMsg('validation.passwordRegexSpecialCharacters'),
     },
   )
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_NUMBER), {
     always: true,
-    message: 'Password must have one number.',
+    message: i18nMsg('validation.passwordRegexNumber'),
   })
-  @IsValidPassword({ column: 'email' }, { message: 'Password is not valid.' })
+  @IsValidPassword(
+    { column: 'email' },
+    { message: i18nMsg('validation.passwordNotValid') },
+  )
   @ApiProperty({
     required: true,
     minLength: GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH,

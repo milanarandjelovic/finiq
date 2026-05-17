@@ -1,11 +1,24 @@
 import { z } from 'zod'
 
-export const transactionFormSchema = z.object({
-  type: z.enum(['income', 'expense']),
-  amount: z.coerce.number().min(0.01, 'Amount must be > 0'),
-  date: z.string({ message: 'Date is required' }),
-  note: z.string().optional(),
-  categoryId: z.string().optional(),
-})
+import { type TranslateFunction } from '../types'
 
-export type TransactionFormValues = z.infer<typeof transactionFormSchema>
+export const transactionFormSchema = (t: TranslateFunction) =>
+  z.object({
+    type: z.enum(['income', 'expense']),
+    amount: z
+      .string()
+      .transform(Number)
+      .pipe(z.number().min(0.01, { message: t('validation.amountMin') })),
+    date: z
+      .string({ message: t('validation.dateRequired') })
+      .min(1, { message: t('validation.dateRequired') }),
+    note: z.string().optional(),
+    categoryId: z.string().optional(),
+  })
+
+export type TransactionFormValues = z.output<
+  ReturnType<typeof transactionFormSchema>
+>
+export type TransactionFormInput = z.input<
+  ReturnType<typeof transactionFormSchema>
+>
