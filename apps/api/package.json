@@ -34,6 +34,7 @@
     "seed:dynamic:fresh": "npm run build && ts-node -r tsconfig-paths/register src/providers/db/run-seeders.ts -- --fresh"
   },
   "dependencies": {
+    "@finiq/sentry": "workspace:*",
     "@finiq/shared": "workspace:*",
     "@finiq/translations": "workspace:*",
     "@jozefazz/nestjs-redoc": "^1.0.7",
@@ -46,6 +47,8 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@sentry/nestjs": "^10.53.1",
+    "@sentry/profiling-node": "^10.53.1",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",

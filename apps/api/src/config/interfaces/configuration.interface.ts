@@ -57,4 +57,16 @@ export interface Configuration {
       ttl: number
     }
   }
+
+  // Sentry Configuration
+  sentry: {
+    dsn: string
+    enabled: boolean
+    environment: string
+    tracesSampleRate: number
+    release?: string
+    enableLogs: boolean
+    profileLifecycle: 'trace' | 'manual'
+    sendDefaultPii: boolean
+  }
 }

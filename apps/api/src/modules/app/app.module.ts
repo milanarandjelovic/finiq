@@ -25,6 +25,7 @@ import { UserModule } from '@/modules/user/user.module'
 import { typeormConfig } from '@/providers/db/typeorm.config'
 import { EmailModule } from '@/providers/email/email.module'
 import { JsonTranslationsLoader } from '@/providers/i18n/json-translations.loader'
+import { SentryModule } from '@/providers/sentry/sentry.module'
 
 @Module({
   imports: [
@@ -107,6 +108,7 @@ import { JsonTranslationsLoader } from '@/providers/i18n/json-translations.loade
               },
       },
     }),
+    SentryModule.forRoot(),
     EmailModule.forRoot({
       useFactory: (configService: ConfigService) => {
         const emailConfig = configService.get<Configuration['email']>('email')

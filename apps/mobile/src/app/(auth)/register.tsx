@@ -5,20 +5,22 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { RegisterForm } from '@/components/auth/register-form'
 import { Button } from '@/components/ui/button'
+import { Text } from '@/components/ui/text'
+import { useTheme } from '@/hooks/use-theme'
 import { ROUTES } from '@/util/routes'
 
 export default function RegisterScreen() {
   const { t } = useTranslation()
+  const { colors } = useTheme()
   const router = useRouter()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

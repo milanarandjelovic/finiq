@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import * as Sentry from '@sentry/react-native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Stack } from 'expo-router'
+import { isRunningInExpoGo } from 'expo'
+import { Stack, useNavigationContainerRef } from 'expo-router'
 import { I18nextProvider } from 'react-i18next'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
@@ -9,6 +11,15 @@ import 'react-native-reanimated'
 import i18n, { changeLanguage, detectUserLanguage } from '@/i18n'
 import { AuthProvider } from '@/providers/auth-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
+import { initSentry } from '@/util/sentry'
+
+const navigationIntegration = Sentry.reactNavigationIntegration({
+  enableTimeToInitialDisplay: !isRunningInExpoGo(),
+})
+
+initSentry(navigationIntegration)
+
+export { ErrorBoundary } from '@/components/shared/error-boundary'
 
 export const reactQueryClient = new QueryClient()
 
@@ -22,8 +33,15 @@ function RootNavigator() {
   )
 }
 
-export default function RootLayout() {
+function RootLayout() {
+  const ref = useNavigationContainerRef()
   const [i18nReady, setI18nReady] = useState(false)
+
+  useEffect(() => {
+    if (ref?.current) {
+      navigationIntegration.registerNavigationContainer(ref)
+    }
+  }, [ref])
 
   useEffect(() => {
     detectUserLanguage()
@@ -49,3 +67,9 @@ export default function RootLayout() {
     </SafeAreaProvider>
   )
 }
+
+/**
+ * Sentry.wrap() installs the React error boundary and is required
+ * for native crash capture
+ */
+export default Sentry.wrap(RootLayout)

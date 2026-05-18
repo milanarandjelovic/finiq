@@ -15,6 +15,8 @@ import type { Configuration } from '@/config/interfaces/configuration.interface'
 import { ValidationException } from '@/exceptions/validation.exception'
 import { ValidationFilter } from '@/filters/validation.filter'
 import { AppModule } from '@/modules/app/app.module'
+import { SentryFilter } from '@/providers/sentry/filters/sentry.filter'
+import { SentryInterceptor } from '@/providers/sentry/interceptors/sentry.interceptor'
 
 async function bootstrap() {
   const isProduction = process.env.NODE_ENV === 'production'
@@ -34,7 +36,10 @@ async function bootstrap() {
 
   // Logger
   app.useLogger(app.get(Logger))
-  app.useGlobalInterceptors(new LoggerErrorInterceptor())
+  app.useGlobalInterceptors(
+    new LoggerErrorInterceptor(),
+    new SentryInterceptor(),
+  )
 
   app.use(cookieParser())
 
@@ -52,8 +57,9 @@ async function bootstrap() {
     })
   }
 
-  // ValidationFilter handles ValidationException specifically (more specific wins).
-  app.useGlobalFilters(app.get(ValidationFilter))
+  // SentryFilter is @Catch() - most general, registered first.
+  // ValidationFilter is more specific - registered second so it takes priority.
+  app.useGlobalFilters(new SentryFilter(), app.get(ValidationFilter))
 
   app.useGlobalPipes(
     new ValidationPipe({

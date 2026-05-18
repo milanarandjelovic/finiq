@@ -6,7 +6,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -14,16 +13,19 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
 import { Button } from '@/components/ui/button'
 import { MutedText } from '@/components/ui/muted-text'
+import { Text } from '@/components/ui/text'
+import { useTheme } from '@/hooks/use-theme'
 import { ROUTES } from '@/util/routes'
 
 export default function ForgotPasswordScreen() {
   const { t } = useTranslation()
+  const { colors } = useTheme()
   const router = useRouter()
   const [sentEmail, setSentEmail] = useState<string | null>(null)
 
   if (sentEmail) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         <View style={styles.center}>
           <Text style={styles.title}>
             {t('auth.forgotPasswordCheckEmailTitle')}
@@ -42,7 +44,7 @@ export default function ForgotPasswordScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
