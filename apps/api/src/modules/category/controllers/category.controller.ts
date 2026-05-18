@@ -58,9 +58,9 @@ export class CategoryController {
   })
   async findAll(
     @Query() query: CategoriesFindAllPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<CategoriesResponseDto>> {
-    return this.categoryService.findAll(query, request)
+    return this.categoryService.findAll(query, req.user.id)
   }
 
   @Get('/:id')
@@ -77,9 +77,9 @@ export class CategoryController {
   })
   async findOne(
     @Param() params: CategoryRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
-    return this.categoryService.findOne(params.id, request)
+    return this.categoryService.findOne(params.id, req.user.id)
   }
 
   @Post()
@@ -96,9 +96,9 @@ export class CategoryController {
   })
   async create(
     @Body() body: CreateCategoryPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
-    return this.categoryService.create(body, request)
+    return this.categoryService.create(body, req.user.id)
   }
 
   @Put('/:id')
@@ -116,9 +116,9 @@ export class CategoryController {
   async update(
     @Param() params: CategoryRequestDto,
     @Body() body: UpdateCategoryPayloadDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
-    return this.categoryService.update(params.id, body, request)
+    return this.categoryService.update(params.id, body, req.user.id)
   }
 
   @Delete('/:id')
@@ -135,8 +135,8 @@ export class CategoryController {
   })
   async delete(
     @Param() params: CategoryRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
-    return this.categoryService.delete(params.id, request)
+    return this.categoryService.delete(params.id, req.user.id)
   }
 }

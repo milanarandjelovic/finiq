@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { type CategoryFormValues } from '@finiq/schemas'
 import { Button } from '@finiq/ui/components/button'
 import {
   getCategoryControllerFindAllQueryKey,
@@ -29,6 +30,10 @@ export function AddCategoryDialog() {
       }),
     )
 
+  const handleSubmit = async (values: CategoryFormValues) => {
+    await createCategory({ data: values })
+  }
+
   return (
     <CrudDialog
       open={open}
@@ -41,12 +46,7 @@ export function AddCategoryDialog() {
         </Button>
       }
     >
-      <CategoryForm
-        onSubmit={async (v) => {
-          await createCategory({ data: v })
-        }}
-        isPending={isCreating}
-      />
+      <CategoryForm onSubmit={handleSubmit} isPending={isCreating} />
     </CrudDialog>
   )
 }

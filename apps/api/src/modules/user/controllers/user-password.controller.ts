@@ -87,6 +87,6 @@ export class UserPasswordController {
     @Req() req: Request,
     @Body() body: UserPasswordPayloadDto,
   ): Promise<RestfulResponseDto<UserResponseDto>> {
-    return await this.userProfileService.update(req, body)
+    return await this.userProfileService.update(req.user.id, body)
   }
 }

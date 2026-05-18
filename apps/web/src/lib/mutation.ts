@@ -48,6 +48,10 @@ export function crudMutationOptions(
 
 /**
  * Applies backend validation errors to a form.
+ *
+ * @param {MinimalFormError} form - The form object.
+ * @param {BackendValidationError[]} [errors] - The array of validation errors.
+ * @returns {void}
  */
 export const applyValidationErrors = (
   form: MinimalFormError,
@@ -61,8 +65,12 @@ export const applyValidationErrors = (
 }
 
 /**
- * Mutation options for form pages — maps 400 validation errors back onto the
+ * Mutation options for form pages - maps 400 validation errors back onto the
  * form and calls an optional onSuccess callback.
+ *
+ * @param {MinimalFormError} form - The form object.
+ * @param {(response: TSuccess) => void} [onSuccess] - Optional callback function to be called on successful mutation.
+ * @returns {Object} - The mutation options object.
  */
 export function formMutationOptions<TSuccess>(
   form: MinimalFormError,

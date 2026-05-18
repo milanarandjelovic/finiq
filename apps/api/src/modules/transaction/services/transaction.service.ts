@@ -2,7 +2,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -19,6 +19,7 @@ import {
 import { TransactionsFindAllPayloadDto } from '@/modules/transaction/dtos/transactions-find-all-payload.dto'
 import { UpdateTransactionPayloadDto } from '@/modules/transaction/dtos/update-transaction-payload.dto'
 import { Transaction } from '@/modules/transaction/entities/transaction.entity'
+import { User } from '@/modules/user/entities/user.entity'
 import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads', 'receipts')
@@ -31,15 +32,16 @@ export class TransactionService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly transactionQueryBuilder: TransactionQueryBuilder,
+    private readonly i18n: I18nService,
   ) {}
 
   async findAll(
     query: TransactionsFindAllPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionsResponseDto>> {
     const { currentPage, perPage } = query
 
-    const qb = this.transactionQueryBuilder.findAll(request.user.id)
+    const qb = this.transactionQueryBuilder.findAll(userId)
     this.transactionQueryBuilder.applyFilters(qb, query)
 
     const [transactions, total] = await qb
@@ -66,15 +68,15 @@ export class TransactionService {
 
   async findOne(
     id: string,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
@@ -86,7 +88,7 @@ export class TransactionService {
 
   async create(
     data: CreateTransactionPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const { type, amount, date, note, categoryId } = data
 
@@ -94,12 +96,15 @@ export class TransactionService {
 
     if (categoryId) {
       category = await this.categoryRepository.findOne({
-        where: { id: categoryId, user: { id: request.user.id } },
+        where: { id: categoryId, user: { id: userId } },
       })
 
       if (!category) {
         throw new ValidationException([
-          { property: 'categoryId', messages: ['Category not found.'] },
+          {
+            property: 'categoryId',
+            messages: [this.i18n.t('api.categoryNotFound')],
+          },
         ])
       }
     }
@@ -108,7 +113,7 @@ export class TransactionService {
       throw new ValidationException([
         {
           property: 'categoryId',
-          messages: ['Category is required for expense transactions.'],
+          messages: [this.i18n.t('api.categoryRequiredForExpense')],
         },
       ])
     }
@@ -121,7 +126,7 @@ export class TransactionService {
         note: note ?? null,
         receiptPath: null,
         category,
-        user: request.user,
+        user: { id: userId } as User,
       })
       .save()
 
@@ -134,15 +139,15 @@ export class TransactionService {
   async update(
     id: string,
     data: UpdateTransactionPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
@@ -163,12 +168,15 @@ export class TransactionService {
         transaction.category = null
       } else {
         const category = await this.categoryRepository.findOne({
-          where: { id: data.categoryId, user: { id: request.user.id } },
+          where: { id: data.categoryId, user: { id: userId } },
         })
 
         if (!category) {
           throw new ValidationException([
-            { property: 'categoryId', messages: ['Category not found.'] },
+            {
+              property: 'categoryId',
+              messages: [this.i18n.t('api.categoryNotFound')],
+            },
           ])
         }
 
@@ -186,15 +194,15 @@ export class TransactionService {
 
   async delete(
     id: string,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
@@ -217,15 +225,15 @@ export class TransactionService {
   async uploadReceipt(
     id: string,
     file: Express.Multer.File,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
@@ -254,21 +262,24 @@ export class TransactionService {
 
   async deleteReceipt(
     id: string,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<TransactionResponseDto>> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
     if (!transaction.receiptPath) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction has no receipt.'] },
+        {
+          property: 'id',
+          messages: [this.i18n.t('api.transactionHasNoReceipt')],
+        },
       ])
     }
 
@@ -284,20 +295,23 @@ export class TransactionService {
     })
   }
 
-  async getReceiptFilePath(id: string, request: Request): Promise<string> {
+  async getReceiptFilePath(id: string, userId: string): Promise<string> {
     const transaction = await this.transactionQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!transaction) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.transactionNotFound')] },
       ])
     }
 
     if (!transaction.receiptPath) {
       throw new ValidationException([
-        { property: 'id', messages: ['Transaction has no receipt.'] },
+        {
+          property: 'id',
+          messages: [this.i18n.t('api.transactionHasNoReceipt')],
+        },
       ])
     }
 
@@ -305,7 +319,7 @@ export class TransactionService {
 
     if (!fs.existsSync(filePath)) {
       throw new ValidationException([
-        { property: 'id', messages: ['Receipt file not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.receiptFileNotFound')] },
       ])
     }
 

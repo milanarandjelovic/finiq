@@ -199,8 +199,8 @@ export class UserController {
   })
   async delete(
     @Param() params: UserDeleteRequestDto,
-    @Req() request: Request,
+    @Req() req: Request,
   ): Promise<RestfulResponseDto<UserDeleteResponseDto>> {
-    return await this.userService.delete(params, request)
+    return await this.userService.delete(params, req.user.id)
   }
 }

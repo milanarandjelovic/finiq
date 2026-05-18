@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
 import { Repository } from 'typeorm'
 
 import { BudgetQueryBuilder } from '@/modules/budget/builders/budget-query.builder'
@@ -23,10 +22,9 @@ export class DashboardService {
 
   async getDashboard(
     query: DashboardQueryDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<DashboardResponseDto>> {
     const { month, year } = query
-    const userId = request.user.id
 
     const [incomeResult, expenseResult, budgets, spendingRows, categories] =
       await Promise.all([

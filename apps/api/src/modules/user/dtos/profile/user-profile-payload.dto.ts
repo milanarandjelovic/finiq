@@ -2,18 +2,19 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, Matches, MaxLength, MinLength } from 'class-validator'
 
 import { GENERAL_VALIDATION_RULES } from '@finiq/shared'
+import { i18nMsg } from '@/shared/helpers/i18n-msg.helper'
 
 export class UserProfilePayloadDto {
-  @IsNotEmpty({ message: 'Name should not be empty.' })
+  @IsNotEmpty({ message: i18nMsg('validation.nameNotEmpty') })
   @MinLength(GENERAL_VALIDATION_RULES.NAME_MIN_LENGTH, {
-    message: 'Name must be at least 3 characters long.',
+    message: i18nMsg('validation.nameMinLength'),
   })
   @MaxLength(GENERAL_VALIDATION_RULES.NAME_MAX_LENGTH, {
-    message: 'Name must be at most 30 characters long.',
+    message: i18nMsg('validation.nameMaxLength'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.NAME_REGEX), {
     always: true,
-    message: 'Name may only contain letter and white space.',
+    message: i18nMsg('validation.nameNotValid'),
   })
   @ApiProperty({
     required: true,

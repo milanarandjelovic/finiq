@@ -27,6 +27,17 @@ interface GoalSheetProps {
   defaultValues?: Partial<GoalFormValues>
 }
 
+const toFormInput = (
+  values?: Partial<GoalFormValues>,
+): Partial<GoalFormInput> =>
+  values
+    ? {
+        ...values,
+        targetAmount: values.targetAmount?.toString(),
+        budgetAmount: values.budgetAmount?.toString(),
+      }
+    : { color: PRESET_COLORS[0] }
+
 export function GoalSheet({
   visible,
   onClose,
@@ -45,15 +56,15 @@ export function GoalSheet({
     reset,
     formState: { errors },
   } = useForm<GoalFormInput, unknown, GoalFormValues>({
-    resolver: zodResolver(goalFormSchema),
-    defaultValues: defaultValues ?? { color: PRESET_COLORS[0] },
+    resolver: zodResolver(goalFormSchema(t)),
+    defaultValues: toFormInput(defaultValues),
   })
 
   const selectedColor = watch('color')
 
   useEffect(() => {
     if (visible) {
-      reset(defaultValues ?? { color: PRESET_COLORS[0] })
+      reset(toFormInput(defaultValues))
     }
   }, [visible, defaultValues, reset])
 

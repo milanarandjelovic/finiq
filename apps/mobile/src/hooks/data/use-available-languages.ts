@@ -8,7 +8,9 @@ export const useAvailableLanguages = () => {
     queryFn: async (): Promise<string[]> => {
       const response = await fetch(`${Env.i18nUrl}/locales`)
 
-      if (!response.ok) return ['en']
+      if (!response.ok) {
+        return ['en']
+      }
 
       return response.json()
     },

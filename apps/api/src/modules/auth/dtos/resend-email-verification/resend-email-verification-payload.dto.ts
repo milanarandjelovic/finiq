@@ -3,20 +3,21 @@ import { IsEmail, IsNotEmpty } from 'class-validator'
 
 import { IsNotExist } from '@/shared/decorators/is-not-exist.decorator'
 import { IsUserVerifiedEmail } from '@/shared/decorators/is-user-verified-email.decorator'
+import { i18nMsg } from '@/shared/helpers/i18n-msg.helper'
 
 export class ResendEmailVerificationPayloadDto {
-  @IsEmail({}, { message: 'Email field must be a valid email address.' })
+  @IsEmail({}, { message: i18nMsg('validation.emailValid') })
   @IsNotEmpty({
     always: true,
-    message: 'Email should not be empty.',
+    message: i18nMsg('validation.emailNotEmpty'),
   })
   @IsNotExist(
     { tableName: 'users', column: 'email' },
-    { message: "This email isn't associated with an account." },
+    { message: i18nMsg('validation.emailNotAssociated') },
   )
   @IsUserVerifiedEmail(
     { column: 'email' },
-    { message: 'Email is already verified.' },
+    { message: i18nMsg('validation.emailAlreadyVerified') },
   )
   @ApiProperty({
     required: true,

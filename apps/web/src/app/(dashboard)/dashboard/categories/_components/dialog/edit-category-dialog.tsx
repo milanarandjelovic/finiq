@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
+import { type CategoryFormValues } from '@finiq/schemas'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerUpdate,
@@ -34,24 +35,36 @@ export function EditCategoryDialog({
       }),
     )
 
+  const handleOpenChange = (o: boolean) => !o && onClose()
+
+  const handleSubmit = async (values: CategoryFormValues) => {
+    if (!category) {
+      return
+    }
+
+    await updateCategory({ id: category.id, data: values })
+  }
+
+  const defaultValues = category
+    ? {
+        name: category.name,
+        emoji: category.emoji,
+        color: category.color,
+        budgetAmount: Number(category.budgetAmount),
+        isGoal: category.isGoal,
+      }
+    : undefined
+
   return (
     <CrudDialog
       open={!!category}
-      onOpenChange={(o) => !o && onClose()}
+      onOpenChange={handleOpenChange}
       title={t('categories.editCategory')}
     >
       {category && (
         <CategoryForm
-          defaultValues={{
-            name: category.name,
-            emoji: category.emoji,
-            color: category.color,
-            budgetAmount: Number(category.budgetAmount),
-            isGoal: category.isGoal,
-          }}
-          onSubmit={async (v) => {
-            await updateCategory({ id: category.id, data: v })
-          }}
+          defaultValues={defaultValues}
+          onSubmit={handleSubmit}
           isPending={isUpdating}
         />
       )}

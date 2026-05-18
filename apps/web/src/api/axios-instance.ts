@@ -1,9 +1,10 @@
 import Axios from 'axios'
 
-import { ACCESS_TOKEN_COOKIE_NAME } from '@finiq/shared'
+import { LANGUAGE_STORAGE_KEY } from '@finiq/shared'
 import {
   clearAccessToken,
   clearRefreshToken,
+  getAccessToken,
   getRefreshToken,
   setAccessToken,
 } from '@/lib/cookies'
@@ -16,15 +17,6 @@ function clearAuthAndRedirect() {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
-
-function getCookie(name: string | undefined): string | null {
-  if (!name || typeof document === 'undefined') return null
-  const safeName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const match = document.cookie.match(
-    new RegExp(`(?:^|;\\s*)${safeName}=([^;]*)`),
-  )
-  return match ? decodeURIComponent(match[1] ?? '') : null
-}
 
 export function postRefreshAccessToken(refreshToken: string) {
   return Axios({
@@ -45,14 +37,25 @@ export const axiosInstanceBase = Axios.create({
 
 axiosInstanceBase.interceptors.request.use(
   (config) => {
-    const token = getCookie(ACCESS_TOKEN_COOKIE_NAME)
+    const token = getAccessToken()
     if (!config.headers.Authorization && token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    const lang =
+      typeof window !== 'undefined'
+        ? localStorage.getItem(LANGUAGE_STORAGE_KEY)
+        : null
+    if (lang) {
+      config.headers['x-lang'] = lang
+    }
+
     return config
   },
   (error) => Promise.reject(error),
 )
+
+let refreshPromise: Promise<string | null> | null = null
 
 axiosInstanceBase.interceptors.response.use(
   (response) => response,
@@ -72,13 +75,25 @@ axiosInstanceBase.interceptors.response.use(
       }
 
       try {
-        const response = await postRefreshAccessToken(refreshToken)
-        const newAccessToken = response.data?.data?.accessToken
-
-        if (newAccessToken) {
-          setAccessToken(newAccessToken)
-          originalConfig.headers.Authorization = `Bearer ${newAccessToken}`
+        if (!refreshPromise) {
+          refreshPromise = postRefreshAccessToken(refreshToken)
+            .then((res) => res.data?.data?.accessToken ?? null)
+            .finally(() => {
+              refreshPromise = null
+            })
         }
+
+        const newAccessToken = await refreshPromise
+
+        if (!newAccessToken) {
+          if (typeof window !== 'undefined') {
+            clearAuthAndRedirect()
+          }
+          return Promise.reject(error)
+        }
+
+        setAccessToken(newAccessToken)
+        originalConfig.headers.Authorization = `Bearer ${newAccessToken}`
 
         return axiosInstanceBase(originalConfig)
       } catch {

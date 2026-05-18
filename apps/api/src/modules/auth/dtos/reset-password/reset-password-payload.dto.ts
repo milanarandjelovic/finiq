@@ -11,31 +11,30 @@ import { GENERAL_VALIDATION_RULES } from '@finiq/shared'
 import { IsMatch } from '@/shared/decorators/is-match.decorator'
 import { IsNotExist } from '@/shared/decorators/is-not-exist.decorator'
 import { IsValidPasswordResetToken } from '@/shared/decorators/is-valid-password-reset-token.decorator'
+import { i18nMsg } from '@/shared/helpers/i18n-msg.helper'
 
 export class ResetPasswordPayloadDto {
   @IsNotExist(
     { tableName: 'password_resets', column: 'token' },
-    { message: 'Reset password token is not valid.' },
+    { message: i18nMsg('validation.resetPasswordTokenInvalid') },
   )
   @IsValidPasswordResetToken(
     { column: 'email' },
-    { message: 'Reset password token is not valid.' },
+    { message: i18nMsg('validation.resetPasswordTokenInvalid') },
   )
   @ApiProperty({
     example: '6b33c97d-e2cd-4fe3-af61-bd59850fb26f',
   })
   token: string
 
-  @IsEmail({}, { message: 'Email field must be a valid email address.' })
+  @IsEmail({}, { message: i18nMsg('validation.emailValid') })
   @IsNotEmpty({
     always: true,
-    message: 'Email should not be empty.',
+    message: i18nMsg('validation.emailNotEmpty'),
   })
   @IsNotExist(
     { tableName: 'users', column: 'email' },
-    {
-      message: "This email isn't associated with an account.",
-    },
+    { message: i18nMsg('validation.emailNotAssociated') },
   )
   @ApiProperty({
     required: true,
@@ -43,33 +42,33 @@ export class ResetPasswordPayloadDto {
   })
   email: string
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: i18nMsg('validation.passwordNotEmpty') })
   @MinLength(GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH, {
     always: true,
-    message: 'Password must be at least 8 characters long.',
+    message: i18nMsg('validation.passwordMinLength'),
   })
   @MaxLength(GENERAL_VALIDATION_RULES.PASSWORD_MAX_LENGTH, {
     always: true,
-    message: 'Password must be at most 30 characters long.',
+    message: i18nMsg('validation.passwordMaxLength'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_LOWERCASE), {
     always: true,
-    message: 'Password must have one lowercase character.',
+    message: i18nMsg('validation.passwordRegexLowercase'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_UPPERCASE), {
     always: true,
-    message: 'Password must have one uppercase character.',
+    message: i18nMsg('validation.passwordRegexUppercase'),
   })
   @Matches(
     new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_SPECIAL_CHARACTERS),
     {
       always: true,
-      message: 'Password must have one number.',
+      message: i18nMsg('validation.passwordRegexSpecialCharacters'),
     },
   )
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_NUMBER), {
     always: true,
-    message: 'Password must have one number.',
+    message: i18nMsg('validation.passwordRegexNumber'),
   })
   @ApiProperty({
     required: true,
@@ -79,39 +78,39 @@ export class ResetPasswordPayloadDto {
   })
   password: string
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: i18nMsg('validation.passwordConfirmationNotEmpty') })
   @MinLength(GENERAL_VALIDATION_RULES.PASSWORD_MIN_LENGTH, {
     always: true,
-    message: 'Password confirmation must be at least 8 characters long.',
+    message: i18nMsg('validation.passwordConfirmationMinLength'),
   })
   @MaxLength(GENERAL_VALIDATION_RULES.PASSWORD_MAX_LENGTH, {
     always: true,
-    message: 'Password confirmation must be at most 30 characters long.',
+    message: i18nMsg('validation.passwordConfirmationMaxLength'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_LOWERCASE), {
     always: true,
-    message: 'Password confirmation must have one lowercase character.',
+    message: i18nMsg('validation.passwordConfirmationRegexLowercase'),
   })
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_UPPERCASE), {
     always: true,
-    message: 'Password confirmation must have one uppercase character.',
+    message: i18nMsg('validation.passwordConfirmationRegexUppercase'),
   })
   @Matches(
     new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_SPECIAL_CHARACTERS),
     {
       always: true,
-      message: 'Password confirmation must have one special character.',
+      message: i18nMsg('validation.passwordConfirmationRegexSpecialCharacters'),
     },
   )
   @Matches(new RegExp(GENERAL_VALIDATION_RULES.PASSWORD_REGEX_NUMBER), {
     always: true,
-    message: 'Password confirmation must have one number.',
+    message: i18nMsg('validation.passwordConfirmationRegexNumber'),
   })
   @IsMatch(
     { field: 'password' },
     {
       always: true,
-      message: 'Password and password confirmation must match.',
+      message: i18nMsg('validation.passwordConfirmationMustMatch'),
     },
   )
   @ApiProperty({

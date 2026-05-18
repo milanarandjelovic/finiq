@@ -1,12 +1,15 @@
 import { z } from 'zod'
 
-export const loginFormSchema = z.object({
-  email: z
-    .string({ message: 'Enter a valid email' })
-    .email({ message: 'Enter a valid email' }),
-  password: z
-    .string({ message: 'Password is required' })
-    .min(1, { message: 'Password is required' }),
-})
+import { type TranslateFunction } from '../types'
 
-export type LoginFormValues = z.infer<typeof loginFormSchema>
+export const loginFormSchema = (t: TranslateFunction) =>
+  z.object({
+    email: z
+      .string({ message: t('validation.emailNotEmpty') })
+      .email({ message: t('validation.emailValid') }),
+    password: z
+      .string({ message: t('validation.passwordNotEmpty') })
+      .min(1, { message: t('validation.passwordNotEmpty') }),
+  })
+
+export type LoginFormValues = z.infer<ReturnType<typeof loginFormSchema>>

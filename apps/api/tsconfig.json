@@ -21,6 +21,7 @@
     "strictPropertyInitialization": false,
     "alwaysStrict": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "moduleResolution": "node",
     "types": ["jest", "multer"],
     "baseUrl": ".",

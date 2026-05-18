@@ -1,6 +1,6 @@
 'use client'
 
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@finiq/ui/components/button'
@@ -38,14 +38,12 @@ export function CategoryActionsCell({
           className="cursor-pointer"
           onSelect={() => onEdit(category)}
         >
-          <Pencil className="mr-2 size-3.5" />
           {t('general.edit')}
         </DropdownMenuItem>
         <DropdownMenuItem
           className="text-destructive focus:text-destructive cursor-pointer"
           onSelect={() => onDelete(category)}
         >
-          <Trash2 className="mr-2 size-3.5" />
           {t('general.delete')}
         </DropdownMenuItem>
       </DropdownMenuContent>

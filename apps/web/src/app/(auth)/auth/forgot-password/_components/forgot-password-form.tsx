@@ -28,7 +28,7 @@ export function ForgotPasswordForm({
 }) {
   const { t } = useTranslation()
   const form = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(forgotPasswordFormSchema),
+    resolver: zodResolver(forgotPasswordFormSchema(t)),
     defaultValues: {
       email: '',
     },

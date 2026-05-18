@@ -35,6 +35,9 @@ import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 
 @Injectable()
 export class AuthService {
+  private readonly clientUrl: string
+  private readonly emailFrom: string
+
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtTokenService: JwtTokenService,
@@ -44,7 +47,12 @@ export class AuthService {
     private readonly emailVerificationRepository: Repository<EmailVerification>,
     @InjectRepository(PasswordReset)
     private readonly passwordResetRepository: Repository<PasswordReset>,
-  ) {}
+  ) {
+    this.clientUrl =
+      this.configService.get<Configuration['clientUrl']>('clientUrl')
+    this.emailFrom =
+      this.configService.get<Configuration['email']>('email').from
+  }
 
   async register(
     data: RegisterPayloadDto,
@@ -52,9 +60,6 @@ export class AuthService {
     const { name, email, password } = data
 
     const token = uuidv4()
-    const url = this.configService.get<Configuration['clientUrl']>('clientUrl')
-    const emailClient = this.configService.get<Configuration['email']>('email')
-    const sentFrom = emailClient.from
 
     const user = await this.userRepository
       .create({
@@ -64,7 +69,6 @@ export class AuthService {
       })
       .save()
 
-    // Save an email verification token and send email
     await this.emailVerificationRepository
       .create({
         token,
@@ -74,12 +78,12 @@ export class AuthService {
 
     await this.emailService.send({
       subject: 'Email Verification',
-      from: sentFrom,
+      from: this.emailFrom,
       to: user.email,
       template: 'auth/email-verification',
       context: {
         name: user.name,
-        link: `${url}/auth/verify-email/${token}`,
+        link: `${this.clientUrl}/auth/verify-email/${token}`,
       },
     })
 
@@ -104,7 +108,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: ['User with this email is not found.'],
+          messages: ['api.authUserNotFound'],
         },
       ])
     }
@@ -113,9 +117,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: [
-            "Your account isn't activated yet. Check your email to activate it.",
-          ],
+          messages: ['api.authAccountNotActivated'],
         },
       ])
     }
@@ -152,9 +154,6 @@ export class AuthService {
   ): Promise<RestfulResponseDto<ForgotPasswordResponseDto>> {
     const token = uuidv4()
     const { email } = data
-    const url = this.configService.get<Configuration['clientUrl']>('clientUrl')
-    const emailClient = this.configService.get<Configuration['email']>('email')
-    const sentFrom = emailClient.from
 
     const user = await this.userRepository.findOne({
       where: {
@@ -166,7 +165,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: ['User with this email is not found.'],
+          messages: ['api.authUserNotFound'],
         },
       ])
     }
@@ -175,10 +174,9 @@ export class AuthService {
       .createQueryBuilder()
       .delete()
       .from(PasswordReset)
-      .where('user_id In(:userId)', { userId: user.id })
+      .where('user_id = :userId', { userId: user.id })
       .execute()
 
-    // Save password reset token and send email
     await this.passwordResetRepository
       .create({
         token,
@@ -188,12 +186,12 @@ export class AuthService {
 
     await this.emailService.send({
       subject: 'Reset Password',
-      from: sentFrom,
+      from: this.emailFrom,
       to: user.email,
       template: 'auth/password-reset',
       context: {
         email: user.email,
-        link: `${url}/auth/password/reset/${token}`,
+        link: `${this.clientUrl}/auth/password/reset/${token}`,
       },
     })
 
@@ -219,12 +217,11 @@ export class AuthService {
       },
     })
 
-    // Check is token exist and is not expired
     if (!passwordReset) {
       throw new ValidationException([
         {
           property: 'token',
-          messages: ['Reset password token not found.'],
+          messages: ['api.authResetPasswordTokenNotFound'],
         },
       ])
     }
@@ -233,35 +230,19 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'token',
-          messages: ['Reset password token is expired.'],
+          messages: ['api.authResetPasswordTokenExpired'],
         },
       ])
     }
 
-    // Update user password and delete password reset token
-    await this.userRepository
-      .createQueryBuilder()
-      .update({
-        password,
-      })
-      .where('id = :userId', { userId: passwordReset.user.id })
-      .execute()
-
-    // Update method not trigger @BeforeUpdate() in User repository
-    // so we need to trigger in this way
-    const user = await this.userRepository.findOne({
-      where: {
-        id: passwordReset.user.id,
-      },
-    })
-    user.password = password
-    user.save()
+    passwordReset.user.password = password
+    await passwordReset.user.save()
 
     await this.passwordResetRepository
       .createQueryBuilder()
       .delete()
       .from(PasswordReset)
-      .where('user_id In(:userId)', { userId: passwordReset.user.id })
+      .where('user_id = :userId', { userId: passwordReset.user.id })
       .execute()
 
     return new RestfulResponseDto<ResetPasswordResponseDto>({
@@ -278,9 +259,6 @@ export class AuthService {
     const { email } = data
 
     const token = uuidv4()
-    const url = this.configService.get<Configuration['clientUrl']>('clientUrl')
-    const emailClient = this.configService.get<Configuration['email']>('email')
-    const sentFrom = emailClient.from
 
     const user = await this.userRepository.findOne({
       where: {
@@ -292,7 +270,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: ['User with this email is not found.'],
+          messages: ['api.authUserNotFound'],
         },
       ])
     }
@@ -301,10 +279,9 @@ export class AuthService {
       .createQueryBuilder()
       .delete()
       .from(EmailVerification)
-      .where('user_id In(:userId)', { userId: user.id })
+      .where('user_id = :userId', { userId: user.id })
       .execute()
 
-    // Save an email verification token and send email
     await this.emailVerificationRepository
       .create({
         token,
@@ -314,12 +291,12 @@ export class AuthService {
 
     await this.emailService.send({
       subject: 'Email Verification',
-      from: sentFrom,
+      from: this.emailFrom,
       to: user.email,
       template: 'auth/resend-email-verification',
       context: {
         name: user.name,
-        link: `${url}/auth/verify-email/${token}`,
+        link: `${this.clientUrl}/auth/verify-email/${token}`,
       },
     })
 
@@ -347,7 +324,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'token',
-          messages: ['Verify email token is not valid.'],
+          messages: ['api.authVerifyEmailTokenInvalid'],
         },
       ])
     }
@@ -356,7 +333,7 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'token',
-          messages: ['Verify email token is expired.'],
+          messages: ['api.authVerifyEmailTokenExpired'],
         },
       ])
     }
@@ -365,13 +342,12 @@ export class AuthService {
       throw new ValidationException([
         {
           property: 'token',
-          messages: [
-            'This account is already activated. You can log in directly.',
-          ],
+          messages: ['api.authAccountAlreadyActivated'],
         },
       ])
     }
 
+    // Registration creates the account without a password; the user sets it here at verification time.
     emailVerification.user.activatedAt = new Date(Date.now())
     emailVerification.user.password = data.password
     await emailVerification.user.save()
@@ -380,21 +356,17 @@ export class AuthService {
       .createQueryBuilder()
       .delete()
       .from(EmailVerification)
-      .where('user_id In(:userId)', { userId: emailVerification.user.id })
+      .where('user_id = :userId', { userId: emailVerification.user.id })
       .execute()
-
-    const url = this.configService.get<Configuration['clientUrl']>('clientUrl')
-    const emailClient = this.configService.get<Configuration['email']>('email')
-    const sentFrom = emailClient.from
 
     await this.emailService.send({
       subject: 'Account Activated',
-      from: sentFrom,
+      from: this.emailFrom,
       to: emailVerification.user.email,
       template: 'auth/activate-account',
       context: {
         name: emailVerification.user.name,
-        loginUrl: `${url}/auth/login`,
+        loginUrl: `${this.clientUrl}/auth/login`,
       },
     })
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
 import { ValidationException } from '@/exceptions/validation.exception'
@@ -14,6 +14,7 @@ import {
 import { CreateCategoryPayloadDto } from '@/modules/category/dtos/create-category-payload.dto'
 import { UpdateCategoryPayloadDto } from '@/modules/category/dtos/update-category-payload.dto'
 import { Category } from '@/modules/category/entities/category.entity'
+import { User } from '@/modules/user/entities/user.entity'
 import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 
 @Injectable()
@@ -22,14 +23,14 @@ export class CategoryService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly categoryQueryBuilder: CategoryQueryBuilder,
+    private readonly i18n: I18nService,
   ) {}
 
   async findAll(
     query: CategoriesFindAllPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<CategoriesResponseDto>> {
     const { isGoal, name, currentPage, perPage } = query
-    const userId = request.user.id
 
     let baseQuery = this.categoryQueryBuilder.findAll(userId)
 
@@ -69,15 +70,15 @@ export class CategoryService {
 
   async findOne(
     id: string,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
     const category = await this.categoryQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!category) {
       throw new ValidationException([
-        { property: 'id', messages: ['Category not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.categoryNotFound')] },
       ])
     }
 
@@ -89,7 +90,7 @@ export class CategoryService {
 
   async create(
     data: CreateCategoryPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
     const {
       name,
@@ -112,7 +113,7 @@ export class CategoryService {
         targetAmount: targetAmount ?? null,
         targetDate: targetDate ? new Date(targetDate) : null,
         sortOrder: sortOrder ?? 0,
-        user: request.user,
+        user: { id: userId } as User,
       })
       .save()
 
@@ -125,15 +126,15 @@ export class CategoryService {
   async update(
     id: string,
     data: UpdateCategoryPayloadDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
     const category = await this.categoryQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!category) {
       throw new ValidationException([
-        { property: 'id', messages: ['Category not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.categoryNotFound')] },
       ])
     }
 
@@ -181,15 +182,15 @@ export class CategoryService {
 
   async delete(
     id: string,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<CategoryResponseDto>> {
     const category = await this.categoryQueryBuilder
-      .findOne(id, request.user.id)
+      .findOne(id, userId)
       .getOne()
 
     if (!category) {
       throw new ValidationException([
-        { property: 'id', messages: ['Category not found.'] },
+        { property: 'id', messages: [this.i18n.t('api.categoryNotFound')] },
       ])
     }
 

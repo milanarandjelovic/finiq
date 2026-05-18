@@ -1,7 +1,10 @@
 import { z } from 'zod'
 
-export const budgetFormSchema = z.object({
-  amount: z.number().min(0, { message: 'Amount must be 0 or more' }),
-})
+import { type TranslateFunction } from '../types'
 
-export type BudgetFormValues = z.infer<typeof budgetFormSchema>
+export const budgetFormSchema = (t: TranslateFunction) =>
+  z.object({
+    amount: z.number().min(0, { message: t('validation.budgetAmountMin') }),
+  })
+
+export type BudgetFormValues = z.infer<ReturnType<typeof budgetFormSchema>>

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { In, Not, Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -31,6 +31,7 @@ export class UserService {
     private readonly userQueryBuilder: UserQueryBuilder,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
+    private readonly i18n: I18nService,
   ) {}
 
   async findAll(
@@ -77,7 +78,7 @@ export class UserService {
       throw new ValidationException([
         {
           property: 'id',
-          messages: ['User not found.'],
+          messages: [this.i18n.t('api.userNotFound')],
         },
       ])
     }
@@ -101,7 +102,7 @@ export class UserService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: ['The email has already been taken.'],
+          messages: [this.i18n.t('validation.emailAlreadyTaken')],
         },
       ])
     }
@@ -175,7 +176,7 @@ export class UserService {
       throw new ValidationException([
         {
           property: 'id',
-          messages: ['User not found.'],
+          messages: [this.i18n.t('api.userNotFound')],
         },
       ])
     }
@@ -189,7 +190,7 @@ export class UserService {
       throw new ValidationException([
         {
           property: 'email',
-          messages: ['The email has already been taken.'],
+          messages: [this.i18n.t('validation.emailAlreadyTaken')],
         },
       ])
     }
@@ -213,17 +214,16 @@ export class UserService {
 
   async delete(
     params: UserDeleteRequestDto,
-    request: Request,
+    userId: string,
   ): Promise<RestfulResponseDto<UserDeleteResponseDto>> {
     const { ids } = params
-    const { user: authenticatedUser } = request
     const idsArray = ids.split(',')
 
-    if (idsArray.includes(authenticatedUser.id)) {
+    if (idsArray.includes(userId)) {
       throw new ValidationException([
         {
           property: 'id',
-          messages: ['You cannot delete yourself.'],
+          messages: [this.i18n.t('api.cannotDeleteSelf')],
         },
       ])
     }
@@ -236,7 +236,7 @@ export class UserService {
       throw new ValidationException([
         {
           property: 'ids',
-          messages: ['Users not found.'],
+          messages: [this.i18n.t('api.usersNotFound')],
         },
       ])
     }

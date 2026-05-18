@@ -31,7 +31,7 @@ export function ResetPasswordForm() {
   const token = searchParams.get('token') ?? ''
 
   const form = useForm<ResetPasswordFormValues>({
-    resolver: zodResolver(resetPasswordFormSchema),
+    resolver: zodResolver(resetPasswordFormSchema(t)),
     defaultValues: {
       email: '',
       password: '',

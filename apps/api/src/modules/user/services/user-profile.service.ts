@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
 import { ValidationException } from '@/exceptions/validation.exception'
@@ -13,32 +13,20 @@ import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 export class UserProfileService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly i18n: I18nService,
   ) {}
 
-  async findOne(
-    request: Request,
-  ): Promise<RestfulResponseDto<UserResponseDto>> {
-    const { user } = request
-
-    if (!user) {
-      throw new ValidationException([
-        {
-          property: 'name',
-          messages: ['User not found.'],
-        },
-      ])
-    }
-
-    const queryBuilder = this.userRepository.createQueryBuilder('user')
-    queryBuilder.where('user.id = :id', { id: user.id })
-
-    const profile = await queryBuilder.getOne()
+  async findOne(userId: string): Promise<RestfulResponseDto<UserResponseDto>> {
+    const profile = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: userId })
+      .getOne()
 
     if (!profile) {
       throw new ValidationException([
         {
           property: 'name',
-          messages: ['User not found.'],
+          messages: [this.i18n.t('api.userNotFound')],
         },
       ])
     }
@@ -52,38 +40,15 @@ export class UserProfileService {
   }
 
   async update(
-    request: Request,
+    userId: string,
     data: UserProfilePayloadDto,
   ): Promise<RestfulResponseDto<UserResponseDto>> {
-    const { user } = request
     const { name } = data
 
-    if (!user) {
-      throw new ValidationException([
-        {
-          property: 'name',
-          messages: ['User not found.'],
-        },
-      ])
-    }
-
-    const check = await this.userRepository.findOne({
-      where: { id: user.id },
-    })
-
-    if (user.id !== check.id) {
-      throw new ValidationException([
-        {
-          property: 'name',
-          messages: ['User not found.'],
-        },
-      ])
-    }
-
-    await this.userRepository.update({ id: user.id }, { name })
+    await this.userRepository.update({ id: userId }, { name })
 
     const profile = await this.userRepository.findOne({
-      where: { id: user.id },
+      where: { id: userId },
     })
 
     return new RestfulResponseDto<UserResponseDto>({

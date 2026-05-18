@@ -1,12 +1,24 @@
 import { z } from 'zod'
 
-export const profileFormSchema = z.object({
-  name: z
-    .string({ message: 'Name is required' })
-    .min(2, 'Name must be at least 2 characters'),
-  email: z
-    .string({ message: 'Email is required' })
-    .email('Enter a valid email'),
-})
+import { GENERAL_VALIDATION_RULES } from '@finiq/shared'
 
-export type ProfileFormValues = z.infer<typeof profileFormSchema>
+import { noInvalidSpaces } from '../helpers'
+import { type TranslateFunction } from '../types'
+
+export const profileFormSchema = (t: TranslateFunction) =>
+  z.object({
+    name: z
+      .string({ message: t('validation.nameNotEmpty') })
+      .min(GENERAL_VALIDATION_RULES.NAME_MIN_LENGTH, {
+        message: t('validation.nameMinLength'),
+      })
+      .max(GENERAL_VALIDATION_RULES.NAME_MAX_LENGTH, {
+        message: t('validation.nameMaxLength'),
+      })
+      .superRefine(noInvalidSpaces(t)),
+    email: z
+      .string({ message: t('validation.emailNotEmpty') })
+      .email({ message: t('validation.emailValid') }),
+  })
+
+export type ProfileFormValues = z.infer<ReturnType<typeof profileFormSchema>>

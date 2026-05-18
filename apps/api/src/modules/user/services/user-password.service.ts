@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { compareSync } from 'bcrypt'
-import { Request } from 'express'
+import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
 import { ValidationException } from '@/exceptions/validation.exception'
@@ -14,35 +14,26 @@ import { RestfulResponseDto } from '@/shared/dtos/restful-response.dto'
 export class UserPasswordService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly i18n: I18nService,
   ) {}
 
   async update(
-    request: Request,
+    userId: string,
     data: UserPasswordPayloadDto,
   ): Promise<RestfulResponseDto<UserResponseDto>> {
-    const { user } = request
     const { password, newPassword } = data
-
-    if (!user) {
-      throw new ValidationException([
-        {
-          property: 'name',
-          messages: ['User not found.'],
-        },
-      ])
-    }
 
     const check = await this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.password')
-      .where('user.id = :id', { id: user.id })
+      .where('user.id = :id', { id: userId })
       .getOne()
 
-    if (user.id !== check.id) {
+    if (!check) {
       throw new ValidationException([
         {
           property: 'name',
-          messages: ['User not found.'],
+          messages: [this.i18n.t('api.userNotFound')],
         },
       ])
     }
@@ -51,21 +42,17 @@ export class UserPasswordService {
       throw new ValidationException([
         {
           property: 'password',
-          messages: ['Current password is invalid.'],
+          messages: [this.i18n.t('api.currentPasswordInvalid')],
         },
       ])
     }
 
-    // Update method not trigger @BeforeUpdate() in User repository
-    // so we need to trigger in this way
-    const profile = await this.userRepository.findOne({
-      where: {
-        id: user.id,
-      },
-    })
+    check.password = newPassword
+    await check.save()
 
-    user.password = newPassword
-    user.save()
+    const profile = await this.userRepository.findOne({
+      where: { id: userId },
+    })
 
     return new RestfulResponseDto<UserResponseDto>({
       message: 'Successfully return user',

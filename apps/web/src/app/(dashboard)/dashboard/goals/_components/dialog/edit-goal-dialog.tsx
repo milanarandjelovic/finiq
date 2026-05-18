@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
+import { type GoalFormValues } from '@finiq/schemas'
 import {
   getCategoryControllerFindAllQueryKey,
   useCategoryControllerUpdate,
@@ -31,35 +32,47 @@ export function EditGoalDialog({ goal, onClose }: EditGoalDialogProps) {
       }),
     )
 
+  const handleOpenChange = (o: boolean) => !o && onClose()
+
+  const handleSubmit = async (values: GoalFormValues) => {
+    if (!goal) {
+      return
+    }
+
+    await updateGoal({
+      id: goal.id,
+      data: {
+        ...values,
+        isGoal: true,
+        targetDate: values.targetDate,
+      },
+    })
+  }
+
+  const defaultValues = goal
+    ? {
+        name: goal.name,
+        emoji: goal.emoji,
+        color: goal.color,
+        targetAmount: Number(goal.targetAmount) || 0,
+        budgetAmount: Number(goal.budgetAmount),
+        targetDate:
+          goal.targetDate instanceof Date
+            ? goal.targetDate.toISOString().split('T')[0]
+            : (goal.targetDate ?? undefined),
+      }
+    : undefined
+
   return (
     <CrudDialog
       open={!!goal}
-      onOpenChange={(o) => !o && onClose()}
+      onOpenChange={handleOpenChange}
       title={t('goals.editGoal')}
     >
       {goal && (
         <GoalForm
-          defaultValues={{
-            name: goal.name,
-            emoji: goal.emoji,
-            color: goal.color,
-            targetAmount: Number(goal.targetAmount) || 0,
-            budgetAmount: Number(goal.budgetAmount),
-            targetDate:
-              goal.targetDate instanceof Date
-                ? goal.targetDate.toISOString().split('T')[0]
-                : (goal.targetDate ?? undefined),
-          }}
-          onSubmit={async (v) => {
-            await updateGoal({
-              id: goal.id,
-              data: {
-                ...v,
-                isGoal: true,
-                targetDate: v.targetDate,
-              },
-            })
-          }}
+          defaultValues={defaultValues}
+          onSubmit={handleSubmit}
           isPending={isUpdating}
         />
       )}
