@@ -1,7 +1,30 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": [
+    "NODE_ENV",
+    "CI",
+    "NEXT_RUNTIME",
+    "SENTRY_DSN",
+    "SENTRY_ENABLED",
+    "SENTRY_RELEASE",
+    "SENTRY_TRACES_SAMPLE_RATE",
+    "SENTRY_ENABLE_LOGS",
+    "SENTRY_PROFILE_LIFECYCLE",
+    "SENTRY_SEND_DEFAULT_PII",
+    "SENTRY_ORG",
+    "SENTRY_AUTH_TOKEN",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "NEXT_PUBLIC_SENTRY_ENABLED",
+    "NEXT_PUBLIC_SENTRY_RELEASE",
+    "NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE",
+    "NEXT_PUBLIC_APP_ENV",
+    "EXPO_PUBLIC_SENTRY_DSN",
+    "EXPO_PUBLIC_SENTRY_ENABLED",
+    "EXPO_PUBLIC_SENTRY_RELEASE",
+    "EXPO_PUBLIC_SENTRY_TRACES_SAMPLE_RATE",
+    "EXPO_PUBLIC_APP_ENV"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

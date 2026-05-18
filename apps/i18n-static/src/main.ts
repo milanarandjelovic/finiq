@@ -7,6 +7,8 @@ import helmet from 'helmet'
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino'
 
 import { AppModule } from '@/modules/app/app.module'
+import { SentryFilter } from '@/providers/sentry/filters/sentry.filter'
+import { SentryInterceptor } from '@/providers/sentry/interceptors/sentry.interceptor'
 
 async function bootstrap() {
   const isProduction = process.env.NODE_ENV === 'production'
@@ -20,7 +22,11 @@ async function bootstrap() {
 
   // Logger
   app.useLogger(app.get(Logger))
-  app.useGlobalInterceptors(new LoggerErrorInterceptor())
+  app.useGlobalInterceptors(
+    new LoggerErrorInterceptor(),
+    new SentryInterceptor(),
+  )
+  app.useGlobalFilters(new SentryFilter())
 
   app.use(helmet())
 

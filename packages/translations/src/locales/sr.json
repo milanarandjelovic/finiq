@@ -26,7 +26,8 @@
     "reset": "Resetuj",
     "deleting": "Brisanje...",
     "menu": "Meni",
-    "tryAgain": "Pokušaj ponovo"
+    "tryAgain": "Pokušaj ponovo",
+    "selectDate": "Izaberite datum"
   },
   "validation": {
     "emailNotEmpty": "Email ne sme biti prazan.",

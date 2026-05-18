@@ -5,7 +5,6 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -20,6 +19,7 @@ import { AppTextInput } from '@/components/ui/app-text-input'
 import { Button } from '@/components/ui/button'
 import { DateInput } from '@/components/ui/date-input'
 import { FormField } from '@/components/ui/form-field'
+import { Text } from '@/components/ui/text'
 import { useTransactionCreate } from '@/hooks/data/use-transaction-create'
 import { useTheme } from '@/hooks/use-theme'
 import type { Category } from '@/types/category'

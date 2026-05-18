@@ -1,0 +1,52 @@
+import {
+  createSentryConfig,
+  isSentryEnabled,
+  toSentryInitOptions,
+} from '@finiq/sentry'
+import { DynamicModule, Global, Logger, Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import * as Sentry from '@sentry/nestjs'
+import { nodeProfilingIntegration } from '@sentry/profiling-node'
+
+import type { Configuration } from '@/config/interfaces/configuration.interface'
+import { SentryService } from '@/providers/sentry/services/sentry.service'
+
+@Global()
+@Module({})
+export class SentryModule {
+  static forRoot(): DynamicModule {
+    return {
+      module: SentryModule,
+      providers: [
+        SentryService,
+        {
+          provide: 'SENTRY_INITIALIZED',
+          useFactory: (configService: ConfigService) => {
+            const raw = configService.get<Configuration['sentry']>('sentry')
+            const config = createSentryConfig(raw)
+            const logger = new Logger('SentryModule')
+
+            if (!isSentryEnabled(config)) {
+              logger.warn(
+                'Sentry is disabled or DSN is missing - skipping initialization',
+              )
+
+              return false
+            }
+
+            Sentry.init({
+              ...toSentryInitOptions(config),
+              integrations: [nodeProfilingIntegration()],
+            })
+
+            logger.log(`Sentry initialized (env: ${config.environment})`)
+
+            return true
+          },
+          inject: [ConfigService],
+        },
+      ],
+      exports: [SentryService],
+    }
+  }
+}

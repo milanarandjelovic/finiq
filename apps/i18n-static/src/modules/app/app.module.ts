@@ -9,6 +9,7 @@ import { HttpExceptionFilter } from '@/filters/http-exception.filter'
 import { AppController } from '@/modules/app/controllers/app.controller'
 import { AppService } from '@/modules/app/services/app.service'
 import { LocalesModule } from '@/modules/locales/locales.module'
+import { SentryModule } from '@/providers/sentry/sentry.module'
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { LocalesModule } from '@/modules/locales/locales.module'
               },
       },
     }),
+    SentryModule.forRoot(),
     LocalesModule,
   ],
   controllers: [AppController],

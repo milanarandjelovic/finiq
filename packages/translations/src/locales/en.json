@@ -26,7 +26,8 @@
     "reset": "Reset",
     "deleting": "Deleting...",
     "menu": "Menu",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "selectDate": "Select date"
   },
   "validation": {
     "emailNotEmpty": "Email should not be empty.",

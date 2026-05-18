@@ -1,3 +1,8 @@
+import {
+  getActiveSpan,
+  spanToBaggageHeader,
+  spanToTraceHeader,
+} from '@sentry/core'
 import axios, { Axios, InternalAxiosRequestConfig } from 'axios'
 import * as SecureStore from 'expo-secure-store'
 
@@ -31,6 +36,29 @@ export class NetworkClient {
   static setInstance(): void {
     NetworkClient._instance = axios.create({ baseURL: Env.apiUrl })
 
+    /**
+     * Inject Sentry trace headers for distributed tracing (Mobile - API).
+     * Native fetch is auto-instrumented, axios requires an explicit interceptor.
+     */
+    NetworkClient._instance.interceptors.request.use((config) => {
+      const activeSpan = getActiveSpan()
+
+      if (activeSpan) {
+        const sentryTrace = spanToTraceHeader(activeSpan)
+        const baggage = spanToBaggageHeader(activeSpan)
+
+        if (sentryTrace) {
+          config.headers.set('sentry-trace', sentryTrace)
+        }
+
+        if (baggage) {
+          config.headers.set('baggage', baggage)
+        }
+      }
+
+      return config
+    })
+
     NetworkClient._instance.interceptors.request.use(
       async (config) => {
         const ctx = createFiniqContext()
@@ -43,6 +71,7 @@ export class NetworkClient {
         }
 
         const lang = await SecureStore.getItemAsync(LANGUAGE_STORAGE_KEY)
+
         if (lang) {
           config.headers.set('x-lang', lang.split('-')[0])
         }

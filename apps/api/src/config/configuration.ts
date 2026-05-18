@@ -77,6 +77,22 @@ const configuration: Configuration = {
       ttl: int(process.env.THROTTLE_SENSITIVE_TTL, 60000),
     },
   },
+
+  // Sentry Configuration
+  sentry: {
+    dsn: process.env.SENTRY_DSN ?? '',
+    enabled: process.env.SENTRY_ENABLED === 'true',
+    environment: process.env.NODE_ENV ?? 'development',
+    // Use || not ?? - empty string passes through ?? and parseFloat('') returns NaN
+    tracesSampleRate: parseFloat(
+      process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1',
+    ),
+    release: process.env.SENTRY_RELEASE ?? process.env.npm_package_version,
+    enableLogs: process.env.SENTRY_ENABLE_LOGS === 'true',
+    profileLifecycle:
+      (process.env.SENTRY_PROFILE_LIFECYCLE as 'trace' | 'manual') ?? 'trace',
+    sendDefaultPii: process.env.SENTRY_SEND_DEFAULT_PII === 'true',
+  },
 }
 
 const configFunction: ConfigFactory<Configuration> = () => configuration

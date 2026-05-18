@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import Axios from 'axios'
 
 import { LANGUAGE_STORAGE_KEY } from '@finiq/shared'
@@ -33,6 +34,29 @@ export const axiosInstanceBase = Axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
+})
+
+/**
+ * Inject Sentry trace headers for distributed tracing (Web -> API).
+ * Native fetch is auto-instrumented, axios requires an explicit interceptor.
+ */
+axiosInstanceBase.interceptors.request.use((config) => {
+  const activeSpan = Sentry.getActiveSpan()
+
+  if (activeSpan) {
+    const sentryTrace = Sentry.spanToTraceHeader(activeSpan)
+    const baggage = Sentry.spanToBaggageHeader(activeSpan)
+
+    if (sentryTrace) {
+      config.headers['sentry-trace'] = sentryTrace
+    }
+
+    if (baggage) {
+      config.headers['baggage'] = baggage
+    }
+  }
+
+  return config
 })
 
 axiosInstanceBase.interceptors.request.use(

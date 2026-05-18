@@ -4,17 +4,19 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { ResetPasswordForm } from '@/components/auth/reset-password-form'
+import { Text } from '@/components/ui/text'
+import { useTheme } from '@/hooks/use-theme'
 
 export default function ResetPasswordScreen() {
   const { t } = useTranslation()
+  const { colors } = useTheme()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

@@ -15,7 +15,7 @@ interface DateInputProps {
 
 export function DateInput({ value, onChange, placeholder }: DateInputProps) {
   const { t } = useTranslation()
-  const { colors } = useTheme()
+  const { colors, isDark } = useTheme()
   const [open, setOpen] = useState(false)
 
   const date = value ? parseISO(value) : new Date()
@@ -49,6 +49,7 @@ export function DateInput({ value, onChange, placeholder }: DateInputProps) {
           value={date}
           mode="date"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          themeVariant={isDark ? 'dark' : 'light'}
           onChange={(_, selected) => {
             setOpen(Platform.OS === 'ios')
             if (selected) {
