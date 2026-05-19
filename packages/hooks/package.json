@@ -14,21 +14,31 @@
     "lint": "eslint src/",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "^19"
   },
   "devDependencies": {
     "@finiq/eslint-config": "workspace:*",
     "@finiq/prettier-config": "workspace:*",
     "@finiq/typescript-config": "workspace:*",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
     "@types/react": "*",
+    "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.5.1",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "react-dom": "^19",
+    "ts-jest": "^29.4.10",
     "typescript": "5.9.2"
   }
 }
