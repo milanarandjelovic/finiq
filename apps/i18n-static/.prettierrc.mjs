@@ -6,6 +6,8 @@ export default {
     '^(nestjs/(.*)$)|^(nestjs$)$',
     '<THIRD_PARTY_MODULES>',
     '',
+    '^(@finiq/sentry)$',
+    '^(@finiq/translations)$',
     '^(^@/(.*)$|^@/config/(.*)$|^@/filters/(.*)$|^@/modules/(.*)$|^@/shared/(.*)$)',
     '',
     '^[../]',

@@ -108,7 +108,6 @@ describe('Configuration', () => {
     process.env.SENTRY_ENABLE_LOGS = 'true'
     process.env.SENTRY_PROFILE_LIFECYCLE = 'manual'
     process.env.SENTRY_SEND_DEFAULT_PII = 'true'
-
     const config = configuration() as Configuration
 
     expect(config.sentry.dsn).toBe('https://test@sentry.io/123')

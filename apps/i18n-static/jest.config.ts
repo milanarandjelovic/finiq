@@ -22,13 +22,23 @@ const config: Config = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['**/*.ts', '!**/__tests__/**', '!**/node_modules/**'],
+  collectCoverageFrom: [
+    '**/*.ts',
+    '!**/*.spec.ts',
+    '!**/*.module.ts',
+    '!**/*.interface.ts',
+    '!**/*.dto.ts',
+    '!**/*.entity.ts',
+    '!**/*.enum.ts',
+    '!**/node_modules/**',
+    '!**/main.ts',
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: '../coverage',
 
   // An array of regexp pattern strings used to skip a coverage collection
-  coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
+  coveragePathIgnorePatterns: ['/node_modules/'],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: 'v8',
@@ -42,7 +52,7 @@ const config: Config = {
   },
 
   // The glob patterns Jest uses to detect test files
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  testMatch: ['**/*.spec.ts'],
 
   // A map from regular expressions to paths to transformers
   transform: {

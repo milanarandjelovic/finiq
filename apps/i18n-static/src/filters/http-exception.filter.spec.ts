@@ -1,17 +1,12 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common'
-import { Test, TestingModule } from '@nestjs/testing'
 
 import { HttpExceptionFilter } from '@/filters/http-exception.filter'
 
 describe('HttpExceptionFilter', () => {
   let filter: HttpExceptionFilter
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [HttpExceptionFilter],
-    }).compile()
-
-    filter = module.get<HttpExceptionFilter>(HttpExceptionFilter)
+  beforeEach(() => {
+    filter = new HttpExceptionFilter()
   })
 
   it('should return 404 with message and path for NotFoundException', () => {

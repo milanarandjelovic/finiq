@@ -1,4 +1,3 @@
-import { SENTRY_IGNORE_HTTP_STATUS_CODES } from '@finiq/sentry'
 import {
   ArgumentsHost,
   Catch,
@@ -8,6 +7,8 @@ import {
 } from '@nestjs/common'
 import * as Sentry from '@sentry/nestjs'
 import type { Request, Response } from 'express'
+
+import { SENTRY_IGNORE_HTTP_STATUS_CODES } from '@finiq/sentry'
 
 @Catch()
 export class SentryFilter implements ExceptionFilter {
