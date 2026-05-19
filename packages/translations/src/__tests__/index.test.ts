@@ -49,8 +49,12 @@ describe('Translations Package', () => {
       expect(LANG_LOCALES).toContain('en')
     })
 
-    it('should have exactly 1 locale', () => {
-      expect(LANG_LOCALES).toHaveLength(1)
+    it('should contain sr locale', () => {
+      expect(LANG_LOCALES).toContain('sr')
+    })
+
+    it('should have exactly 2 locales', () => {
+      expect(LANG_LOCALES).toHaveLength(2)
     })
 
     it('should have en as first locale', () => {

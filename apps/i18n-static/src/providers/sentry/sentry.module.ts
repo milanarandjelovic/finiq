@@ -1,13 +1,13 @@
-import {
-  createSentryConfig,
-  isSentryEnabled,
-  toSentryInitOptions,
-} from '@finiq/sentry'
 import { DynamicModule, Global, Logger, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import * as Sentry from '@sentry/nestjs'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
 
+import {
+  createSentryConfig,
+  isSentryEnabled,
+  toSentryInitOptions,
+} from '@finiq/sentry'
 import type { Configuration } from '@/config/interfaces/configuration.interface'
 
 @Global()

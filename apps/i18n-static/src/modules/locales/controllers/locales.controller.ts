@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common'
 import { ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { Response } from 'express'
+import type { Response } from 'express'
 
 import { LocaleNotFoundDto } from '@/modules/locales/dtos/locale-not-found.dto'
 import { LocalesService } from '@/modules/locales/services/locales.service'

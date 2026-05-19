@@ -27,6 +27,7 @@ export class AppController {
   })
   async getHealth(): Promise<RestfulResponseDto<HealthResponseDto>> {
     const data = this.appService.getHealth()
+
     return new RestfulResponseDto({
       message: 'Health check successful',
       data,

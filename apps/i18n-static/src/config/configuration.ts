@@ -9,7 +9,7 @@ expand(config())
 const int = (val: string | undefined, num: number): number =>
   val ? (isNaN(parseInt(val)) ? num : parseInt(val)) : num
 
-const configuration: Configuration = {
+const configFunction: ConfigFactory<Configuration> = () => ({
   // App Version
   appVersion: process.env.APP_VERSION || '1.0.0',
 
@@ -52,8 +52,6 @@ const configuration: Configuration = {
       (process.env.SENTRY_PROFILE_LIFECYCLE as 'trace' | 'manual') ?? 'trace',
     sendDefaultPii: process.env.SENTRY_SEND_DEFAULT_PII === 'true',
   },
-}
-
-const configFunction: ConfigFactory<Configuration> = () => configuration
+})
 
 export default configFunction
