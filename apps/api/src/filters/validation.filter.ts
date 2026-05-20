@@ -35,7 +35,9 @@ export class ValidationFilter implements ExceptionFilter {
     if (!message.includes('|')) {
       return this.i18n.translate(message, { lang })
     }
+
     const [key, argsString] = message.split('|')
+
     try {
       return this.i18n.translate(key, { lang, args: JSON.parse(argsString) })
     } catch {
