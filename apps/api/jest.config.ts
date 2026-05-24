@@ -37,6 +37,7 @@ const config: Config = {
     '!**/factories/**',
     '!**/node_modules/**',
     '!**/main.ts',
+    '!**/providers/db/**',
   ],
 
   // The directory where Jest should output its coverage files
@@ -61,8 +62,16 @@ const config: Config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.(t|j)s$': 'ts-jest',
   },
+
+  // In bun's cache, paths look like: node_modules/.bun/pkg@version/node_modules/pkg/file.js
+  // The inner /node_modules/ is always preceded by a version string containing @.
+  // This pattern ignores node_modules/ except:
+  //   - the outer bun cache root (.bun/ prefix)
+  //   - the inner nested path (@ prefix from version string)
+  // Result: all ESM packages stored in bun's .bun/ cache get transformed by ts-jest.
+  transformIgnorePatterns: ['(?<!@[^/]+)/node_modules/(?!\\.bun/)'],
 
   // Indicates whether each individual test should be reported during the run
   verbose: true,
