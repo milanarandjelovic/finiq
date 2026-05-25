@@ -37,7 +37,7 @@ describe('UserPasswordService', () => {
   })
 
   it('update: should throw when user not found', async () => {
-    const qb = userRepository.createQueryBuilder as jest.Mock
+    const qb = jest.mocked(userRepository.createQueryBuilder)
     qb().getOne.mockResolvedValue(null)
 
     await expect(
@@ -59,7 +59,7 @@ describe('UserPasswordService', () => {
       where: jest.fn().mockReturnThis(),
       getOne: jest.fn().mockResolvedValue(user),
     }
-    ;(userRepository.createQueryBuilder as jest.Mock).mockReturnValue(mockQb)
+    jest.mocked(userRepository.createQueryBuilder).mockReturnValue(mockQb)
 
     await expect(
       service.update('user-1', {
@@ -83,9 +83,9 @@ describe('UserPasswordService', () => {
       where: jest.fn().mockReturnThis(),
       getOne: jest.fn().mockResolvedValue(user),
     }
-    ;(userRepository.createQueryBuilder as jest.Mock).mockReturnValue(mockQb)
+    jest.mocked(userRepository.createQueryBuilder).mockReturnValue(mockQb)
     const updatedProfile = { id: 'user-1', name: 'John' }
-    ;(userRepository.findOne as jest.Mock).mockResolvedValue(updatedProfile)
+    jest.mocked(userRepository.findOne).mockResolvedValue(updatedProfile)
 
     const result = await service.update('user-1', {
       password: plainPassword,

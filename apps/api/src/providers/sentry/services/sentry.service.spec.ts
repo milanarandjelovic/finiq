@@ -22,7 +22,7 @@ describe('SentryService', () => {
     it('should call Sentry.withScope and captureException', () => {
       const error = new Error('test error')
       const mockScope = { setExtras: jest.fn() }
-      ;(Sentry.withScope as jest.Mock).mockImplementation((cb) => cb(mockScope))
+      jest.mocked(Sentry.withScope).mockImplementation((cb) => cb(mockScope))
 
       service.captureException(error, { key: 'value' })
 
@@ -34,7 +34,7 @@ describe('SentryService', () => {
     it('should call captureException without extras when context is not provided', () => {
       const error = new Error('test')
       const mockScope = { setExtras: jest.fn() }
-      ;(Sentry.withScope as jest.Mock).mockImplementation((cb) => cb(mockScope))
+      jest.mocked(Sentry.withScope).mockImplementation((cb) => cb(mockScope))
 
       service.captureException(error)
 

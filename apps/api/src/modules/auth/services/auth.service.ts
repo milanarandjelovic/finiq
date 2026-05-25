@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Request } from 'express'
+import type { Request } from 'express'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 

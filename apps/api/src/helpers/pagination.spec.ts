@@ -64,5 +64,16 @@ describe('Pagination', () => {
       expect(result.lastPage).toBe(0)
       expect(result.total).toBe(0)
     })
+
+    it('should use default currentPage and perPage when not provided', () => {
+      const result = generatePaginationMetadata({
+        total: 10,
+        currentPage: undefined as any,
+        perPage: undefined as any,
+      })
+
+      expect(result.currentPage).toBeDefined()
+      expect(result.perPage).toBeDefined()
+    })
   })
 })

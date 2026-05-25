@@ -110,7 +110,7 @@ describe('AuthService', () => {
         email: 'john@example.com',
         password: 'Pass123!',
       }
-      ;(userRepository.create as jest.Mock).mockReturnValue({
+      jest.mocked(userRepository.create).mockReturnValue({
         ...mockUser,
         save: jest.fn().mockResolvedValue(mockUser),
       })
@@ -176,16 +176,14 @@ describe('AuthService', () => {
       userRepository.findOne.mockResolvedValue(mockUser)
       const deleteMock = jest.fn().mockReturnThis()
       const executeMock = jest.fn()
-      ;(
-        passwordResetRepository.createQueryBuilder as jest.Mock
-      ).mockReturnValue({
+      jest.mocked(passwordResetRepository.createQueryBuilder).mockReturnValue({
         delete: deleteMock,
         from: deleteMock,
         where: deleteMock,
         execute: executeMock,
       })
       const saveMock = jest.fn()
-      ;(passwordResetRepository.create as jest.Mock).mockReturnValue({
+      jest.mocked(passwordResetRepository.create).mockReturnValue({
         save: saveMock,
       })
       const result = await service.sendResetPasswordEmail({
@@ -236,9 +234,7 @@ describe('AuthService', () => {
       passwordResetRepository.findOne.mockResolvedValue(validReset as any)
       const deleteMock = jest.fn().mockReturnThis()
       const executeMock = jest.fn()
-      ;(
-        passwordResetRepository.createQueryBuilder as jest.Mock
-      ).mockReturnValue({
+      jest.mocked(passwordResetRepository.createQueryBuilder).mockReturnValue({
         delete: deleteMock,
         from: deleteMock,
         where: deleteMock,
@@ -267,16 +263,16 @@ describe('AuthService', () => {
       userRepository.findOne.mockResolvedValue(mockUser)
       const deleteMock = jest.fn().mockReturnThis()
       const executeMock = jest.fn()
-      ;(
-        emailVerificationRepository.createQueryBuilder as jest.Mock
-      ).mockReturnValue({
-        delete: deleteMock,
-        from: deleteMock,
-        where: deleteMock,
-        execute: executeMock,
-      })
+      jest
+        .mocked(emailVerificationRepository.createQueryBuilder)
+        .mockReturnValue({
+          delete: deleteMock,
+          from: deleteMock,
+          where: deleteMock,
+          execute: executeMock,
+        })
       const saveMock = jest.fn()
-      ;(emailVerificationRepository.create as jest.Mock).mockReturnValue({
+      jest.mocked(emailVerificationRepository.create).mockReturnValue({
         save: saveMock,
       })
       const result = await service.resendEmailVerification({
@@ -345,14 +341,14 @@ describe('AuthService', () => {
       )
       const deleteMock = jest.fn().mockReturnThis()
       const executeMock = jest.fn()
-      ;(
-        emailVerificationRepository.createQueryBuilder as jest.Mock
-      ).mockReturnValue({
-        delete: deleteMock,
-        from: deleteMock,
-        where: deleteMock,
-        execute: executeMock,
-      })
+      jest
+        .mocked(emailVerificationRepository.createQueryBuilder)
+        .mockReturnValue({
+          delete: deleteMock,
+          from: deleteMock,
+          where: deleteMock,
+          execute: executeMock,
+        })
       const result = await service.verifyEmail({
         token: 'valid',
         password: 'Pass1!',

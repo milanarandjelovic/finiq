@@ -36,11 +36,36 @@ describe('CategoryController', () => {
     expect(categoryService.findAll).toHaveBeenCalledWith(query, 'user-1')
   })
 
+  it('GET /categories/:id: should call categoryService.findOne', async () => {
+    const params = { id: 'cat-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.findOne(params, req)
+
+    expect(categoryService.findOne).toHaveBeenCalledWith('cat-1', 'user-1')
+  })
+
   it('POST /categories: should call categoryService.create', async () => {
     const body = { name: 'Test' } as any
     const req = { user: { id: 'user-1' } } as any
     await controller.create(body, req)
 
     expect(categoryService.create).toHaveBeenCalledWith(body, 'user-1')
+  })
+
+  it('PUT /categories/:id: should call categoryService.update', async () => {
+    const params = { id: 'cat-1' } as any
+    const body = { name: 'Updated' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.update(params, body, req)
+
+    expect(categoryService.update).toHaveBeenCalledWith('cat-1', body, 'user-1')
+  })
+
+  it('DELETE /categories/:id: should call categoryService.delete', async () => {
+    const params = { id: 'cat-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.delete(params, req)
+
+    expect(categoryService.delete).toHaveBeenCalledWith('cat-1', 'user-1')
   })
 })

@@ -142,8 +142,8 @@ describe('UserService', () => {
       userRepository.findOneBy.mockResolvedValue(null)
       const savedUser = { id: 'user-1', email: 'new@test.com', name: 'New' }
       const saveMock = jest.fn().mockResolvedValue(savedUser)
-      ;(userRepository.create as jest.Mock).mockReturnValue({ save: saveMock })
-      ;(emailVerificationRepository.create as jest.Mock).mockReturnValue({
+      jest.mocked(userRepository.create).mockReturnValue({ save: saveMock })
+      jest.mocked(emailVerificationRepository.create).mockReturnValue({
         save: jest.fn(),
       })
       const result = await service.create({
@@ -160,7 +160,7 @@ describe('UserService', () => {
       userRepository.findOneBy.mockResolvedValue(null)
       const savedUser = { id: 'user-1', email: 'new@test.com', name: 'New' }
       const saveMock = jest.fn().mockResolvedValue(savedUser)
-      ;(userRepository.create as jest.Mock).mockReturnValue({ save: saveMock })
+      jest.mocked(userRepository.create).mockReturnValue({ save: saveMock })
       const result = await service.create({
         name: 'New',
         email: 'new@test.com',
@@ -209,7 +209,7 @@ describe('UserService', () => {
       }
       findOneQueryBuilder.getOne.mockResolvedValue(targetUser)
       userRepository.findOneBy.mockResolvedValue(null)
-      ;(userRepository.save as jest.Mock).mockResolvedValue(targetUser)
+      jest.mocked(userRepository.save).mockResolvedValue(targetUser)
       const result = await service.update(
         { id: 'user-1' } as any,
         { name: 'New', email: 'new@test.com' } as any,
@@ -228,7 +228,7 @@ describe('UserService', () => {
       }
       findOneQueryBuilder.getOne.mockResolvedValue(targetUser)
       userRepository.findOneBy.mockResolvedValue(null)
-      ;(userRepository.save as jest.Mock).mockResolvedValue(targetUser)
+      jest.mocked(userRepository.save).mockResolvedValue(targetUser)
       const result = await service.update(
         { id: 'user-1' } as any,
         { name: 'New', email: 'new@test.com', password: 'NewPass1!' } as any,
@@ -255,7 +255,7 @@ describe('UserService', () => {
       const users = [{ id: 'user-2' }, { id: 'user-3' }]
       deleteQueryBuilder.getMany.mockResolvedValue(users)
       emailVerificationRepository.delete.mockResolvedValue(undefined as any)
-      ;(userRepository.remove as jest.Mock).mockResolvedValue(users)
+      jest.mocked(userRepository.remove).mockResolvedValue(users)
       const result = await service.delete(
         { ids: 'user-2,user-3' } as any,
         'user-1',

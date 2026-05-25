@@ -60,6 +60,14 @@ describe('BudgetQueryBuilder', () => {
     })
   })
 
+  describe('findOne', () => {
+    it('should return the query builder', () => {
+      const result = builder.findOne('user-1', 'cat-1', 3, 2024)
+
+      expect(result).toBe(mockQueryBuilder)
+    })
+  })
+
   describe('findPreviousMonth', () => {
     it('should return December of previous year when month is January', () => {
       builder.findPreviousMonth('user-1', 1, 2024)
