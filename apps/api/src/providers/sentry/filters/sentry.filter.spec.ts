@@ -40,9 +40,9 @@ describe('SentryFilter', () => {
       }),
     }
     mockScope = { setTag: jest.fn(), setExtra: jest.fn() }
-    jest.mocked(Sentry.withScope).mockImplementation((cb) => cb(mockScope))
+    jest.mocked(Sentry.withScope).mockImplementation((cb: any) => cb(mockScope))
     jest.clearAllMocks()
-    jest.mocked(Sentry.withScope).mockImplementation((cb) => cb(mockScope))
+    jest.mocked(Sentry.withScope).mockImplementation((cb: any) => cb(mockScope))
     jest.spyOn(Logger.prototype, 'error').mockImplementation(() => {})
   })
 

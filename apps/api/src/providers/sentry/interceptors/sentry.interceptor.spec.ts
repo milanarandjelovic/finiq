@@ -17,11 +17,11 @@ describe('SentryInterceptor', () => {
     mockSetTag = jest.fn()
     jest.mocked(Sentry.getCurrentScope).mockReturnValue({
       setTag: mockSetTag,
-    })
+    } as any)
     jest.clearAllMocks()
     jest.mocked(Sentry.getCurrentScope).mockReturnValue({
       setTag: mockSetTag,
-    })
+    } as any)
   })
 
   describe('intercept', () => {

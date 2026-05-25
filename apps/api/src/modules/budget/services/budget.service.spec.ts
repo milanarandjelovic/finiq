@@ -92,7 +92,7 @@ describe('BudgetService', () => {
       categoryRepository.findOne.mockResolvedValue(category as any)
       const existing = { id: 'budget-1', amount: 50, category }
       mockQueryBuilder.getOne.mockResolvedValue(existing)
-      jest.mocked(budgetRepository.save).mockResolvedValue(existing)
+      jest.mocked(budgetRepository.save).mockResolvedValue(existing as any)
 
       const result = await service.upsert(
         { categoryId: 'cat-1', month: 1, year: 2026, amount: 200 },
@@ -141,7 +141,9 @@ describe('BudgetService', () => {
       }
       mockQueryBuilder.getMany.mockResolvedValue(sourceBudgets)
       mockQueryBuilder.getOne.mockResolvedValue(existingBudget)
-      jest.mocked(budgetRepository.save).mockResolvedValue(existingBudget)
+      jest
+        .mocked(budgetRepository.save)
+        .mockResolvedValue(existingBudget as any)
       const result = await service.copyFromPreviousMonth(
         { month: 2, year: 2026 } as any,
         'user-1',
@@ -159,7 +161,7 @@ describe('BudgetService', () => {
       const newBudget = { id: 'new-bgt', amount: 100 }
       jest.mocked(budgetRepository.create).mockReturnValue({
         save: jest.fn().mockResolvedValue(newBudget),
-      })
+      } as any)
       const result = await service.copyFromPreviousMonth(
         { month: 2, year: 2026 } as any,
         'user-1',

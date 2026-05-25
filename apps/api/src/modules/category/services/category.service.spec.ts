@@ -236,7 +236,7 @@ describe('CategoryService', () => {
     it('should delete and return category', async () => {
       const category = { id: 'cat-1', name: 'Food' }
       mockQueryBuilder.getOne.mockResolvedValue(category)
-      jest.mocked(categoryRepository.remove).mockResolvedValue(category)
+      jest.mocked(categoryRepository.remove).mockResolvedValue(category as any)
       const result = await service.delete('cat-1', 'user-1')
 
       expect(result.message).toBe('Category deleted successfully.')

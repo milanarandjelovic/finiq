@@ -181,11 +181,11 @@ describe('AuthService', () => {
         from: deleteMock,
         where: deleteMock,
         execute: executeMock,
-      })
+      } as any)
       const saveMock = jest.fn()
       jest.mocked(passwordResetRepository.create).mockReturnValue({
         save: saveMock,
-      })
+      } as any)
       const result = await service.sendResetPasswordEmail({
         email: 'john@example.com',
       } as any)
@@ -239,7 +239,7 @@ describe('AuthService', () => {
         from: deleteMock,
         where: deleteMock,
         execute: executeMock,
-      })
+      } as any)
       const result = await service.resetPassword({
         token: 'valid',
         password: 'NewPass1!',
@@ -270,11 +270,11 @@ describe('AuthService', () => {
           from: deleteMock,
           where: deleteMock,
           execute: executeMock,
-        })
+        } as any)
       const saveMock = jest.fn()
       jest.mocked(emailVerificationRepository.create).mockReturnValue({
         save: saveMock,
-      })
+      } as any)
       const result = await service.resendEmailVerification({
         email: 'john@example.com',
       } as any)
@@ -348,7 +348,7 @@ describe('AuthService', () => {
           from: deleteMock,
           where: deleteMock,
           execute: executeMock,
-        })
+        } as any)
       const result = await service.verifyEmail({
         token: 'valid',
         password: 'Pass1!',

@@ -130,7 +130,7 @@ describe('TransactionService', () => {
       const savedTx = { id: 'tx-1', amount: 500 }
       jest.mocked(transactionRepository.create).mockReturnValue({
         save: jest.fn().mockResolvedValue(savedTx),
-      })
+      } as any)
       const result = await service.create(
         {
           type: TransactionType.INCOME,
@@ -149,7 +149,7 @@ describe('TransactionService', () => {
       const savedTx = { id: 'tx-1', amount: 100, category }
       jest.mocked(transactionRepository.create).mockReturnValue({
         save: jest.fn().mockResolvedValue(savedTx),
-      })
+      } as any)
       const result = await service.create(
         {
           type: TransactionType.EXPENSE,
@@ -168,7 +168,7 @@ describe('TransactionService', () => {
       const savedTx = { id: 'tx-1', amount: 200 }
       jest.mocked(transactionRepository.create).mockReturnValue({
         save: jest.fn().mockResolvedValue(savedTx),
-      })
+      } as any)
       const result = await service.create(
         {
           type: TransactionType.INCOME,
