@@ -23,13 +23,15 @@ vi.mock('lucide-react', () => ({
 }))
 
 describe('ThemeToggle', () => {
-  it('renders without crashing', () => {
+  it('should render without crashing', () => {
     render(<ThemeToggle />)
+
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('has correct aria-label', () => {
+  it('should have correct aria-label', () => {
     render(<ThemeToggle />)
+
     expect(screen.getByRole('button')).toHaveAttribute(
       'aria-label',
       'sidebar.toggleTheme',

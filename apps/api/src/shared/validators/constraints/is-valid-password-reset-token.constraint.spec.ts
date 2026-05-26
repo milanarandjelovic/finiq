@@ -8,13 +8,8 @@ describe('IsValidPasswordResetTokenConstraint', () => {
   let mockEntityManager: {
     getRepository: jest.Mock
   }
-  let mockUserGetOne: jest.Mock
-  let mockResetGetOne: jest.Mock
 
   beforeEach(async () => {
-    mockUserGetOne = jest.fn()
-    mockResetGetOne = jest.fn()
-
     mockEntityManager = {
       getRepository: jest.fn(),
     }

@@ -8,10 +8,14 @@ import { Env } from '@/util/env'
 
 export const detectUserLanguage = async (): Promise<string> => {
   const saved = Cookies.get(LANGUAGE_STORAGE_KEY)
-  if (saved) return saved
+
+  if (saved) {
+    return saved
+  }
 
   if (typeof navigator !== 'undefined') {
     const code = navigator.language ?? 'en'
+
     return (code.split('-')[0] ?? 'en') as string
   }
 
@@ -77,8 +81,13 @@ export const clearAllI18nCache = async (): Promise<void> => {}
  * (see Providers) so this init is fast and synchronous-leaning.
  */
 export const initI18n = async (): Promise<typeof i18next> => {
-  if (i18next.isInitialized) return i18next
-  if (typeof window === 'undefined') return i18next
+  if (i18next.isInitialized) {
+    return i18next
+  }
+
+  if (typeof window === 'undefined') {
+    return i18next
+  }
 
   await i18next.use(initReactI18next).init({
     lng: 'en',

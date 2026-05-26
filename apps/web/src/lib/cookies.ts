@@ -9,7 +9,7 @@ import {
  * @param {string} name - The name of the cookie to retrieve.
  * @returns {string | null} - The value of the cookie, or null if not found.
  */
-function getCookieValue(name: string): string | null {
+export function getCookieValue(name: string): string | null {
   if (typeof document === 'undefined') {
     return null
   }

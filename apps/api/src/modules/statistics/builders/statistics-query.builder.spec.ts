@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 
 import { StatisticsQueryBuilder } from '@/modules/statistics/builders/statistics-query.builder'
 import { Transaction } from '@/modules/transaction/entities/transaction.entity'

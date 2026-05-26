@@ -19,10 +19,12 @@ export function setApiFormErrors<T extends FieldValues>(
   }
 
   const errors = (error as { errors: ApiValidationError[] }).errors
+
   for (const { property, messages } of errors) {
-    if (messages[0]) {
+    if (property && messages[0]) {
       setError(property as Path<T>, { message: messages[0] })
     }
   }
+
   return errors.length > 0
 }
