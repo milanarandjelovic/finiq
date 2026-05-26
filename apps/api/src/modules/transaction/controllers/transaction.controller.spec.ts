@@ -39,12 +39,41 @@ describe('TransactionController', () => {
     expect(transactionService.findAll).toHaveBeenCalledWith(query, 'user-1')
   })
 
+  it('GET /transactions/:id: should call transactionService.findOne', async () => {
+    const params = { id: 'tx-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.findOne(params, req)
+
+    expect(transactionService.findOne).toHaveBeenCalledWith('tx-1', 'user-1')
+  })
+
   it('POST /transactions: should call transactionService.create', async () => {
     const body = { amount: 100 } as any
     const req = { user: { id: 'user-1' } } as any
     await controller.create(body, req)
 
     expect(transactionService.create).toHaveBeenCalledWith(body, 'user-1')
+  })
+
+  it('PUT /transactions/:id: should call transactionService.update', async () => {
+    const params = { id: 'tx-1' } as any
+    const body = { amount: 200 } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.update(params, body, req)
+
+    expect(transactionService.update).toHaveBeenCalledWith(
+      'tx-1',
+      body,
+      'user-1',
+    )
+  })
+
+  it('DELETE /transactions/:id: should call transactionService.delete', async () => {
+    const params = { id: 'tx-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.delete(params, req)
+
+    expect(transactionService.delete).toHaveBeenCalledWith('tx-1', 'user-1')
   })
 
   it('POST /transactions/:id/receipt: should call transactionService.uploadReceipt', async () => {
@@ -61,5 +90,31 @@ describe('TransactionController', () => {
       file,
       'user-1',
     )
+  })
+
+  it('DELETE /transactions/:id/receipt: should call transactionService.deleteReceipt', async () => {
+    const params = { id: 'tx-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    await controller.deleteReceipt(params, req)
+
+    expect(transactionService.deleteReceipt).toHaveBeenCalledWith(
+      'tx-1',
+      'user-1',
+    )
+  })
+
+  it('GET /transactions/:id/receipt: should call getReceiptFilePath and sendFile', async () => {
+    const filePath = '/uploads/receipt.jpg'
+    transactionService.getReceiptFilePath.mockResolvedValue(filePath)
+    const params = { id: 'tx-1' } as any
+    const req = { user: { id: 'user-1' } } as any
+    const res = { sendFile: jest.fn() } as any
+    await controller.downloadReceipt(params, req, res)
+
+    expect(transactionService.getReceiptFilePath).toHaveBeenCalledWith(
+      'tx-1',
+      'user-1',
+    )
+    expect(res.sendFile).toHaveBeenCalledWith(filePath)
   })
 })

@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { HbsTransporter, TemplateOptions } from 'nodemailer-express-handlebars'
+import type {
+  HbsTransporter,
+  TemplateOptions,
+} from 'nodemailer-express-handlebars'
 import { MailOptions } from 'nodemailer/lib/sendmail-transport'
 
 import { MAILER_TRANSPORT } from '@/providers/email/constants/email.constant'

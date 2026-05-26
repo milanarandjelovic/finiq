@@ -48,12 +48,24 @@ describe('SettingService', () => {
   })
 
   describe('update', () => {
-    it('should upsert each key/value pair', async () => {
+    it('should create a new setting when one does not exist', async () => {
       settingRepository.find.mockResolvedValue([])
       settingRepository.findOne.mockResolvedValue(null)
       settingRepository.create.mockReturnValue({ save: jest.fn() } as any)
       const result = await service.update({ currency: 'EUR' } as any, 'user-1')
 
+      expect(result.message).toBe('Settings updated successfully.')
+    })
+
+    it('should update an existing setting when one already exists', async () => {
+      const existing = { key: 'currency', value: 'USD' } as any
+      settingRepository.find.mockResolvedValue([existing])
+      settingRepository.findOne.mockResolvedValue(existing)
+      settingRepository.save.mockResolvedValue(existing)
+      const result = await service.update({ currency: 'EUR' } as any, 'user-1')
+
+      expect(existing.value).toBe('EUR')
+      expect(settingRepository.save).toHaveBeenCalledWith(existing)
       expect(result.message).toBe('Settings updated successfully.')
     })
   })

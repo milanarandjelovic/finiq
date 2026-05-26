@@ -15,7 +15,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Request } from 'express'
+import type { Request } from 'express'
 
 import { TransformInterceptor } from '@/interceptors/transform.interceptor'
 import { ThrottleTier } from '@/modules/auth/decorators/throttle-tier.decorator'

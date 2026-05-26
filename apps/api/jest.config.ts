@@ -47,7 +47,7 @@ const config: Config = {
   coveragePathIgnorePatterns: ['/node_modules/'],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: 'v8',
+  coverageProvider: 'babel',
 
   // An array of file extensions your modules use
   moduleFileExtensions: ['js', 'json', 'ts'],

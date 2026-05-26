@@ -35,4 +35,16 @@ describe('DashboardQueryBuilder', () => {
 
     expect(qb).toBeDefined()
   })
+
+  it('monthlyExpense: should build query summing expenses for month/year', () => {
+    const qb = builder.monthlyExpense('user-1', 3, 2026)
+
+    expect(qb).toBeDefined()
+  })
+
+  it('spendingByCategory: should build query grouping expense by category', () => {
+    const qb = builder.spendingByCategory('user-1', 3, 2026)
+
+    expect(qb).toBeDefined()
+  })
 })

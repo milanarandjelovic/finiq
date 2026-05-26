@@ -14,7 +14,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
-import { Request } from 'express'
+import type { Request } from 'express'
 
 import { TransformInterceptor } from '@/interceptors/transform.interceptor'
 import { JwtAuthenticationGuard } from '@/modules/auth/guards/jwt-authentication.guard'

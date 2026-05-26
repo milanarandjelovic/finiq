@@ -37,8 +37,8 @@ describe('UserProfileService', () => {
   })
 
   it('findOne: should throw when user not found', async () => {
-    const qb = userRepository.createQueryBuilder as jest.Mock
-    qb().getOne.mockResolvedValue(null)
+    const qb = jest.mocked(userRepository.createQueryBuilder)
+    ;(qb() as any).getOne.mockResolvedValue(null)
 
     await expect(service.findOne('nonexistent')).rejects.toThrow()
   })
@@ -62,7 +62,9 @@ describe('UserProfileService', () => {
       where: jest.fn().mockReturnThis(),
       getOne: jest.fn().mockResolvedValue(user),
     }
-    ;(userRepository.createQueryBuilder as jest.Mock).mockReturnValue(mockQb)
+    jest
+      .mocked(userRepository.createQueryBuilder)
+      .mockReturnValue(mockQb as any)
     const result = await service.findOne('user-1')
 
     expect(result.message).toBe('Successfully return user')

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { CookieOptions } from 'express'
+import type { CookieOptions } from 'express'
 
 import { Configuration } from '@/config/interfaces/configuration.interface'
 import { JwtPayloadInterface } from '@/modules/auth/interfaces/jwt-payload.interface'
