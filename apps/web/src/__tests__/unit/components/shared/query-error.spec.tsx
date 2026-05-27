@@ -4,27 +4,25 @@ import { vi } from 'vitest'
 
 import { QueryError } from '@/components/shared/query-error'
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) =>
-      ({
-        'general.somethingWentWrong': 'Something went wrong',
-        'general.tryAgain': 'Try again',
-      })[key] ?? key,
-  }),
-}))
+vi.mock('react-i18next', async () => {
+  const { createI18nMock } =
+    await import('@/__tests__/unit/__mocks__/react-i18next')
 
-vi.mock('@finiq/ui/components/button', () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}))
+  return createI18nMock({
+    'general.somethingWentWrong': 'Something went wrong',
+    'general.tryAgain': 'Try again',
+  })
+})
 
-vi.mock('lucide-react', () => ({
-  AlertCircle: () => <span>AlertCircle</span>,
-}))
+vi.mock(
+  '@finiq/ui/components/button',
+  async () => import('@/__tests__/unit/__mocks__/button'),
+)
+
+vi.mock(
+  'lucide-react',
+  async () => import('@/__tests__/unit/__mocks__/lucide-react'),
+)
 
 describe('QueryError', () => {
   it('should render default error message when no message prop', () => {

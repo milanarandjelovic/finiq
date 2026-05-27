@@ -9,32 +9,23 @@ vi.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
 }))
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => {
-      const map: Record<string, string> = {
-        'sidebar.dashboard': 'Dashboard',
-        'sidebar.transactions': 'Transactions',
-        'sidebar.budget': 'Budget',
-        'sidebar.categories': 'Categories',
-        'sidebar.goals': 'Goals',
-        'sidebar.statistics': 'Statistics',
-      }
-      return map[key] ?? key
-    },
-  }),
-}))
+vi.mock('react-i18next', async () => {
+  const { createI18nMock } =
+    await import('@/__tests__/unit/__mocks__/react-i18next')
+  return createI18nMock({
+    'sidebar.dashboard': 'Dashboard',
+    'sidebar.transactions': 'Transactions',
+    'sidebar.budget': 'Budget',
+    'sidebar.categories': 'Categories',
+    'sidebar.goals': 'Goals',
+    'sidebar.statistics': 'Statistics',
+  })
+})
 
-vi.mock('lucide-react', () => ({
-  LayoutDashboard: () => <span>LayoutDashboard</span>,
-  Wallet: () => <span>Wallet</span>,
-  PiggyBank: () => <span>PiggyBank</span>,
-  Tag: () => <span>Tag</span>,
-  Target: () => <span>Target</span>,
-  BarChart3: () => <span>BarChart3</span>,
-  Settings: () => <span>Settings</span>,
-  User: () => <span>User</span>,
-}))
+vi.mock(
+  'lucide-react',
+  async () => import('@/__tests__/unit/__mocks__/lucide-react'),
+)
 
 describe('MobileNav', () => {
   beforeEach(() => {

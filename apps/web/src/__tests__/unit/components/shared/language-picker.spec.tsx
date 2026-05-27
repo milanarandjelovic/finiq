@@ -15,12 +15,10 @@ vi.mock('@/i18n', () => ({
   changeLanguage: vi.fn(),
 }))
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    i18n: { language: 'en' },
-  }),
-  initReactI18next: {},
-}))
+vi.mock(
+  'react-i18next',
+  async () => import('@/__tests__/unit/__mocks__/react-i18next'),
+)
 
 vi.mock('@/hooks/data/use-available-languages', () => ({
   useAvailableLanguages: () => ({
@@ -29,11 +27,10 @@ vi.mock('@/hooks/data/use-available-languages', () => ({
   }),
 }))
 
-vi.mock('@finiq/ui/components/button', () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
-}))
+vi.mock(
+  '@finiq/ui/components/button',
+  async () => import('@/__tests__/unit/__mocks__/button'),
+)
 
 vi.mock('@finiq/ui/components/dropdown-menu', () => ({
   DropdownMenu: ({ children }: any) => <div>{children}</div>,
@@ -44,9 +41,10 @@ vi.mock('@finiq/ui/components/dropdown-menu', () => ({
   DropdownMenuTrigger: ({ children }: any) => <div>{children}</div>,
 }))
 
-vi.mock('lucide-react', () => ({
-  ChevronDownIcon: () => <span>ChevronDownIcon</span>,
-}))
+vi.mock(
+  'lucide-react',
+  async () => import('@/__tests__/unit/__mocks__/lucide-react'),
+)
 
 describe('LanguagePicker', () => {
   it('should render the current language name', () => {

@@ -16,9 +16,10 @@ vi.mock('@/util/env', () => ({
   },
 }))
 
-vi.mock('react-i18next', () => ({
-  initReactI18next: {},
-}))
+vi.mock(
+  'react-i18next',
+  async () => import('@/__tests__/unit/__mocks__/react-i18next'),
+)
 
 const mockI18next = vi.hoisted(() => ({
   isInitialized: false,

@@ -7,20 +7,19 @@ import { ConfirmDialog } from '@/components/shared/confirm-dialog'
 const mockOnOpenChange = vi.fn()
 const mockOnConfirm = vi.fn()
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) =>
-      ({ 'general.cancel': 'Cancel', 'general.delete': 'Delete' })[key] ?? key,
-  }),
-}))
+vi.mock('react-i18next', async () => {
+  const { createI18nMock } =
+    await import('@/__tests__/unit/__mocks__/react-i18next')
+  return createI18nMock({
+    'general.cancel': 'Cancel',
+    'general.delete': 'Delete',
+  })
+})
 
-vi.mock('@finiq/ui/components/button', () => ({
-  Button: ({ children, onClick, _variant, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}))
+vi.mock(
+  '@finiq/ui/components/button',
+  async () => import('@/__tests__/unit/__mocks__/button'),
+)
 
 vi.mock('@finiq/ui/components/dialog', () => ({
   Dialog: ({ children, open }: any) => (open ? <div>{children}</div> : null),
