@@ -7,29 +7,31 @@ vi.mock('next-themes', () => ({
   useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }),
 }))
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}))
+vi.mock(
+  'react-i18next',
+  async () => import('@/__tests__/unit/__mocks__/react-i18next'),
+)
 
-vi.mock('@finiq/ui/components/button', () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
-}))
+vi.mock(
+  '@finiq/ui/components/button',
+  async () => import('@/__tests__/unit/__mocks__/button'),
+)
 
-vi.mock('lucide-react', () => ({
-  SunIcon: () => <span>SunIcon</span>,
-  MoonIcon: () => <span>MoonIcon</span>,
-}))
+vi.mock(
+  'lucide-react',
+  async () => import('@/__tests__/unit/__mocks__/lucide-react'),
+)
 
 describe('ThemeToggle', () => {
-  it('renders without crashing', () => {
+  it('should render without crashing', () => {
     render(<ThemeToggle />)
+
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('has correct aria-label', () => {
+  it('should have correct aria-label', () => {
     render(<ThemeToggle />)
+
     expect(screen.getByRole('button')).toHaveAttribute(
       'aria-label',
       'sidebar.toggleTheme',

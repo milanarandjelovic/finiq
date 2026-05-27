@@ -48,7 +48,7 @@ describe('UserProfileService', () => {
       id: 'user-1',
       name: 'Old',
     } as any)
-    const result = await service.update('user-1', { name: 'New' } as any)
+    await service.update('user-1', { name: 'New' } as any)
 
     expect(userRepository.update).toHaveBeenCalledWith(
       { id: 'user-1' },

@@ -7,13 +7,26 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/__tests__/setup.ts'],
+    setupFiles: ['./src/__tests__/unit/setup.ts'],
     include: ['src/__tests__/unit/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/__tests__/**', 'src/app/**'],
+      exclude: [
+        'src/__tests__/**',
+        'src/app/**',
+        'src/types/**',
+        'src/util/env.ts',
+        'src/util/routes.ts',
+        'src/api/__generated__/**',
+      ],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
+      },
     },
   },
   resolve: {

@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 
 import { DashboardQueryBuilder } from '@/modules/dashboard/builders/dashboard-query.builder'
 import { Transaction } from '@/modules/transaction/entities/transaction.entity'

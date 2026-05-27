@@ -67,9 +67,45 @@ jobs:
       - run: bun --filter "./packages/**" build
       - run: bun --filter @finiq/web test
 
+  test-api:
+    name: Test (apps/api)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('packages/**') }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+      - run: bun --filter "./packages/**" build
+      - run: bun --filter @finiq/api test
+
+  test-i18n-static:
+    name: Test (apps/i18n-static)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('packages/**') }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+      - run: bun --filter "./packages/**" build
+      - run: bun --filter @finiq/i18n-static test
+
   build:
     name: Build
-    needs: [lint-types, test-web]
+    needs: [lint-types, test-web, test-api, test-i18n-static]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

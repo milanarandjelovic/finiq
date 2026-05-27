@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
+import { hashSync } from 'bcrypt'
 import { I18nService } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
@@ -72,7 +73,6 @@ describe('UserPasswordService', () => {
   })
 
   it('update: should update password and return updated user on success', async () => {
-    const { hashSync } = require('bcrypt')
     const plainPassword = 'CurrentPass1!'
     const hashedPassword = hashSync(plainPassword, 10)
     const user = {
