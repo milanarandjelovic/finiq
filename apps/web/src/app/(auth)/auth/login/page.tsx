@@ -28,7 +28,11 @@ export default function LoginPage() {
 
         <p className="text-muted-foreground mt-4 text-center text-sm">
           {t('auth.loginNoAccount')}{' '}
-          <Link href={ROUTES.REGISTER} className="text-primary hover:underline">
+          <Link
+            href={ROUTES.REGISTER}
+            className="text-primary hover:underline"
+            data-testid="login-sign-up"
+          >
             {t('auth.signUp')}
           </Link>
         </p>

@@ -69,6 +69,7 @@ export function ResetPasswordForm() {
                   type="email"
                   placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
+                  data-testid="reset-password-email"
                   {...field}
                 />
               </FormControl>
@@ -87,6 +88,7 @@ export function ResetPasswordForm() {
                 <PasswordInput
                   placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
+                  data-testid="reset-password-password"
                   {...field}
                 />
               </FormControl>
@@ -105,6 +107,7 @@ export function ResetPasswordForm() {
                 <PasswordInput
                   placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
+                  data-testid="reset-password-confirm-password"
                   {...field}
                 />
               </FormControl>
@@ -113,7 +116,12 @@ export function ResetPasswordForm() {
           )}
         />
 
-        <LoadingButton type="submit" isLoading={isPending} className="w-full">
+        <LoadingButton
+          type="submit"
+          isLoading={isPending}
+          className="w-full"
+          data-testid="reset-password-submit"
+        >
           {t('auth.resetPasswordSubmit')}
         </LoadingButton>
       </form>

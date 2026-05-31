@@ -72,13 +72,18 @@ export function VerifyEmailStatus() {
           <div className="mb-2 flex justify-center">
             <CheckCircle className="size-12 text-green-500" />
           </div>
-          <CardTitle>{t('auth.verifyEmailSuccess')}</CardTitle>
+          <CardTitle data-testid="verify-email-success-title">
+            {t('auth.verifyEmailSuccess')}
+          </CardTitle>
           <CardDescription>
             {t('auth.verifyEmailSuccessDescription')}
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-center">
-          <Button onClick={() => router.push(ROUTES.LOGIN)}>
+          <Button
+            onClick={() => router.push(ROUTES.LOGIN)}
+            data-testid="verify-email-back"
+          >
             {t('auth.verifyEmailBackToSignIn')}
           </Button>
         </CardFooter>
@@ -92,13 +97,18 @@ export function VerifyEmailStatus() {
         <div className="mb-2 flex justify-center">
           <XCircle className="text-destructive size-12" />
         </div>
-        <CardTitle>{t('auth.verifyEmailFailed')}</CardTitle>
-        <CardDescription>{errorMsg}</CardDescription>
+        <CardTitle data-testid="verify-email-error-title">
+          {t('auth.verifyEmailFailed')}
+        </CardTitle>
+        <CardDescription data-testid="verify-email-error-description">
+          {errorMsg}
+        </CardDescription>
       </CardHeader>
       <CardFooter className="justify-center">
         <Link
           href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
+          data-testid="verify-email-back"
         >
           {t('auth.verifyEmailBackToSignIn')}
         </Link>
