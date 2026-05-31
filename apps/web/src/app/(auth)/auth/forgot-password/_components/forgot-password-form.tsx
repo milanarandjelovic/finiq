@@ -66,6 +66,7 @@ export function ForgotPasswordForm({
                   type="email"
                   placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
+                  data-testid="forgot-password-email"
                   {...field}
                 />
               </FormControl>
@@ -74,7 +75,12 @@ export function ForgotPasswordForm({
           )}
         />
 
-        <LoadingButton type="submit" isLoading={isPending} className="w-full">
+        <LoadingButton
+          type="submit"
+          isLoading={isPending}
+          className="w-full"
+          data-testid="forgot-password-submit"
+        >
           {t('auth.forgotPasswordSubmit')}
         </LoadingButton>
       </form>

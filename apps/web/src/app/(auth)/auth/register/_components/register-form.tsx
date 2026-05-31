@@ -63,6 +63,7 @@ export function RegisterForm() {
                 <Input
                   placeholder={t('auth.registerFullNamePlaceholder')}
                   autoComplete="name"
+                  data-testid="register-name"
                   {...field}
                 />
               </FormControl>
@@ -82,6 +83,7 @@ export function RegisterForm() {
                   type="email"
                   placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
+                  data-testid="register-email"
                   {...field}
                 />
               </FormControl>
@@ -100,6 +102,7 @@ export function RegisterForm() {
                 <PasswordInput
                   placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
+                  data-testid="register-password"
                   {...field}
                 />
               </FormControl>
@@ -118,6 +121,7 @@ export function RegisterForm() {
                 <PasswordInput
                   placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="new-password"
+                  data-testid="register-confirm-password"
                   {...field}
                 />
               </FormControl>
@@ -126,7 +130,12 @@ export function RegisterForm() {
           )}
         />
 
-        <LoadingButton type="submit" isLoading={isPending} className="w-full">
+        <LoadingButton
+          type="submit"
+          isLoading={isPending}
+          className="w-full"
+          data-testid="register-submit"
+        >
           {t('auth.registerSubmit')}
         </LoadingButton>
       </form>

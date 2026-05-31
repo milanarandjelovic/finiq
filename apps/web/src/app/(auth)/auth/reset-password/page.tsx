@@ -32,6 +32,7 @@ export default function ResetPasswordPage() {
         <Link
           href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
+          data-testid="reset-password-back"
         >
           {t('auth.resetPasswordBackToSignIn')}
         </Link>

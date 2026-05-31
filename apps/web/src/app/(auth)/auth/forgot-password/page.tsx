@@ -33,6 +33,7 @@ export default function ForgotPasswordPage() {
           <Link
             href={ROUTES.LOGIN}
             className="text-primary text-sm hover:underline"
+            data-testid="forgot-password-back"
           >
             {t('auth.forgotPasswordBackToSignIn')}
           </Link>
@@ -56,6 +57,7 @@ export default function ForgotPasswordPage() {
         <Link
           href={ROUTES.LOGIN}
           className="text-primary text-sm hover:underline"
+          data-testid="forgot-password-back"
         >
           {t('auth.forgotPasswordBackToSignIn')}
         </Link>

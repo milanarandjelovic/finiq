@@ -69,6 +69,7 @@ export function LoginForm() {
                   type="email"
                   placeholder={t('auth.emailPlaceholder')}
                   autoComplete="email"
+                  data-testid="login-email"
                   {...field}
                 />
               </FormControl>
@@ -87,6 +88,7 @@ export function LoginForm() {
                 <Link
                   href={ROUTES.FORGOT_PASSWORD}
                   className="text-primary text-sm hover:underline"
+                  data-testid="login-forgot-password"
                 >
                   {t('auth.loginForgotPassword')}
                 </Link>
@@ -95,6 +97,7 @@ export function LoginForm() {
                 <PasswordInput
                   placeholder={t('auth.passwordPlaceholder')}
                   autoComplete="current-password"
+                  data-testid="login-password"
                   {...field}
                 />
               </FormControl>
@@ -103,7 +106,12 @@ export function LoginForm() {
           )}
         />
 
-        <LoadingButton type="submit" isLoading={isPending} className="w-full">
+        <LoadingButton
+          type="submit"
+          isLoading={isPending}
+          className="w-full"
+          data-testid="login-submit"
+        >
           {t('auth.loginSubmit')}
         </LoadingButton>
       </form>

@@ -28,7 +28,11 @@ export default function RegisterPage() {
 
         <p className="text-muted-foreground mt-4 text-center text-sm">
           {t('auth.registerHasAccount')}{' '}
-          <Link href={ROUTES.LOGIN} className="text-primary hover:underline">
+          <Link
+            href={ROUTES.LOGIN}
+            className="text-primary hover:underline"
+            data-testid="register-sign-in"
+          >
             {t('auth.signIn')}
           </Link>
         </p>
