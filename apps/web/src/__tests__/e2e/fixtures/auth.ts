@@ -22,6 +22,7 @@ function readCredentials(): TestUser {
 
 export const test = base.extend<{ authedPage: Page }, { testUser: TestUser }>({
   testUser: [
+    // eslint-disable-next-line no-empty-pattern
     async ({}, provide) => {
       await provide(readCredentials())
     },

@@ -10,7 +10,13 @@ export class UserSeeder implements Seeder {
 
     const userRepo = dataSource.getRepository(User)
 
-    const users = Array.from({ length: 10 }, () => {
+    const e2eUser = new User()
+    e2eUser.name = 'Test User'
+    e2eUser.email = 'info@email.com'
+    e2eUser.password = '1Jc1uE@1uKi7rx-='
+    e2eUser.activatedAt = new Date()
+
+    const randomUsers = Array.from({ length: 10 }, () => {
       const user = new User()
       user.name = faker.person.fullName()
       user.email = faker.internet.email()
@@ -19,8 +25,8 @@ export class UserSeeder implements Seeder {
       return user
     })
 
-    await userRepo.save(users)
+    await userRepo.save([e2eUser, ...randomUsers])
 
-    console.log(`${users.length} users seeded`)
+    console.log(`${randomUsers.length + 1} users seeded`)
   }
 }
