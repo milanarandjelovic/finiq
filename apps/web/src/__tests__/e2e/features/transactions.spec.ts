@@ -85,7 +85,7 @@ test.describe('Transactions CRUD', () => {
 
     test('should create a new expense transaction', async ({
       authedPage,
-      testUser,
+      testUser: _testUser,
     }) => {
       const txn = generateTestTransaction()
       await authedPage.goto('/dashboard/transactions')
