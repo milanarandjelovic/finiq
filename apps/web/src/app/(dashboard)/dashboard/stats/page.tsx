@@ -56,7 +56,9 @@ export default function StatsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{t('statistics.title')}</h1>
+        <h1 className="text-2xl font-semibold" data-testid="stats-page-title">
+          {t('statistics.title')}
+        </h1>
         <MonthPicker value={date} onChange={setDate} />
       </div>
 

@@ -16,7 +16,11 @@ export function TransactionActionsCell({ row }: { row: TransactionRow }) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0"
+          data-testid="transaction-row-actions"
+        >
           <span className="sr-only">{t('general.openMenu')}</span>
           <MoreHorizontal className="size-4" />
         </Button>
@@ -25,6 +29,7 @@ export function TransactionActionsCell({ row }: { row: TransactionRow }) {
         <DropdownMenuItem
           className="text-destructive cursor-pointer"
           onSelect={() => row.onDelete(row.id)}
+          data-testid="transaction-delete-action"
         >
           {t('general.delete')}
         </DropdownMenuItem>

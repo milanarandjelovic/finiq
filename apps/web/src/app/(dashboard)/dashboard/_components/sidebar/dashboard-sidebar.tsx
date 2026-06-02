@@ -29,7 +29,7 @@ export function DashboardSidebar() {
 
   const menuLinks = [
     {
-      name: t('sidebar.home'),
+      name: t('sidebar.dashboard'),
       url: ROUTES.DASHBOARD,
       icon: <HomeIcon className="size-4" />,
     },

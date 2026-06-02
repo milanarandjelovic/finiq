@@ -1,63 +1,50 @@
+import * as fs from 'fs'
+import * as path from 'path'
+import { fileURLToPath } from 'url'
 import { test as base, expect, type Page } from '@playwright/test'
 
-import { generateTestUser } from '@/__tests__/e2e/helpers/test-data'
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const MOCK_USER = { id: 1, name: 'Test User', email: 'e2e@finiq.test' }
+export type TestUser = {
+  name: string
+  email: string
+  password: string
+  accessToken: string
+  refreshToken: string
+}
 
-export const test = base.extend<{
-  authedPage: Page
-  testUser: ReturnType<typeof generateTestUser>
-}>({
-  // eslint-disable-next-line no-empty-pattern
-  testUser: async ({}, provide) => {
-    const user = generateTestUser()
-    await provide(user)
-  },
+const CREDENTIALS_FILE = path.join(__dirname, '../.auth', 'credentials.json')
 
-  authedPage: async ({ page }, provide) => {
-    await page.route(/localhost:4000/, async (route) => {
-      const url = route.request().url()
-      const method = route.request().method()
+function readCredentials(): TestUser {
+  const raw = fs.readFileSync(CREDENTIALS_FILE, 'utf-8')
+  return JSON.parse(raw) as TestUser
+}
 
-      if (url.includes('/auth/login') && method === 'POST') {
-        return route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'User logged in successfully.',
-            data: {
-              accessToken: 'e2e-test-access-token',
-              refreshToken: 'e2e-test-refresh-token',
-              user: MOCK_USER,
-            },
-          }),
-        })
-      }
+export const test = base.extend<{ authedPage: Page }, { testUser: TestUser }>({
+  testUser: [
+    async ({}, provide) => {
+      await provide(readCredentials())
+    },
+    { scope: 'worker' },
+  ],
 
-      if (url.includes('/user/profile')) {
-        return route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'Profile found.',
-            data: { user: MOCK_USER },
-          }),
-        })
-      }
-
-      return route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ message: 'OK', data: {} }),
-      })
+  authedPage: async ({ page, testUser }, provide) => {
+    await page.context().addCookies([
+      {
+        name: 'accessToken',
+        value: testUser.accessToken,
+        url: 'http://localhost:3000',
+      },
+      {
+        name: 'refreshToken',
+        value: testUser.refreshToken,
+        url: 'http://localhost:3000',
+      },
+    ])
+    await page.goto('/dashboard')
+    await page.waitForSelector('[data-testid="user-menu-trigger"]', {
+      timeout: 30_000,
     })
-
-    await page.goto('/auth/login')
-    await page.getByTestId('login-email').fill(MOCK_USER.email)
-    await page.getByTestId('login-password').fill('Password123!')
-    await page.getByTestId('login-submit').click()
-    await page.waitForURL('/dashboard')
-
     await provide(page)
   },
 })

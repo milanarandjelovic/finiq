@@ -106,7 +106,11 @@ export function PersonalInformationForm() {
                 </FormItem>
               )}
             />
-            <LoadingButton type="submit" isLoading={isPending}>
+            <LoadingButton
+              type="submit"
+              isLoading={isPending}
+              data-testid="profile-save-btn"
+            >
               {t('profile.saveChanges')}
             </LoadingButton>
           </form>

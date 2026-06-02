@@ -28,7 +28,11 @@ export function CategoryActionsCell({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0"
+          data-testid="category-row-actions"
+        >
           <span className="sr-only">{t('general.openMenu')}</span>
           <MoreHorizontal className="size-4" />
         </Button>
@@ -37,12 +41,14 @@ export function CategoryActionsCell({
         <DropdownMenuItem
           className="cursor-pointer"
           onSelect={() => onEdit(category)}
+          data-testid="category-edit-action"
         >
           {t('general.edit')}
         </DropdownMenuItem>
         <DropdownMenuItem
           className="text-destructive focus:text-destructive cursor-pointer"
           onSelect={() => onDelete(category)}
+          data-testid="category-delete-action"
         >
           {t('general.delete')}
         </DropdownMenuItem>

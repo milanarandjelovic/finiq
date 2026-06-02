@@ -170,7 +170,7 @@ export function SettingsForm() {
                     defaultValue={field.value}
                   >
                     <FormControl className="w-full">
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="currency-select">
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
@@ -207,7 +207,11 @@ export function SettingsForm() {
                 </SelectContent>
               </Select>
             </FormItem>
-            <LoadingButton type="submit" isLoading={isPending}>
+            <LoadingButton
+              type="submit"
+              isLoading={isPending}
+              data-testid="settings-save-btn"
+            >
               {t('settings.saveSettings')}
             </LoadingButton>
           </form>

@@ -16,11 +16,19 @@ export function QueryError({ message, onRetry }: QueryErrorProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
       <AlertCircle className="text-destructive h-8 w-8" />
-      <p className="text-muted-foreground text-sm">
+      <p
+        className="text-muted-foreground text-sm"
+        data-testid="query-error-message"
+      >
         {message ?? t('general.somethingWentWrong')}
       </p>
       {onRetry && (
-        <Button variant="outline" size="sm" onClick={onRetry}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onRetry}
+          data-testid="query-error-retry"
+        >
           {t('general.tryAgain')}
         </Button>
       )}
