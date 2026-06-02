@@ -21,7 +21,8 @@ const getLanguageName = (code: string) =>
 export function LanguagePicker() {
   const { i18n } = useTranslation()
   const [loading, setLoading] = useState(false)
-  const { data: languages = ['en'] } = useAvailableLanguages()
+  const { data: languages = Object.keys(LANGUAGE_AVAILABLE_NAMES) } =
+    useAvailableLanguages()
 
   const currentLang = i18n.language
 
@@ -42,7 +43,13 @@ export function LanguagePicker() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8" disabled={loading}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8"
+          disabled={loading}
+          data-testid="language-picker-trigger"
+        >
           {getLanguageName(currentLang)}
           <ChevronDownIcon className="ml-1 size-4" />
         </Button>
@@ -53,6 +60,7 @@ export function LanguagePicker() {
             key={lang}
             onClick={() => handleSelect(lang)}
             className={lang === currentLang ? 'font-semibold' : ''}
+            data-testid={`language-option-${lang}`}
           >
             {getLanguageName(lang)}
           </DropdownMenuItem>

@@ -81,7 +81,11 @@ export function ChangePasswordForm() {
                 <FormItem>
                   <FormLabel>{t('profile.currentPassword')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="••••••••" {...field} />
+                    <PasswordInput
+                      placeholder="••••••••"
+                      {...field}
+                      data-testid="current-password-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +98,11 @@ export function ChangePasswordForm() {
                 <FormItem>
                   <FormLabel>{t('profile.newPassword')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="••••••••" {...field} />
+                    <PasswordInput
+                      placeholder="••••••••"
+                      {...field}
+                      data-testid="new-password-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -107,13 +115,21 @@ export function ChangePasswordForm() {
                 <FormItem>
                   <FormLabel>{t('profile.confirmNewPassword')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="••••••••" {...field} />
+                    <PasswordInput
+                      placeholder="••••••••"
+                      {...field}
+                      data-testid="confirm-password-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <LoadingButton type="submit" isLoading={isPending}>
+            <LoadingButton
+              type="submit"
+              isLoading={isPending}
+              data-testid="change-password-submit"
+            >
               {t('profile.changePasswordSubmit')}
             </LoadingButton>
           </form>

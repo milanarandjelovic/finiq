@@ -45,7 +45,7 @@ export function SidebarUserMenu() {
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-              data-testid="user-menu-trigger"
+              data-testid="sidebar-user-menu-trigger"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground rounded-lg">

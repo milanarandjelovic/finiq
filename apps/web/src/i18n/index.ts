@@ -69,6 +69,7 @@ export const changeLanguage = async (lang: string): Promise<void> => {
     }
   }
 
+  Cookies.set(LANGUAGE_STORAGE_KEY, normalizedLang)
   await i18next.changeLanguage(normalizedLang)
   i18next.emit('languageChanged', normalizedLang)
 }

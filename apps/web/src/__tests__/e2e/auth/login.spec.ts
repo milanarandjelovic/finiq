@@ -39,7 +39,7 @@ test.describe('Login page', () => {
   })
 
   test('should display error for incorrect credentials', async ({ page }) => {
-    await page.getByTestId('login-email').fill('wrong@finiq.test')
+    await page.getByTestId('login-email').fill('nonexistent@e2e.test')
     await page.getByTestId('login-password').fill('WrongPassword123!')
     await page.getByTestId('login-submit').click()
 

@@ -35,7 +35,7 @@ test.describe('Reset password page', () => {
   })
 
   test('should show error for invalid or expired token', async ({ page }) => {
-    await page.goto('/auth/reset-password?token=invalid-token')
+    await page.goto('/auth/reset-password?token=invalid-token-e2e')
     await page.getByTestId('reset-password-email').fill('e2e@finiq.test')
     await page.getByTestId('reset-password-password').fill('NewPass123!')
     await page

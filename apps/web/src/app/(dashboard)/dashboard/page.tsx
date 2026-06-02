@@ -49,7 +49,10 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1
+            className="text-xl font-semibold tracking-tight"
+            data-testid="dashboard-overview-heading"
+          >
             {t('dashboard.overview')}
           </h1>
           <p className="text-muted-foreground text-sm">

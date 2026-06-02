@@ -30,7 +30,11 @@ export function BudgetActionsCell({ row }: { row: BudgetRow }) {
 
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0"
+            data-testid="budget-row-actions"
+          >
             <span className="sr-only">{t('general.openMenu')}</span>
             <MoreHorizontal className="size-4" />
           </Button>
@@ -39,6 +43,7 @@ export function BudgetActionsCell({ row }: { row: BudgetRow }) {
           <DropdownMenuItem
             className="cursor-pointer"
             onSelect={() => setShowAssignDialog(true)}
+            data-testid="budget-assign-action"
           >
             {isEditing ? t('budget.editBudget') : t('budget.assignBudget')}
           </DropdownMenuItem>

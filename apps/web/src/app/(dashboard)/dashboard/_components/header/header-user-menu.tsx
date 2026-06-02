@@ -40,9 +40,13 @@ export function HeaderUserMenu({ user }: HeaderUserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-xs font-medium">
+        <button
+          className="bg-sidebar-primary text-sidebar-primary-foreground flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-xs font-medium"
+          aria-label="User profile"
+          data-testid="user-menu-trigger"
+        >
           {initials}
-        </div>
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="min-w-56 rounded-lg" align="end">
@@ -66,13 +70,21 @@ export function HeaderUserMenu({ user }: HeaderUserMenuProps) {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={ROUTES.PROFILE} className="cursor-pointer">
+            <Link
+              href={ROUTES.PROFILE}
+              className="cursor-pointer"
+              data-testid="header-profile-link"
+            >
               <UserCircleIcon />
               {t('userMenu.profile')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={ROUTES.SETTINGS} className="cursor-pointer">
+            <Link
+              href={ROUTES.SETTINGS}
+              className="cursor-pointer"
+              data-testid="header-settings-link"
+            >
               <SettingsIcon />
               {t('sidebar.settings')}
             </Link>
@@ -81,7 +93,11 @@ export function HeaderUserMenu({ user }: HeaderUserMenuProps) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={handleLogout}
+          data-testid="user-menu-sign-out"
+        >
           <LogOutIcon />
           {t('userMenu.signOut')}
         </DropdownMenuItem>

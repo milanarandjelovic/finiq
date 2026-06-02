@@ -4,6 +4,7 @@ import { useUserProfileControllerFindOne } from '@/api/__generated__/user-profil
 import { HeaderUserMenu } from '@/app/(dashboard)/dashboard/_components/header/header-user-menu'
 import { PageBreadcrumb } from '@/app/(dashboard)/dashboard/_components/header/page-breadcrumb'
 import { SidebarTriggerWithTooltip } from '@/app/(dashboard)/dashboard/_components/sidebar/sidebar-trigger-with-tooltip'
+import { LanguagePicker } from '@/components/shared/language-picker'
 import { ThemeToggle } from '@/components/shared/theme-toggle'
 
 export function DashboardHeader() {
@@ -19,6 +20,7 @@ export function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-2">
+        <LanguagePicker />
         <ThemeToggle />
         <HeaderUserMenu user={user ?? {}} />
       </div>

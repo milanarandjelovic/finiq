@@ -23,7 +23,7 @@ export function generateTestTransaction() {
     amount: 42.5,
     note: `E2E test transaction ${Date.now()}`,
     type: 'expense' as const,
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split('T')[0]!,
   }
 }
 

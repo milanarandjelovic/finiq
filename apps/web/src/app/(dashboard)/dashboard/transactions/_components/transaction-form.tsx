@@ -60,7 +60,11 @@ export function TransactionForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleApiSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleApiSubmit(onSubmit)}
+        className="space-y-4"
+        noValidate
+      >
         <FormField
           control={form.control}
           name="type"
@@ -183,7 +187,12 @@ export function TransactionForm({
             </FormItem>
           )}
         />
-        <LoadingButton type="submit" className="w-full" isLoading={isPending}>
+        <LoadingButton
+          type="submit"
+          className="w-full"
+          isLoading={isPending}
+          data-testid="transaction-form-submit"
+        >
           {t('transactions.addTransaction')}
         </LoadingButton>
       </form>

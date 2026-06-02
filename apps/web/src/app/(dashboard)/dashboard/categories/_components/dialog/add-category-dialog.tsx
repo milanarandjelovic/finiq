@@ -40,7 +40,7 @@ export function AddCategoryDialog() {
       onOpenChange={setOpen}
       title={t('categories.newCategory')}
       trigger={
-        <Button>
+        <Button data-testid="add-category-btn">
           <Plus />
           {t('categories.addCategory')}
         </Button>

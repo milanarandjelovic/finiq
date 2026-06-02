@@ -46,7 +46,7 @@ export function AddGoalDialog() {
       onOpenChange={setOpen}
       title={t('goals.newSavingsGoal')}
       trigger={
-        <Button>
+        <Button data-testid="add-goal-btn">
           <Plus />
           {t('goals.newGoal')}
         </Button>

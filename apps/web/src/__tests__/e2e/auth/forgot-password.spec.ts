@@ -1,6 +1,4 @@
-import { expect, test } from '@playwright/test'
-
-import { generateTestUser } from '../helpers/test-data'
+import { expect, test } from '@/__tests__/e2e/fixtures/auth'
 
 test.describe('Forgot password page', () => {
   test.beforeEach(async ({ page }) => {
@@ -24,22 +22,13 @@ test.describe('Forgot password page', () => {
 
   test('should show success state after submitting valid email', async ({
     page,
+    testUser,
   }) => {
-    const user = generateTestUser()
-    await page.goto('/auth/register')
-    await page.getByTestId('register-name').fill(user.name)
-    await page.getByTestId('register-email').fill(user.email)
-    await page.getByTestId('register-password').fill(user.password)
-    await page.getByTestId('register-confirm-password').fill(user.password)
-    await page.getByTestId('register-submit').click()
-    await page.waitForURL('/auth/login')
-
-    await page.goto('/auth/forgot-password')
-    await page.getByTestId('forgot-password-email').fill(user.email)
+    await page.getByTestId('forgot-password-email').fill(testUser.email)
     await page.getByTestId('forgot-password-submit').click()
 
     await expect(page.getByText(/check your email/i)).toBeVisible()
-    await expect(page.getByText(user.email)).toBeVisible()
+    await expect(page.getByText(testUser.email)).toBeVisible()
   })
 
   test('should allow navigating back to sign in', async ({ page }) => {
