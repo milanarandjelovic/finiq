@@ -5,16 +5,14 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 
-export const CREDENTIALS_FILE = path.join(
-  __dirname,
-  '.auth',
-  'credentials.json',
-)
+const AUTH_DIR = path.join(__dirname, '.auth')
+export const CREDENTIALS_FILE = path.join(AUTH_DIR, 'credentials.json')
+const STORAGE_STATE_FILE = path.join(AUTH_DIR, 'storage-state.json')
 
 const E2E_USER = {
-  name: 'Test User',
-  email: 'info@email.com',
-  password: '1Jc1uE@1uKi7rx-=',
+  name: process.env.E2E_TEST_NAME ?? 'Test User',
+  email: process.env.E2E_TEST_EMAIL ?? 'info@email.com',
+  password: process.env.E2E_TEST_PASSWORD ?? '1Jc1uE@1uKi7rx-=',
 }
 
 export default async function globalSetup() {
@@ -35,21 +33,54 @@ export default async function globalSetup() {
       password: E2E_USER.password,
     }),
   })
+
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`POST /auth/login → ${res.status}: ${text}`)
   }
+
   const body = (await res.json()) as {
     data?: { accessToken: string; refreshToken: string }
   }
+
   const accessToken = body.data?.accessToken
   const refreshToken = body.data?.refreshToken
-  if (!accessToken || !refreshToken)
-    throw new Error('Login response missing tokens')
 
-  fs.mkdirSync(path.dirname(CREDENTIALS_FILE), { recursive: true })
+  if (!accessToken || !refreshToken) {
+    throw new Error('Login response missing tokens')
+  }
+
+  fs.mkdirSync(AUTH_DIR, { recursive: true })
+
   fs.writeFileSync(
     CREDENTIALS_FILE,
     JSON.stringify({ ...E2E_USER, accessToken, refreshToken }),
+  )
+
+  fs.writeFileSync(
+    STORAGE_STATE_FILE,
+    JSON.stringify({
+      cookies: [
+        {
+          name: 'accessToken',
+          value: accessToken,
+          domain: 'localhost',
+          path: '/',
+          httpOnly: false,
+          secure: false,
+          sameSite: 'Lax',
+        },
+        {
+          name: 'refreshToken',
+          value: refreshToken,
+          domain: 'localhost',
+          path: '/',
+          httpOnly: false,
+          secure: false,
+          sameSite: 'Lax',
+        },
+      ],
+      origins: [],
+    }),
   )
 }

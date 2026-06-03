@@ -29,19 +29,7 @@ export const test = base.extend<{ authedPage: Page }, { testUser: TestUser }>({
     { scope: 'worker' },
   ],
 
-  authedPage: async ({ page, testUser }, provide) => {
-    await page.context().addCookies([
-      {
-        name: 'accessToken',
-        value: testUser.accessToken,
-        url: 'http://localhost:3000',
-      },
-      {
-        name: 'refreshToken',
-        value: testUser.refreshToken,
-        url: 'http://localhost:3000',
-      },
-    ])
+  authedPage: async ({ page }, provide) => {
     await page.goto('/dashboard')
     await page.waitForSelector('[data-testid="user-menu-trigger"]', {
       timeout: 30_000,
