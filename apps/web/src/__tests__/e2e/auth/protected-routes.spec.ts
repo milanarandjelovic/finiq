@@ -14,6 +14,7 @@ test.describe('Protected routes', () => {
     test(`should redirect to login when accessing ${path}`, async ({
       page,
     }) => {
+      await page.context().clearCookies()
       await page.goto(path, { waitUntil: 'commit' })
       await page.waitForURL('/auth/login')
     })

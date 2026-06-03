@@ -2,6 +2,7 @@ import { expect, test } from '@/__tests__/e2e/fixtures/auth'
 
 test.describe('Forgot password page', () => {
   test.beforeEach(async ({ page }) => {
+    await page.context().clearCookies()
     await page.goto('/auth/forgot-password')
   })
 
